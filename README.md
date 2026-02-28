@@ -87,6 +87,7 @@ This setup ensures consistent database state across all environments — develop
 |------|----------|-------------|
 | **2026-02-03** | v1.0 | Initial MVP: Dockerized Django application with PostgreSQL and Flyway, user authentication (login/register), flight search and multi-step booking workflow (Step 1–5). |
 | **2026-02-21** | v1.1 | Implemented ticket cancellation workflow (PLUS class restriction), automatic seat release, payment status transition (Paid → Refunded), PDF ticket generation with Code128 barcode, SMTP password reset setup, secure environment variable handling, Ngrok Docker integration, Flyway schema update (country fields), seat selection refactor, template & UX improvements. |
+| **2026-02-28** | v1.2 | Extracted all inline styles and scripts into dedicated CSS/JS static files (per page: `base.css`, `book_step5.css`, `flight_step3.css`, `home_carousel.css`, `home_search.css`, `receipt_pdf.css`, `search.css`, `ticket_pdf.css`). Added interactive home page with promotional image carousel (auto-advance + prev/next controls) and a dynamic flight search widget (AJAX-powered country/city dropdowns, Flatpickr date picker with available-dates-only filtering, one-way/round-trip toggle). Added PayPal SDK integration on booking Step 5 — real payment flow with order capture, loading overlay, seat-conflict detection, and error handling. |
 
 ---
 
