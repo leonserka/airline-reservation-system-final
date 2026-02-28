@@ -1,0 +1,15 @@
+{% extends 'flights/base.html' %}
+
+{% block title %}Error — Airline Reservation{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Error</h1>
+
+<div class="card">
+    <div class="alert alert-danger">{{ message }}</div>
+
+    <div class="mt-2">
+        <a href="{% url 'check_booked_flights' %}" class="btn btn-secondary">Back to My Bookings</a>
+    </div>
+</div>
+{% endblock %}

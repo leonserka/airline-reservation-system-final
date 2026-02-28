@@ -1,0 +1,63 @@
+{% extends 'flights/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<ul class="step-indicator">
+  <li class="active"><span class="step-num">1</span> Passengers<span class="step-line"></span></li>
+  <li><span class="step-num">2</span> Class<span class="step-line"></span></li>
+  <li><span class="step-num">3</span> Seats<span class="step-line"></span></li>
+  <li><span class="step-num">4</span> Extras<span class="step-line"></span></li>
+  <li><span class="step-num">5</span> Payment</li>
+</ul>
+
+<h1 class="page-title">Passenger Details</h1>
+
+<div class="card mb-3">
+  <h2 class="card-header">Flight Summary</h2>
+
+  <div class="flight-info">
+    <span class="route">{{ flight.departure_city }} → {{ flight.arrival_city }}</span>
+    <span class="details">
+      {{ flight.date|date:"M. d, Y" }} &middot;
+      {{ flight.departure_time|time:"H:i" }} → {{ flight.arrival_time|time:"H:i" }}
+      &middot; €{{ flight.price }}
+    </span>
+  </div>
+
+  {% if return_flight %}
+  <div class="flight-info return">
+    <span class="route">{{ return_flight.departure_city }} → {{ return_flight.arrival_city }}</span>
+    <span class="details">
+      {{ return_flight.date|date:"M. d, Y" }} &middot;
+      {{ return_flight.departure_time|time:"H:i" }} → {{ return_flight.arrival_time|time:"H:i" }}
+      &middot; €{{ return_flight.price }}
+    </span>
+  </div>
+  {% endif %}
+
+  <p class="mt-2"><strong>Passengers:</strong> {{ num_passengers }}</p>
+</div>
+
+<div class="card">
+  <h2 class="card-header">Passenger Information</h2>
+
+  <form method="post">
+    {% csrf_token %}
+
+    {% for form in passenger_forms %}
+    <fieldset class="passenger-fieldset">
+      <legend>Passenger {{ forloop.counter }}</legend>
+      <div class="django-form">
+        {{ form.as_p }}
+      </div>
+    </fieldset>
+    {% endfor %}
+
+    <div class="mt-3">
+      <button type="submit" class="btn btn-red">Continue →</button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Airline Reservation{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'flights/css/base.css' %}?v=4">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+    {% block extra_css %}{% endblock %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+</head>
+<body>
+
+<header class="ca-header">
+    <div class="ca-left">
+        <a href="{% url 'home' %}" class="brand-text">AIRLINE RESERVATION</a>
+    </div>
+    <nav class="ca-nav">
+        {% if user.is_authenticated %}
+            <a href="{% url 'flight_list' %}">Flights</a>
+            <a href="{% url 'check_booked_flights' %}">My Bookings</a>
+            {% if user.is_staff %}
+                <a href="{% url 'create_flight' %}">Add Flight</a>
+            {% endif %}
+        {% endif %}
+    </nav>
+    <div class="ca-right">
+        {% if user.is_authenticated %}
+            <span class="user-welcome">{{ user.username }}</span>
+            <a href="{% url 'logout' %}" class="btn-header btn-logout">Logout</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="btn-header">Login</a>
+            <a href="{% url 'register' %}" class="btn-header">Register</a>
+        {% endif %}
+    </div>
+</header>
+
+{% block hero %}{% endblock %}
+
+<main class="main-content">
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="ca-footer">
+    <p>&copy; 2026 Airline Reservation System</p>
+</footer>
+
+{% block extra_js %}{% endblock %}
+
+</body>
+</html>

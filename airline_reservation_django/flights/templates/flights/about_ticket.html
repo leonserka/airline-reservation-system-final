@@ -1,0 +1,91 @@
+{% extends 'flights/base.html' %}
+
+{% block title %}Ticket Details — Airline Reservation{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Ticket Details</h1>
+
+<div class="card">
+    <div class="card-header">Flight Information</div>
+
+    <div class="detail-grid">
+        <div class="detail-item">
+            <span class="detail-label">Passenger</span>
+            <span class="detail-value">{{ ticket.passenger_name }} {{ ticket.passenger_surname }}</span>
+        </div>
+
+        <div class="detail-item">
+            <span class="detail-label">Flight</span>
+            <span class="detail-value">{{ ticket.flight.departure_city }} → {{ ticket.flight.arrival_city }}</span>
+        </div>
+
+        <div class="detail-item">
+            <span class="detail-label">Departure</span>
+            <span class="detail-value">{{ ticket.flight.date }} {{ ticket.flight.departure_time|time:"H:i" }}</span>
+        </div>
+
+        <div class="detail-item">
+            <span class="detail-label">Arrival</span>
+            <span class="detail-value">{{ ticket.flight.arrival_time|time:"H:i" }}</span>
+        </div>
+
+        <div class="detail-item">
+            <span class="detail-label">Seat</span>
+            <span class="detail-value">{{ ticket.seat_number|default:"N/A" }} ({{ ticket.seat_class }})</span>
+        </div>
+
+        <div class="detail-item">
+            <span class="detail-label">Price Paid</span>
+            <span class="detail-value">€{{ ticket.price_paid }}</span>
+        </div>
+
+        <div class="detail-item">
+            <span class="detail-label">Extra Luggage</span>
+            <span class="detail-value">{{ ticket.extra_luggage|default:"None" }}</span>
+        </div>
+
+        <div class="detail-item">
+            <span class="detail-label">Equipment</span>
+            <span class="detail-value">{{ ticket.extra_equipment|default:"None" }}</span>
+        </div>
+
+        <div class="detail-item">
+            <span class="detail-label">Payment Status</span>
+            <span class="detail-value">
+                {% if ticket.payment_status == 'paid' %}
+                    <span class="badge badge-paid">Paid</span>
+                {% elif ticket.payment_status == 'refunded' %}
+                    <span class="badge badge-refunded">Refunded</span>
+                {% elif ticket.payment_status == 'booked' %}
+                    <span class="badge badge-booked">Booked</span>
+                {% elif ticket.payment_status == 'canceled' %}
+                    <span class="badge badge-canceled">Canceled</span>
+                {% else %}
+                    <span class="badge">{{ ticket.payment_status|capfirst }}</span>
+                {% endif %}
+            </span>
+        </div>
+
+        <div class="detail-item">
+            <span class="detail-label">Booking Status</span>
+            <span class="detail-value">
+                {% if ticket.status == 'booked' %}
+                    <span class="badge badge-booked">Booked</span>
+                {% elif ticket.status == 'canceled' %}
+                    <span class="badge badge-canceled">Canceled</span>
+                {% else %}
+                    <span class="badge">{{ ticket.status|capfirst }}</span>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="mt-3 gap-sm">
+    {% if can_cancel and ticket.status != 'canceled' %}
+        <a href="{% url 'cancel_booked_flight' ticket.id %}" class="btn btn-danger">Cancel Ticket</a>
+    {% endif %}
+
+    <a href="{% url 'check_booked_flights' %}" class="btn btn-secondary">Back</a>
+</div>
+{% endblock %}

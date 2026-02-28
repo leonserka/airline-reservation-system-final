@@ -1,0 +1,145 @@
+{% extends 'flights/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'flights/css/search.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Search Flights</h1>
+
+<div class="card mb-3">
+  <div class="search-controls">
+    <div class="search-row">
+      <div class="search-field">
+        <label class="form-label">Origin Country</label>
+        <select id="origin_country" class="form-control">
+          <option value="">-- Select country --</option>
+        </select>
+      </div>
+
+      <div class="search-field">
+        <label class="form-label">Origin Airport</label>
+        <select id="origin_airport" class="form-control" disabled>
+          <option value="">-- Select airport --</option>
+        </select>
+      </div>
+
+      <div class="search-field">
+        <label class="form-label">Destination Country</label>
+        <select id="dest_country" class="form-control" disabled>
+          <option value="">-- Select country --</option>
+        </select>
+      </div>
+
+      <div class="search-field">
+        <label class="form-label">Destination Airport</label>
+        <select id="dest_airport" class="form-control" disabled>
+          <option value="">-- Select airport --</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="search-row">
+      <div class="search-field">
+        <label class="form-label">Trip Type</label>
+        <select id="trip_type" class="form-control">
+          <option value="oneway" selected>One way</option>
+          <option value="round">Round trip</option>
+        </select>
+      </div>
+
+      <div class="search-field">
+        <label class="form-label">Departure Date</label>
+        <input type="text" id="departure_date" class="form-control" placeholder="Select date">
+      </div>
+
+      <div class="search-field" id="return_field" style="display:none;">
+        <label class="form-label">Return Date</label>
+        <input type="text" id="return_date" class="form-control" placeholder="Select date">
+      </div>
+
+      <div class="search-field search-action">
+        <button id="searchBtn" class="btn btn-red">Search Flights</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if show_results %}
+  {% if flights %}
+  <form id="selectFlightsForm" onsubmit="return handleFlightSelection(event)">
+    <div class="card mb-3">
+      <h2 class="card-header">Available Flights</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Route</th>
+            <th>Date</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for flight in flights %}
+          <tr>
+            <td><input type="radio" name="departure_flight" value="{{ flight.id }}"></td>
+            <td>{{ flight.departure_city }} → {{ flight.arrival_city }}</td>
+            <td>{{ flight.date }}</td>
+            <td>€{{ flight.price }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% if return_flights %}
+    <div class="card mb-3">
+      <h2 class="card-header">Return Flights</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Route</th>
+            <th>Date</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for flight in return_flights %}
+          <tr>
+            <td><input type="radio" name="return_flight" value="{{ flight.id }}"></td>
+            <td>{{ flight.departure_city }} → {{ flight.arrival_city }}</td>
+            <td>{{ flight.date }}</td>
+            <td>€{{ flight.price }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+
+    <div class="card">
+      <div class="search-row" style="align-items: flex-end;">
+        <div class="search-field">
+          <label class="form-label">Number of Passengers</label>
+          <input type="number" id="num_passengers" class="form-control" min="1" max="9" value="1">
+        </div>
+        <div class="search-field search-action">
+          <button type="submit" class="btn btn-red">Continue →</button>
+        </div>
+      </div>
+    </div>
+  </form>
+  {% else %}
+    <div class="card text-center">
+      <p>No flights found for the selected route and date.</p>
+    </div>
+  {% endif %}
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'flights/js/search.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,4 @@
+.search-controls { display: flex; flex-direction: column; gap: 14px; }
+.search-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-start; }
+.search-field { flex: 1; min-width: 160px; }
+.search-field.search-action { display: flex; align-items: flex-end; min-width: auto; padding-top: 20px; }

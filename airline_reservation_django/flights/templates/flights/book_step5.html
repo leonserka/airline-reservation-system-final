@@ -1,0 +1,69 @@
+{% extends 'flights/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'flights/css/book_step5.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<ul class="step-indicator">
+  <li class="done"><span class="step-num">1</span> Passengers<span class="step-line"></span></li>
+  <li class="done"><span class="step-num">2</span> Class<span class="step-line"></span></li>
+  <li class="done"><span class="step-num">3</span> Seats<span class="step-line"></span></li>
+  <li class="done"><span class="step-num">4</span> Extras<span class="step-line"></span></li>
+  <li class="active"><span class="step-num">5</span> Payment</li>
+</ul>
+
+<h1 class="page-title">Complete Your Payment</h1>
+
+<div class="card mb-3">
+  <h2 class="card-header">Flight Summary</h2>
+
+  <div class="flight-info">
+    <span class="route">{{ flight.departure_city }} → {{ flight.arrival_city }}</span>
+    <span class="details">
+      {{ flight.date|date:"M. d, Y" }} &middot;
+      {{ flight.departure_time|time:"H:i" }} → {{ flight.arrival_time|time:"H:i" }}
+      &middot; €{{ flight.price }}
+    </span>
+  </div>
+
+  {% if return_flight %}
+  <div class="flight-info return">
+    <span class="route">{{ return_flight.departure_city }} → {{ return_flight.arrival_city }}</span>
+    <span class="details">
+      {{ return_flight.date|date:"M. d, Y" }} &middot;
+      {{ return_flight.departure_time|time:"H:i" }} → {{ return_flight.arrival_time|time:"H:i" }}
+      &middot; €{{ return_flight.price }}
+    </span>
+  </div>
+  {% endif %}
+
+  <p class="mt-2"><strong>Total Price:</strong> €{{ total_price }}</p>
+</div>
+
+<div class="card">
+  <h2 class="card-header">Pay with PayPal</h2>
+  <div id="paypal-button-container" style="max-width: 450px; margin: 0 auto;"></div>
+</div>
+
+<div id="loading-overlay" class="loading-overlay">
+  <div class="loading-box">
+    <h2>Processing your payment...</h2>
+    <p>Please wait a few seconds</p>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://www.paypal.com/sdk/js?client-id={{ PAYPAL_CLIENT_ID }}&currency=EUR"></script>
+<script>
+  const TOTAL_PRICE = "{{ total_price }}";
+  const CSRF_TOKEN = "{{ csrf_token }}";
+  const BOOK_SUCCESS_URL = "{% url 'book_success' %}";
+  const FLIGHT_ID = "{{ flight.id }}";
+</script>
+<script src="{% static 'flights/js/book_step5.js' %}"></script>
+{% endblock %}

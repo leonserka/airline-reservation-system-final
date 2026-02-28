@@ -1,0 +1,17 @@
+.search-container { width: 100%; display: flex; justify-content: center; margin-top: -50px; position: relative; z-index: 30; }
+.search-box { display: flex; background: rgba(255,255,255,0.96); padding: 16px; border-radius: 8px; gap: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); align-items: flex-end; flex-wrap: wrap; }
+.search-input { display: flex; flex-direction: column; position: relative; }
+.search-input label { font-size: 12px; font-weight: bold; color: #555; margin-bottom: 4px; }
+.search-input input { width: 180px; padding: 7px 10px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; font-size: 14px; }
+.search-input.small input { width: 140px; }
+.swap-btn { font-size: 20px; padding: 6px; cursor: pointer; margin-bottom: 2px; }
+.dropdown-panel { display: none; position: absolute; top: 66px; left: 0; width: 480px; background: #fff; border: 1px solid #ddd; border-radius: 6px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); padding: 16px; z-index: 50; }
+.dropdown-panel.show { display: block; }
+.dropdown-columns { display: flex; gap: 16px; }
+.country-list { width: 45%; }
+.airport-list { width: 55%; max-height: 280px; overflow-y: auto; }
+.country-item, .airport-item { padding: 5px 4px; cursor: pointer; font-size: 14px; }
+.country-item:hover, .airport-item:hover { background: #f2f2f2; border-radius: 3px; }
+.search-btn { background: #c0392b; color: #fff; padding: 10px 20px; font-size: 15px; border-radius: 4px; cursor: pointer; border: none; }
+.trip-type-box { display: flex; flex-direction: column; gap: 4px; justify-content: flex-end; }
+.trip-type-box label { display: flex; align-items: center; gap: 5px; font-size: 13px; cursor: pointer; }

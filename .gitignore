@@ -1,0 +1,124 @@
+# ============================
+# ✈️ Airline Reservation System (Django)
+# .gitignore file
+# ============================
+
+# --- Python cache and compiled files ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# --- Django database and local settings ---
+db.sqlite3
+*.db
+*.sqlite3
+local_settings.py
+
+# --- Virtual environments ---
+venv/
+env/
+ENV/
+.venv/
+.virtualenv/
+
+# --- Environment / secrets ---
+.env
+.env.*
+*.env
+!example.env       # allow example env templates
+
+# --- Static and media files ---
+staticfiles/
+media/
+uploads/
+mediafiles/
+static_root/
+
+# --- Logs, backups, and temp files ---
+*.log
+*.log.*
+*.bak
+*.swp
+*.tmp
+*.pid
+*.sock
+~$*
+*.tar
+*.tar.gz
+
+# --- IDE and editor settings ---
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+*.iml
+
+# --- OS-specific files ---
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+$RECYCLE.BIN/
+.AppleDouble
+.LSOverride
+
+# --- Testing, coverage, reports ---
+.coverage
+htmlcov/
+pytest_cache/
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# --- Build / distribution ---
+build/
+dist/
+*.egg-info/
+*.egg
+.eggs/
+output/
+
+# --- Deployment / cache ---
+__pypackages__/
+*.manifest
+*.spec
+*.lock
+*.cache/
+
+# --- Docker files ---
+docker-compose.override.yml
+*.env.backup
+docker-data/
+postgres_data/
+pgdata/
+
+# --- Flyway ---
+flyway/sql/*.tmp
+flyway/drivers/
+flyway/conf/
+
+# --- Django translations ---
+*.pot
+*.mo
+
+# --- Migrations (ignored if using Flyway) ---
+airline_reservation_django/flights/migrations/*.py
+!airline_reservation_django/flights/migrations/__init__.py
+
+
+# Django collectstatic output
+staticfiles/
+
+# Env / venv
+.env
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# IDE
+.vscode/
+.idea/

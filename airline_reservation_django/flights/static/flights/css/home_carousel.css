@@ -1,0 +1,10 @@
+.home-carousel { position: relative; width: 100%; height: 480px; overflow: hidden; }
+.slide { position: absolute; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0; transition: opacity 1s ease-in-out; }
+.slide.active { opacity: 1; }
+.caption { position: absolute; bottom: 60px; left: 60px; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+.caption h1 { font-size: 36px; margin: 8px 0; }
+.more { display: inline-block; margin-top: 8px; padding: 6px 16px; border-bottom: 2px solid #fff; color: #fff; font-size: 16px; }
+.carousel-arrow { position: absolute; top: 50%; transform: translateY(-50%); font-size: 36px; color: #fff; cursor: pointer; padding: 8px 16px; background: rgba(0,0,0,0.35); border-radius: 4px; user-select: none; z-index: 50; }
+.carousel-arrow:hover { background: rgba(0,0,0,0.6); }
+.carousel-arrow.left { left: 10px; }
+.carousel-arrow.right { right: 10px; }

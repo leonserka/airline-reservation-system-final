@@ -1,0 +1,50 @@
+{% extends 'flights/base.html' %}
+
+{% block content %}
+
+<div class="alert alert-success mb-3">
+  Booking confirmed! Thank you for your purchase.
+</div>
+
+<h1 class="page-title">Your Tickets</h1>
+
+{% if tickets %}
+<div class="card">
+  <h2 class="card-header">Passenger Tickets</h2>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Passenger</th>
+        <th>Flight</th>
+        <th>Seat</th>
+        <th>Class</th>
+        <th>Price (€)</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for ticket in tickets %}
+      <tr>
+        <td>{{ ticket.passenger_name }} {{ ticket.passenger_surname }}</td>
+        <td>{{ ticket.flight.departure_city }} → {{ ticket.flight.arrival_city }} ({{ ticket.flight.date|date:"M. d, Y" }})</td>
+        <td>{{ ticket.seat_number }}</td>
+        <td>{{ ticket.seat_class }}</td>
+        <td>{{ ticket.price_paid }}</td>
+        <td><span class="badge badge-{{ ticket.payment_status }}">{{ ticket.payment_status|capfirst }}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="card">
+  <p>No tickets found.</p>
+</div>
+{% endif %}
+
+<div class="mt-3">
+  <a href="{% url 'home' %}" class="btn btn-primary">Return Home</a>
+</div>
+
+{% endblock %}

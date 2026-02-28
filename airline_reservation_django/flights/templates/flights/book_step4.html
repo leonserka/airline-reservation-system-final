@@ -1,0 +1,65 @@
+{% extends 'flights/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<ul class="step-indicator">
+  <li class="done"><span class="step-num">1</span> Passengers<span class="step-line"></span></li>
+  <li class="done"><span class="step-num">2</span> Class<span class="step-line"></span></li>
+  <li class="done"><span class="step-num">3</span> Seats<span class="step-line"></span></li>
+  <li class="active"><span class="step-num">4</span> Extras<span class="step-line"></span></li>
+  <li><span class="step-num">5</span> Payment</li>
+</ul>
+
+<h1 class="page-title">Extra Luggage &amp; Equipment</h1>
+
+<div class="card mb-3">
+  <h2 class="card-header">Flight Summary</h2>
+
+  <div class="flight-info">
+    <span class="route">{{ flight.departure_city }} → {{ flight.arrival_city }}</span>
+    <span class="details">
+      {{ flight.date|date:"M. d, Y" }} &middot;
+      {{ flight.departure_time|time:"H:i" }} → {{ flight.arrival_time|time:"H:i" }}
+      &middot; €{{ flight.price }}
+    </span>
+  </div>
+
+  <p class="mt-2"><strong>Current Total:</strong> €{{ total_price }}</p>
+</div>
+
+<form method="post">
+  {% csrf_token %}
+
+  <div class="card mb-3">
+    <h2 class="card-header">Extra Luggage</h2>
+
+    {% for key, cost in luggage_options.items %}
+    <label class="option-card">
+      <input type="radio" name="luggage_option" value="{{ key }}"> {{ key }} checked-in bag (+€{{ cost }})
+    </label>
+    {% endfor %}
+    <label class="option-card">
+      <input type="radio" name="luggage_option" value="" checked> No extra luggage
+    </label>
+  </div>
+
+  <div class="card mb-3">
+    <h2 class="card-header">Special Equipment</h2>
+
+    {% for key, cost in equipment_options.items %}
+    <label class="option-card">
+      <input type="radio" name="equipment_option" value="{{ key }}"> {{ key|capfirst }} equipment (+€{{ cost }})
+    </label>
+    {% endfor %}
+    <label class="option-card">
+      <input type="radio" name="equipment_option" value="" checked> No equipment
+    </label>
+  </div>
+
+  <div class="mt-3">
+    <button type="submit" class="btn btn-red">Continue to Payment →</button>
+  </div>
+</form>
+
+{% endblock %}

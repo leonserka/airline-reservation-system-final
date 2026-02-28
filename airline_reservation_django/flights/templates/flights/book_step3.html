@@ -1,0 +1,118 @@
+{% extends 'flights/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'flights/css/flight_step3.css' %}?v=3">
+{% endblock %}
+
+{% block content %}
+
+<ul class="step-indicator">
+  <li class="done"><span class="step-num">1</span> Passengers<span class="step-line"></span></li>
+  <li class="done"><span class="step-num">2</span> Class<span class="step-line"></span></li>
+  <li class="active"><span class="step-num">3</span> Seats<span class="step-line"></span></li>
+  <li><span class="step-num">4</span> Extras<span class="step-line"></span></li>
+  <li><span class="step-num">5</span> Payment</li>
+</ul>
+
+<h1 class="page-title">Select Your Seats</h1>
+
+<div class="card mb-3">
+  <h2 class="card-header">Flight Summary</h2>
+
+  <div class="flight-info">
+    <span class="route">{{ flight.departure_city }} → {{ flight.arrival_city }}</span>
+    <span class="details">
+      {{ flight.date|date:"M. d, Y" }} &middot;
+      {{ flight.departure_time|time:"H:i" }} → {{ flight.arrival_time|time:"H:i" }}
+    </span>
+  </div>
+
+  {% if return_flight %}
+  <div class="flight-info return">
+    <span class="route">{{ return_flight.departure_city }} → {{ return_flight.arrival_city }}</span>
+    <span class="details">
+      {{ return_flight.date|date:"M. d, Y" }} &middot;
+      {{ return_flight.departure_time|time:"H:i" }} → {{ return_flight.arrival_time|time:"H:i" }}
+    </span>
+  </div>
+  {% endif %}
+
+  <div class="mt-2">
+    <strong>Class:</strong> {{ request.session.seat_class }} &middot;
+    <strong>Total:</strong> €{{ total_price }} &middot;
+    <strong>Selected:</strong> <span id="seat-counter">{{ selected_seats|length }} / {{ num_passengers }}</span>
+    {% if remaining > 0 %}<span class="text-muted">({{ remaining }} remaining)</span>{% endif %}
+  </div>
+</div>
+
+<div class="card">
+  <h2 class="card-header">Seat Map</h2>
+
+  <div class="seatmap-legend">
+    <span class="legend-item"><span class="legend-dot available"></span> Available</span>
+    <span class="legend-item"><span class="legend-dot occupied"></span> Taken</span>
+    <span class="legend-item"><span class="legend-dot selected"></span> Selected</span>
+  </div>
+
+  {{ selected_seats|json_script:"pre-selected-seats" }}
+
+  <form method="post">
+    {% csrf_token %}
+    <input type="hidden" id="num-passengers" value="{{ num_passengers }}">
+    <input type="hidden" name="selected_seats_json" id="selected_seats_json" value="">
+
+    <div class="airplane-fuselage">
+
+      <div class="airplane-nose"></div>
+
+      <div class="seatmap">
+
+        <div class="seat-header-row">
+          <div class="row-num-col"></div>
+          <div class="seat-label">A</div>
+          <div class="seat-label">B</div>
+          <div class="aisle-label">✈</div>
+          <div class="seat-label">C</div>
+          <div class="seat-label">D</div>
+        </div>
+
+        {% for row in seat_positions %}
+        <div class="seat-row">
+          <div class="row-num-col">{{ row.row_number }}</div>
+          {% for seat in row.left %}
+          <div class="seat {% if seat.occupied %}occupied{% elif seat.seat_id in selected_seats %}selected{% endif %}"
+               data-seat="{{ seat.seat_id }}">
+          </div>
+          {% endfor %}
+          <div class="aisle"></div>
+          {% for seat in row.right %}
+          <div class="seat {% if seat.occupied %}occupied{% elif seat.seat_id in selected_seats %}selected{% endif %}"
+               data-seat="{{ seat.seat_id }}">
+          </div>
+          {% endfor %}
+        </div>
+        {% endfor %}
+
+      </div>
+
+      <div class="airplane-tail"></div>
+
+    </div>
+
+    <div style="text-align:center; margin-top:20px;">
+      <button type="submit" id="confirm-seats-btn" class="btn btn-primary" disabled>
+        Confirm Seats
+      </button>
+      <p class="text-muted" style="font-size:13px; margin-top:8px;">
+        Select {{ num_passengers }} seat{% if num_passengers != 1 %}s{% endif %} to continue
+      </p>
+    </div>
+  </form>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'flights/js/flight_step3.js' %}?v=3"></script>
+{% endblock %}

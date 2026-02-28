@@ -1,0 +1,62 @@
+{% extends 'flights/base.html' %}
+
+{% block title %}My Bookings — Airline Reservation{% endblock %}
+
+{% block content %}
+<h1 class="page-title">My Bookings</h1>
+<p class="page-subtitle">View and manage your booked flights</p>
+
+{% if tickets %}
+<div class="card">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Flight</th>
+                <th>Time</th>
+                <th>Seat</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ticket in tickets %}
+            <tr>
+                <td>{{ ticket.flight.departure_city }} → {{ ticket.flight.arrival_city }}</td>
+                <td>
+                    {{ ticket.flight.date }} {{ ticket.flight.departure_time|time:"H:i" }} → {{ ticket.flight.arrival_time|time:"H:i" }}
+                </td>
+                <td>{{ ticket.seat_number }} ({{ ticket.seat_class }})</td>
+                <td>€{{ ticket.price_paid }}</td>
+                <td>
+                    {% if ticket.payment_status == 'paid' %}
+                        <span class="badge badge-paid">Paid</span>
+                    {% elif ticket.payment_status == 'refunded' %}
+                        <span class="badge badge-refunded">Refunded</span>
+                    {% elif ticket.payment_status == 'booked' %}
+                        <span class="badge badge-booked">Booked</span>
+                    {% elif ticket.payment_status == 'canceled' %}
+                        <span class="badge badge-canceled">Canceled</span>
+                    {% else %}
+                        <span class="badge">{{ ticket.payment_status|capfirst }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'about_ticket' ticket.id %}" class="btn btn-primary btn-sm">View Ticket</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="card text-center">
+    <p class="mb-3">You have not booked any flights yet.</p>
+    <a href="{% url 'flight_list' %}" class="btn btn-primary">Browse Flights</a>
+</div>
+{% endif %}
+
+<div class="mt-3">
+    <a href="{% url 'home' %}" class="btn btn-secondary">Return Home</a>
+</div>
+{% endblock %}
