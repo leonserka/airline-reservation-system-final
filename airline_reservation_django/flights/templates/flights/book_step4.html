@@ -1,5 +1,5 @@
 {% extends 'flights/base.html' %}
-{% load static %}
+{% load static tz %}
 
 {% block content %}
 
@@ -20,7 +20,8 @@
     <span class="route">{{ flight.departure_city }} → {{ flight.arrival_city }}</span>
     <span class="details">
       {{ flight.date|date:"M. d, Y" }} &middot;
-      {{ flight.departure_time|time:"H:i" }} → {{ flight.arrival_time|time:"H:i" }}
+      {{ flight.departure_datetime|timezone:flight.departure_timezone|date:"H:i" }} ({{ flight.departure_timezone }})
+      → {{ flight.arrival_datetime|timezone:flight.arrival_timezone|date:"H:i" }} ({{ flight.arrival_timezone }})
       &middot; €{{ flight.price }}
     </span>
   </div>

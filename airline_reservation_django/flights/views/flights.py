@@ -14,6 +14,7 @@ def create_flight(request):
         return redirect("flight_list")
     return render(request, "flights/create_flight.html", {"form": form})
 
+
 def flight_list(request):
     dep = request.GET.get("departure_city")
     arr = request.GET.get("arrival_city")

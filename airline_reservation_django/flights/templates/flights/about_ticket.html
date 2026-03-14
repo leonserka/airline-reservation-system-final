@@ -1,4 +1,5 @@
 {% extends 'flights/base.html' %}
+{% load tz %}
 
 {% block title %}Ticket Details — Airline Reservation{% endblock %}
 
@@ -20,13 +21,19 @@
         </div>
 
         <div class="detail-item">
-            <span class="detail-label">Departure</span>
-            <span class="detail-value">{{ ticket.flight.date }} {{ ticket.flight.departure_time|time:"H:i" }}</span>
+            <span class="detail-label">Departure (Local)</span>
+            <span class="detail-value">
+                {{ ticket.flight.departure_datetime|timezone:ticket.flight.departure_timezone|date:"Y-m-d H:i" }}
+                ({{ ticket.flight.departure_timezone }})
+            </span>
         </div>
 
         <div class="detail-item">
-            <span class="detail-label">Arrival</span>
-            <span class="detail-value">{{ ticket.flight.arrival_time|time:"H:i" }}</span>
+            <span class="detail-label">Arrival (Local)</span>
+            <span class="detail-value">
+                {{ ticket.flight.arrival_datetime|timezone:ticket.flight.arrival_timezone|date:"Y-m-d H:i" }}
+                ({{ ticket.flight.arrival_timezone }})
+            </span>
         </div>
 
         <div class="detail-item">
@@ -84,6 +91,12 @@
 <div class="mt-3 gap-sm">
     {% if can_cancel and ticket.status != 'canceled' %}
         <a href="{% url 'cancel_booked_flight' ticket.id %}" class="btn btn-danger">Cancel Ticket</a>
+    {% endif %}
+
+    {% if ticket.checked_in %}
+        <a href="?download=pdf" class="btn btn-primary">Download Boarding Pass (PDF)</a>
+    {% else %}
+        <a href="{% url 'check_in' ticket.id %}" class="btn btn-success">Check-In Now</a>
     {% endif %}
 
     <a href="{% url 'check_booked_flights' %}" class="btn btn-secondary">Back</a>

@@ -1,4 +1,5 @@
 {% extends 'flights/base.html' %}
+{% load tz %}
 
 {% block title %}My Bookings — Airline Reservation{% endblock %}
 
@@ -12,7 +13,7 @@
         <thead>
             <tr>
                 <th>Flight</th>
-                <th>Time</th>
+                <th>Local Time</th>
                 <th>Seat</th>
                 <th>Price</th>
                 <th>Status</th>
@@ -24,7 +25,8 @@
             <tr>
                 <td>{{ ticket.flight.departure_city }} → {{ ticket.flight.arrival_city }}</td>
                 <td>
-                    {{ ticket.flight.date }} {{ ticket.flight.departure_time|time:"H:i" }} → {{ ticket.flight.arrival_time|time:"H:i" }}
+                    🛫 {{ ticket.flight.departure_datetime|timezone:ticket.flight.departure_timezone|date:"Y-m-d H:i" }}<br>
+                    🛬 {{ ticket.flight.arrival_datetime|timezone:ticket.flight.arrival_timezone|date:"Y-m-d H:i" }}
                 </td>
                 <td>{{ ticket.seat_number }} ({{ ticket.seat_class }})</td>
                 <td>€{{ ticket.price_paid }}</td>

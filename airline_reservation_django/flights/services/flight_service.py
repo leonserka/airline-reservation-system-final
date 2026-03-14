@@ -27,7 +27,10 @@ def search(dep_city, arr_city, dep_date_str, ret_date_str):
         flights = base.filter(date=dep_date) if dep_date else base
         if ret_date:
             returns = Flight.objects.filter(
-                departure_city=arr_city, arrival_city=dep_city, date=ret_date, date__gte=today
+                departure_city=arr_city,
+                arrival_city=dep_city,
+                date=ret_date,
+                date__gte=today,
             )
 
     return {"flights": flights, "return_flights": returns, "show_results": show_results}
@@ -59,7 +62,8 @@ def get_available_dates_for_route(dep_city, arr_city, route_type="departure"):
     if not dep_city or not arr_city:
         return []
     if route_type == "departure":
-        qs = Flight.objects.filter(departure_city=dep_city, arrival_city=arr_city, date__gte=today)
+        flights = Flight.objects.filter(departure_city=dep_city, arrival_city=arr_city, date__gte=today)
     else:
-        qs = Flight.objects.filter(departure_city=arr_city, arrival_city=dep_city, date__gte=today)
-    return sorted(set(d.strftime("%Y-%m-%d") for d in qs.values_list("date", flat=True).distinct()))
+        flights = Flight.objects.filter(departure_city=arr_city, arrival_city=dep_city, date__gte=today)
+    all_dates = flights.values_list("date", flat=True).distinct()
+    return sorted(set(d.strftime("%Y-%m-%d") for d in all_dates))

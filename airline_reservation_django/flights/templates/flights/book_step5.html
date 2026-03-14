@@ -1,5 +1,5 @@
 {% extends 'flights/base.html' %}
-{% load static %}
+{% load static tz %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'flights/css/book_step5.css' %}">
@@ -24,7 +24,8 @@
     <span class="route">{{ flight.departure_city }} → {{ flight.arrival_city }}</span>
     <span class="details">
       {{ flight.date|date:"M. d, Y" }} &middot;
-      {{ flight.departure_time|time:"H:i" }} → {{ flight.arrival_time|time:"H:i" }}
+      {{ flight.departure_datetime|timezone:flight.departure_timezone|date:"H:i" }} ({{ flight.departure_timezone }})
+      → {{ flight.arrival_datetime|timezone:flight.arrival_timezone|date:"H:i" }} ({{ flight.arrival_timezone }})
       &middot; €{{ flight.price }}
     </span>
   </div>
@@ -34,7 +35,8 @@
     <span class="route">{{ return_flight.departure_city }} → {{ return_flight.arrival_city }}</span>
     <span class="details">
       {{ return_flight.date|date:"M. d, Y" }} &middot;
-      {{ return_flight.departure_time|time:"H:i" }} → {{ return_flight.arrival_time|time:"H:i" }}
+      {{ return_flight.departure_datetime|timezone:return_flight.departure_timezone|date:"H:i" }} ({{ return_flight.departure_timezone }})
+      → {{ return_flight.arrival_datetime|timezone:return_flight.arrival_timezone|date:"H:i" }} ({{ return_flight.arrival_timezone }})
       &middot; €{{ return_flight.price }}
     </span>
   </div>
@@ -44,8 +46,7 @@
 </div>
 
 <div class="card">
-  <h2 class="card-header">Pay with PayPal</h2>
-  <div id="paypal-button-container" style="max-width: 450px; margin: 0 auto;"></div>
+  <h2 class="card-header">Pay with PayPal</h2>  <div id="paypal-button-container" style="max-width: 450px; margin: 0 auto;"></div>
 </div>
 
 <div id="loading-overlay" class="loading-overlay">

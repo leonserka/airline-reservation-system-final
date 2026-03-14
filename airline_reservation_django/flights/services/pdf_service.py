@@ -2,25 +2,21 @@ import base64
 import os
 import qrcode
 from io import BytesIO
-from datetime import timedelta
+from datetime import datetime, timedelta
 from django.template.loader import render_to_string
 from django.conf import settings
 from weasyprint import HTML, CSS
 
 
 def generate_ticket_pdf(ticket):
-    fl = ticket.flight
-    departure_local = f"{fl.date} {fl.departure_time.strftime('%H:%M')}"
-    arrival_local = fl.arrival_time.strftime("%H:%M")
+    departure_local = ticket.flight.departure_datetime.strftime("%Y-%m-%d %H:%M")
+    arrival_local = ticket.flight.arrival_datetime.strftime("%Y-%m-%d %H:%M")
 
-    qr_img = qrcode.make(f"TICKET-{ticket.id}-{fl.flight_number}")
+    qr_img = qrcode.make(f"TICKET-{ticket.id}-{ticket.flight.flight_number}")
     buf = BytesIO()
     qr_img.save(buf, format="PNG")
     qr_base64 = base64.b64encode(buf.getvalue()).decode()
-
-    from datetime import datetime as dt
-    dep_dt = dt.combine(fl.date, fl.departure_time)
-    gate_closes = (dep_dt - timedelta(minutes=30)).strftime("%H:%M")
+    gate_closes = (ticket.flight.departure_datetime - timedelta(minutes=30)).strftime("%H:%M")
 
     context = {
         "ticket": ticket,
@@ -42,6 +38,7 @@ def generate_ticket_pdf(ticket):
 def generate_receipt_pdf(flight, passengers, seat_class, user):
     rows = []
     total_sum = 0.0
+
     for p in passengers:
         price = float(flight.price)
         rows.append({

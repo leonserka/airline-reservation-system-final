@@ -4,6 +4,7 @@ from ..constants import (
     SKEY_LUGGAGE, SKEY_EQUIPMENT
 )
 
+
 class BookingSession:
     def __init__(self, request):
         self.session = request.session
@@ -88,8 +89,8 @@ class BookingSession:
     def clear(self):
         keys = [
             SKEY_OUTBOUND_ID, SKEY_PASSENGERS, SKEY_NUM_PAX,
-            SKEY_SELECTED_SEATS, SKEY_SEAT_CLASS, SKEY_TOTAL_PRICE, SKEY_RETURN_ID,
-            SKEY_LUGGAGE, SKEY_EQUIPMENT
+            SKEY_SELECTED_SEATS, SKEY_SEAT_CLASS, SKEY_TOTAL_PRICE,
+            SKEY_RETURN_ID, SKEY_LUGGAGE, SKEY_EQUIPMENT,
         ]
         for key in keys:
             self.session.pop(key, None)

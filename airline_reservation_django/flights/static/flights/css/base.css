@@ -1,112 +1,525 @@
+/* ===== Reset & Base ===== */
 *, *::before, *::after { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
-body { font-family: Arial, sans-serif; background: #f4f4f4; color: #222; min-height: 100vh; display: flex; flex-direction: column; }
+html, body { margin: 0; padding: 0; width: 100%; overflow-x: hidden; }
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #222;
+    background: #f0f2f5;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
 a { color: #003366; text-decoration: none; }
 a:hover { text-decoration: underline; }
 
-/* Header */
-.ca-header { background: #003366; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; height: 52px; }
-.ca-left .brand-text { font-weight: bold; font-size: 16px; color: #fff; text-decoration: none; }
-.ca-nav { display: flex; gap: 6px; }
-.ca-nav a { color: #fff; font-size: 14px; padding: 4px 12px; text-decoration: none; }
-.ca-nav a:hover { text-decoration: underline; }
-.ca-right { display: flex; align-items: center; gap: 8px; }
-.ca-right .user-welcome { color: #fff; font-size: 14px; }
-.btn-header { padding: 4px 12px; font-size: 13px; border: 1px solid #fff; color: #fff; border-radius: 3px; text-decoration: none; }
-.btn-header:hover { background: rgba(255,255,255,0.15); text-decoration: none; }
-.btn-header.btn-logout { background: #c0392b; border-color: #c0392b; }
+/* ===== CA Header ===== */
+.ca-header {
+    width: 100%;
+    height: 60px;
+    background: #003366;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
 
-/* Main */
-.main-content { flex: 1; max-width: 1100px; width: 100%; margin: 0 auto; padding: 24px 16px 40px; }
+.ca-left .brand-text {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 1.5px;
+    text-decoration: none;
+}
 
-/* Footer */
-.ca-footer { background: #003366; color: #ccc; text-align: center; padding: 14px; font-size: 13px; margin-top: auto; }
+.ca-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
-/* Titles */
-.page-title { font-size: 22px; font-weight: bold; margin: 0 0 20px; }
-.page-subtitle { font-size: 14px; color: #666; margin: -14px 0 20px; }
+.ca-nav a {
+    color: rgba(255,255,255,0.85);
+    font-size: 14px;
+    padding: 6px 14px;
+    border-radius: 4px;
+    transition: background 0.2s, color 0.2s;
+    text-decoration: none;
+}
 
-/* Cards */
-.card { background: #fff; border: 1px solid #ddd; border-radius: 4px; padding: 20px; margin-bottom: 20px; }
-.card-header { font-size: 16px; font-weight: bold; margin: 0 0 14px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+.ca-nav a:hover {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    text-decoration: none;
+}
 
-/* Buttons */
-.btn { display: inline-block; padding: 8px 18px; border: none; border-radius: 4px; font-size: 14px; cursor: pointer; text-decoration: none; }
-.btn:hover { opacity: 0.85; text-decoration: none; }
+.ca-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ca-right .user-welcome {
+    color: rgba(255,255,255,0.9);
+    font-size: 14px;
+}
+
+/* Header buttons */
+.btn-header {
+    padding: 6px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.4);
+    color: #fff;
+    transition: all 0.2s;
+}
+
+.btn-header:hover {
+    background: rgba(255,255,255,0.15);
+    text-decoration: none;
+}
+
+.btn-header.btn-logout {
+    background: rgba(217, 43, 43, 0.8);
+    border-color: transparent;
+}
+
+.btn-header.btn-logout:hover {
+    background: #d92b2b;
+}
+
+/* Currency selector in header */
+.currency-form {
+    display: flex;
+    align-items: center;
+}
+
+.currency-select {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 13px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.currency-select option {
+    background: #003366;
+    color: #fff;
+}
+
+.currency-select:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+/* ===== Main Content ===== */
+.main-content {
+    flex: 1;
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 32px 20px 48px;
+}
+
+/* ===== Page Titles ===== */
+.page-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #003366;
+    margin: 0 0 24px;
+}
+
+.page-subtitle {
+    font-size: 15px;
+    color: #666;
+    margin: -16px 0 24px;
+}
+
+/* ===== Cards ===== */
+.card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+    padding: 28px 32px;
+    margin-bottom: 24px;
+}
+
+.card-header {
+    font-size: 17px;
+    font-weight: 600;
+    color: #003366;
+    margin: 0 0 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #f0f2f5;
+}
+
+/* ===== Buttons ===== */
+.btn {
+    display: inline-block;
+    padding: 10px 22px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+    line-height: 1.4;
+}
+
+.btn:hover { text-decoration: none; opacity: 0.9; transform: translateY(-1px); }
+
 .btn-primary { background: #003366; color: #fff; }
-.btn-red { background: #c0392b; color: #fff; }
-.btn-danger { background: #c0392b; color: #fff; }
-.btn-success { background: #1a7a4a; color: #fff; }
+.btn-primary:hover { background: #00254d; }
+
+.btn-red { background: #d92b2b; color: #fff; }
+.btn-red:hover { background: #b52020; }
+
+.btn-danger { background: #d92b2b; color: #fff; }
+.btn-danger:hover { background: #b52020; }
+
+.btn-success { background: #1a8754; color: #fff; }
+.btn-success:hover { background: #146b43; }
+
 .btn-secondary { background: #6c757d; color: #fff; }
-.btn-sm { padding: 4px 10px; font-size: 13px; }
+.btn-secondary:hover { background: #565e64; }
 
-/* Tables */
-.table { width: 100%; border-collapse: collapse; }
-.table th { background: #003366; color: #fff; padding: 10px 12px; text-align: left; font-size: 13px; }
-.table td { padding: 10px 12px; border-bottom: 1px solid #eee; font-size: 14px; vertical-align: middle; }
-.table tbody tr:hover { background: #f9f9f9; }
-.table tbody tr:last-child td { border-bottom: none; }
+.btn-sm { padding: 6px 14px; font-size: 13px; }
 
-/* Forms */
-.form-group { margin-bottom: 14px; }
-.form-group label, .form-label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 4px; }
-.form-control { width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
-.form-control:focus { outline: none; border-color: #003366; }
-select.form-control { cursor: pointer; }
+/* ===== Tables ===== */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
-.django-form p { margin-bottom: 12px; }
-.django-form p label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 4px; }
-.django-form p input, .django-form p select, .django-form p textarea { width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
-.django-form p input:focus, .django-form p select:focus { outline: none; border-color: #003366; }
-.django-form .helptext { font-size: 12px; color: #888; }
-.django-form .errorlist { color: #c0392b; font-size: 13px; list-style: none; padding: 0; margin: 2px 0 0; }
+.table th {
+    background: #003366;
+    color: #fff;
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 12px 14px;
+    text-align: left;
+}
 
-/* Flight info */
-.flight-info { display: flex; gap: 14px; align-items: center; padding: 12px 14px; background: #f0f4f8; border-left: 3px solid #003366; margin-bottom: 10px; }
-.flight-info.return { border-left-color: #c0392b; }
-.flight-info .route { font-weight: bold; }
-.flight-info .details { font-size: 13px; color: #555; }
+.table th:first-child { border-radius: 6px 0 0 0; }
+.table th:last-child { border-radius: 0 6px 0 0; }
 
-/* Step indicator */
-.step-indicator { display: flex; justify-content: center; gap: 4px; margin-bottom: 24px; padding: 0; list-style: none; }
-.step-indicator li { display: flex; align-items: center; gap: 4px; font-size: 13px; color: #999; }
-.step-indicator li .step-num { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: #ddd; color: #666; font-size: 12px; font-weight: bold; }
-.step-indicator li.active .step-num { background: #003366; color: #fff; }
-.step-indicator li.active { color: #003366; font-weight: bold; }
-.step-indicator li.done .step-num { background: #1a7a4a; color: #fff; }
-.step-indicator li.done { color: #1a7a4a; }
-.step-indicator li .step-line { width: 28px; height: 2px; background: #ddd; margin: 0 2px; }
-.step-indicator li.done .step-line { background: #1a7a4a; }
+.table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid #eef0f3;
+    font-size: 14px;
+    vertical-align: middle;
+}
 
-/* Alerts */
-.alert { padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px; }
-.alert-danger { background: #fdecea; color: #a00; border: 1px solid #f5c6cb; }
-.alert-success { background: #e8f5e9; color: #155724; border: 1px solid #c3e6cb; }
-.alert-info { background: #e7f3fe; color: #0c5460; border: 1px solid #bee5eb; }
+.table tbody tr:hover {
+    background: #f8f9fb;
+}
 
-/* Ticket grid */
-.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 24px; }
-.detail-grid .detail-item { padding: 6px 0; border-bottom: 1px solid #eee; }
-.detail-grid .detail-label { font-size: 11px; font-weight: bold; text-transform: uppercase; color: #888; }
-.detail-grid .detail-value { font-size: 14px; }
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
 
-/* Badges */
-.badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px; font-weight: bold; }
-.badge-paid { background: #e8f5e9; color: #1a7a4a; }
-.badge-refunded { background: #fdecea; color: #c0392b; }
-.badge-booked { background: #e7f3fe; color: #003366; }
-.badge-canceled { background: #fdecea; color: #c0392b; }
+/* ===== Forms ===== */
+.form-group {
+    margin-bottom: 16px;
+}
 
-/* Fieldset */
-fieldset.passenger-fieldset { border: 1px solid #ddd; border-radius: 4px; padding: 16px 20px; margin-bottom: 16px; }
-fieldset.passenger-fieldset legend { font-size: 14px; font-weight: bold; padding: 0 6px; }
+.form-group label,
+.form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #003366;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
 
-/* Option cards */
-.option-card { display: block; padding: 10px 14px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 6px; cursor: pointer; }
-.option-card:hover { border-color: #003366; background: #f8f8f8; }
-.option-card input[type="radio"] { margin-right: 6px; }
+.form-control {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccd3db;
+    border-radius: 6px;
+    font-size: 15px;
+    color: #222;
+    background: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
 
-/* Utility */
+.form-control:focus {
+    outline: none;
+    border-color: #003366;
+    box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.1);
+}
+
+select.form-control {
+    cursor: pointer;
+}
+
+/* Django form rendering */
+.django-form p {
+    margin-bottom: 14px;
+}
+
+.django-form p label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #003366;
+    margin-bottom: 4px;
+}
+
+.django-form p input,
+.django-form p select,
+.django-form p textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccd3db;
+    border-radius: 6px;
+    font-size: 15px;
+    color: #222;
+    background: #fff;
+}
+
+.django-form p input:focus,
+.django-form p select:focus {
+    outline: none;
+    border-color: #003366;
+    box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.1);
+}
+
+.django-form .helptext {
+    font-size: 12px;
+    color: #888;
+    margin-top: 2px;
+}
+
+.django-form .errorlist {
+    color: #d92b2b;
+    font-size: 13px;
+    list-style: none;
+    padding: 0;
+    margin: 2px 0 0;
+}
+
+/* ===== Flight Info Boxes ===== */
+.flight-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 18px;
+    background: #f8f9fb;
+    border-left: 4px solid #003366;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 12px;
+}
+
+.flight-info.return {
+    border-left-color: #d92b2b;
+}
+
+.flight-info .route {
+    font-size: 16px;
+    font-weight: 600;
+    color: #003366;
+}
+
+.flight-info .details {
+    font-size: 13px;
+    color: #666;
+}
+
+/* ===== Booking Step Indicator ===== */
+.step-indicator {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 32px;
+    padding: 0;
+    list-style: none;
+}
+
+.step-indicator li {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: #aab0b8;
+    font-weight: 500;
+}
+
+.step-indicator li .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #dde1e6;
+    color: #888;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.step-indicator li.active .step-num {
+    background: #003366;
+    color: #fff;
+}
+
+.step-indicator li.active {
+    color: #003366;
+    font-weight: 600;
+}
+
+.step-indicator li.done .step-num {
+    background: #1a8754;
+    color: #fff;
+}
+
+.step-indicator li.done { color: #1a8754; }
+
+.step-indicator li .step-line {
+    width: 32px;
+    height: 2px;
+    background: #dde1e6;
+    margin: 0 2px;
+}
+
+.step-indicator li.done .step-line {
+    background: #1a8754;
+}
+
+/* ===== Alerts / Messages ===== */
+.alert {
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.alert-danger {
+    background: #fdeced;
+    color: #9b1c1c;
+    border: 1px solid #f8d7da;
+}
+
+.alert-success {
+    background: #e6f4ed;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-info {
+    background: #e7f1fa;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+/* ===== Ticket Detail Grid ===== */
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 32px;
+}
+
+.detail-grid .detail-item {
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f2f5;
+}
+
+.detail-grid .detail-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #888;
+}
+
+.detail-grid .detail-value {
+    font-size: 15px;
+    color: #222;
+    font-weight: 500;
+}
+
+/* ===== Status Badges ===== */
+.badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.badge-paid { background: #e6f4ed; color: #1a8754; }
+.badge-refunded { background: #fdeced; color: #d92b2b; }
+.badge-booked { background: #e7f1fa; color: #003366; }
+.badge-canceled { background: #fdeced; color: #d92b2b; }
+
+/* ===== Fieldset ===== */
+fieldset.passenger-fieldset {
+    border: 1px solid #e0e3e8;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+    background: #fafbfc;
+}
+
+fieldset.passenger-fieldset legend {
+    font-size: 14px;
+    font-weight: 700;
+    color: #003366;
+    padding: 0 8px;
+}
+
+/* ===== Radio / Option Cards ===== */
+.option-card {
+    display: block;
+    padding: 12px 16px;
+    border: 1px solid #e0e3e8;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.option-card:hover {
+    border-color: #003366;
+    background: #f8f9fb;
+}
+
+.option-card input[type="radio"] {
+    margin-right: 8px;
+}
+
+/* ===== Footer ===== */
+.ca-footer {
+    background: #003366;
+    color: rgba(255,255,255,0.7);
+    text-align: center;
+    padding: 20px;
+    font-size: 13px;
+    margin-top: auto;
+}
+
+.ca-footer a {
+    color: rgba(255,255,255,0.9);
+}
+
+/* ===== Utility ===== */
 .text-center { text-align: center; }
 .text-muted { color: #888; }
 .mt-1 { margin-top: 8px; }
@@ -114,12 +527,16 @@ fieldset.passenger-fieldset legend { font-size: 14px; font-weight: bold; padding
 .mt-3 { margin-top: 24px; }
 .mb-2 { margin-bottom: 16px; }
 .mb-3 { margin-bottom: 24px; }
-.gap-sm { display: flex; gap: 8px; align-items: center; }
+.gap-sm { display: flex; gap: 10px; align-items: center; }
 .flex-between { display: flex; justify-content: space-between; align-items: center; }
 
+/* ===== Responsive ===== */
 @media (max-width: 768px) {
+    .ca-header { padding: 0 12px; }
     .ca-nav { display: none; }
-    .main-content { padding: 16px 12px; }
+    .main-content { padding: 20px 12px; }
+    .card { padding: 20px 16px; }
     .detail-grid { grid-template-columns: 1fr; }
     .step-indicator { flex-wrap: wrap; }
+    .step-indicator li .step-line { width: 16px; }
 }

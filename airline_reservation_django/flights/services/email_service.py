@@ -1,10 +1,13 @@
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, EmailMessage
 from django.conf import settings
 
 
 def send_receipt_email(to_email, total_sum, pdf_buffer=None, flight=None, user=None):
     try:
-        subject = f"Booking Confirmed: {flight.departure_city} → {flight.arrival_city} on {flight.date}" if flight else "Booking Confirmation"
+        subject = (
+            f"Booking Confirmed: {flight.departure_city} → {flight.arrival_city} on {flight.date}"
+            if flight else "Booking Confirmation"
+        )
         username = user.username if user else "Passenger"
         route = f"{flight.departure_city} → {flight.arrival_city}" if flight else "N/A"
         date = str(flight.date) if flight else "N/A"
@@ -37,12 +40,32 @@ def send_receipt_email(to_email, total_sum, pdf_buffer=None, flight=None, user=N
         """
 
         from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'no-reply@airline.com')
-        msg = EmailMultiAlternatives(subject=subject, body=text_body, from_email=from_email, to=[to_email])
+        msg = EmailMultiAlternatives(
+            subject=subject,
+            body=text_body,
+            from_email=from_email,
+            to=[to_email],
+        )
         msg.attach_alternative(html_body, "text/html")
         if pdf_buffer:
             msg.attach("receipt.pdf", pdf_buffer.getvalue(), "application/pdf")
         msg.send()
         return True
+
     except Exception as e:
         print(f"[EMAIL ERROR] Failed to send receipt email to {to_email}: {e}")
+        return False
+
+
+def send_checkin_email(to_email, flight_number):
+    try:
+        EmailMessage(
+            subject=f"Check-in Confirmed – Flight {flight_number}",
+            body=f"You have successfully checked in for flight {flight_number}.",
+            to=[to_email],
+            from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', 'no-reply@airline.com'),
+        ).send()
+        return True
+    except Exception as e:
+        print(f"[EMAIL ERROR] Failed to send check-in email to {to_email}: {e}")
         return False

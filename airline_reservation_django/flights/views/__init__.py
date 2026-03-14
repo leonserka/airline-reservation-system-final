@@ -19,4 +19,5 @@ from .tickets import (
     check_booked_flights,
     cancel_booked_flight,
     about_ticket,
+    check_in,
 )
