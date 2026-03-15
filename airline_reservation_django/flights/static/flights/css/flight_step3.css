@@ -1,4 +1,3 @@
-/* ===== Seat Map Legend ===== */
 .seatmap-legend {
     display: flex;
     gap: 20px;
@@ -25,7 +24,6 @@
 .legend-dot.occupied  { background: #ccd3db; }
 .legend-dot.selected  { background: #003366; }
 
-/* ===== Airplane Fuselage ===== */
 .airplane-fuselage {
     max-width: 320px;
     margin: 0 auto;
@@ -52,12 +50,10 @@
     opacity: 0.2;
 }
 
-/* ===== Seat Grid ===== */
 .seatmap {
     padding: 4px 0;
 }
 
-/* Header row: blank | A | B | icon | C | D */
 .seat-header-row {
     display: flex;
     align-items: center;
@@ -85,7 +81,6 @@
     color: #aab0bb;
 }
 
-/* Row number column */
 .row-num-col {
     width: 20px;
     text-align: right;
@@ -96,7 +91,6 @@
     flex-shrink: 0;
 }
 
-/* Each seat row */
 .seat-row {
     display: flex;
     align-items: center;
@@ -109,7 +103,6 @@
     width: 32px;
 }
 
-/* ===== Individual Seat ===== */
 .seat {
     width: 40px;
     height: 36px;
@@ -122,7 +115,6 @@
     position: relative;
 }
 
-/* headrest visual line */
 .seat::before {
     content: '';
     display: block;

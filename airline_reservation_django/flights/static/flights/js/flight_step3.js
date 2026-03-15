@@ -7,7 +7,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (!input || !form) return;
 
-    // Read seats already selected (from server, e.g. after return-flight redirect)
     let selectedSeats = new Set();
     try {
         const pre = JSON.parse(document.getElementById('pre-selected-seats').textContent || '[]');
