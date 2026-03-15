@@ -37,16 +37,14 @@ class Flight(models.Model):
 
     @property
     def arrival_datetime(self):
-        naive_arr = datetime.combine(self.date, self.arrival_time)
+        arrival = datetime.combine(self.date, self.arrival_time)
 
         if self.arrival_time <= self.departure_time:
-            naive_arr += timedelta(days=1)
+            arrival += timedelta(days=1)
 
         dep_tz = ZoneInfo(self.departure_timezone or "UTC")
         arr_tz = ZoneInfo(self.arrival_timezone or "UTC")
-
-        dt_in_dep = naive_arr.replace(tzinfo=dep_tz)
-        return dt_in_dep.astimezone(arr_tz)
+        return arrival.replace(tzinfo=dep_tz).astimezone(arr_tz)
 
     def __str__(self):
         return f"{self.flight_number} | {self.departure_city} → {self.arrival_city} | {self.date}"

@@ -28,11 +28,7 @@ def generate_ticket_pdf(ticket):
 
     html = render_to_string("flights/ticket_pdf_template.html", context)
     css_path = os.path.join(settings.BASE_DIR, "flights", "static", "flights", "css", "ticket_pdf.css")
-    pdf_bytes = HTML(string=html).write_pdf(stylesheets=[CSS(css_path)])
-    out = BytesIO()
-    out.write(pdf_bytes)
-    out.seek(0)
-    return out
+    return BytesIO(HTML(string=html).write_pdf(stylesheets=[CSS(css_path)]))
 
 
 def generate_receipt_pdf(flight, passengers, seat_class, user):
@@ -61,8 +57,4 @@ def generate_receipt_pdf(flight, passengers, seat_class, user):
     html = render_to_string("flights/receipt_pdf_template.html", context)
     css_path = os.path.join(settings.BASE_DIR, "flights", "static", "flights", "css", "receipt_pdf.css")
     stylesheets = [CSS(css_path)] if os.path.exists(css_path) else []
-    pdf_bytes = HTML(string=html).write_pdf(stylesheets=stylesheets)
-    out = BytesIO()
-    out.write(pdf_bytes)
-    out.seek(0)
-    return out, total_sum
+    return BytesIO(HTML(string=html).write_pdf(stylesheets=stylesheets)), total_sum

@@ -16,12 +16,3 @@ EQUIPMENT = {
     'baby': 10,
 }
 
-SKEY_OUTBOUND_ID    = "outbound_flight_id"
-SKEY_RETURN_ID      = "return_id"
-SKEY_PASSENGERS     = "passengers"
-SKEY_NUM_PAX        = "num_passengers"
-SKEY_SEAT_CLASS     = "seat_class"
-SKEY_SELECTED_SEATS = "selected_seats"
-SKEY_TOTAL_PRICE    = "total_price"
-SKEY_LUGGAGE        = "selected_luggage"
-SKEY_EQUIPMENT      = "selected_equipment"

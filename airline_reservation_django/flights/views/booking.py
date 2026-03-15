@@ -10,25 +10,30 @@ from ..services.seatmap_service import build_seat_positions
 from ..services.booking_service import process_booking
 from ..services.booking_session import BookingSession
 
+
 def get_return_flight(bs):
-    rid = bs.return_flight_id
+    rid = bs.get_return_flight_id()
     return Flight.objects.filter(id=rid).first() if rid else None
+
 
 @login_required
 def book_step1(request, flight_id):
     bs = BookingSession(request)
     flight = get_object_or_404(Flight, id=flight_id)
-    bs.outbound_flight_id = flight.id
+
+    bs.set_outbound_flight_id(flight.id)
+
     if request.GET.get("return_id"):
-        bs.return_flight_id = request.GET.get("return_id")
-    return_flight = get_return_flight(bs) 
-    num_passengers = int(request.GET.get("pax", bs.num_passengers))
+        bs.set_return_flight_id(request.GET.get("return_id"))
+
+    return_flight = get_return_flight(bs)
+    num_passengers = int(request.GET.get("pax", bs.get_num_passengers()))
 
     if request.method == "POST":
         forms = [PassengerForm(request.POST, prefix=str(i)) for i in range(num_passengers)]
         if all(f.is_valid() for f in forms):
-            bs.passengers = [f.cleaned_data for f in forms]
-            bs.num_passengers = num_passengers
+            bs.set_passengers([f.cleaned_data for f in forms])
+            bs.set_num_passengers(num_passengers)
             return redirect("book_step2", flight_id=flight.id)
     else:
         forms = [PassengerForm(prefix=str(i)) for i in range(num_passengers)]
@@ -40,6 +45,7 @@ def book_step1(request, flight_id):
         "num_passengers": num_passengers,
     })
 
+
 @login_required
 def book_step2(request, flight_id):
     bs = BookingSession(request)
@@ -48,10 +54,11 @@ def book_step2(request, flight_id):
 
     if request.method == "POST":
         seat_class = request.POST.get("seat_class")
-        bs.seat_class = seat_class
+        bs.set_seat_class(seat_class)
+
         dep_price = flight.price + SEAT_PRICES.get(seat_class, 0)
         ret_price = return_flight.price + SEAT_PRICES.get(seat_class, 0) if return_flight else 0
-        bs.total_price = float(dep_price + ret_price)
+        bs.set_total_price(float(dep_price + ret_price))
 
         return redirect("book_step3", flight_id=flight.id)
 
@@ -64,14 +71,15 @@ def book_step2(request, flight_id):
         "total_price": flight.price,
     })
 
+
 @login_required
 def book_step3(request, flight_id):
     bs = BookingSession(request)
     flight = get_object_or_404(Flight, id=flight_id)
     return_flight = get_return_flight(bs)
 
-    num_passengers = bs.num_passengers
-    all_selected = bs.selected_seats
+    num_passengers = bs.get_num_passengers()
+    all_selected = bs.get_selected_seats()
     selected = all_selected.get(str(flight_id), [])
 
     taken = set(
@@ -84,15 +92,16 @@ def book_step3(request, flight_id):
             picks = json.loads(request.POST.get("selected_seats_json", "[]"))
         except (json.JSONDecodeError, ValueError):
             picks = []
+
         picks = [p for p in picks if isinstance(p, str) and p not in taken]
         all_selected[str(flight_id)] = picks
-        bs.selected_seats = all_selected
+        bs.set_selected_seats(all_selected)
         selected = picks
 
         if len(selected) >= num_passengers:
             if return_flight and str(return_flight.id) not in all_selected:
                 return redirect("book_step3", flight_id=return_flight.id)
-            outbound_id = bs.outbound_flight_id or flight.id
+            outbound_id = bs.get_outbound_flight_id() or flight.id
             return redirect("book_step4", flight_id=outbound_id)
 
     seat_positions = build_seat_positions(
@@ -109,8 +118,9 @@ def book_step3(request, flight_id):
         "selected_seats": selected,
         "num_passengers": num_passengers,
         "remaining": num_passengers - len(selected),
-        "total_price": bs.total_price or float(flight.price),
+        "total_price": bs.get_total_price() or float(flight.price),
     })
+
 
 @login_required
 def book_step4(request, flight_id):
@@ -122,9 +132,9 @@ def book_step4(request, flight_id):
         lug = request.POST.get("luggage_option")
         eq = request.POST.get("equipment_option")
         extra = LUGGAGE.get(lug, 0) + EQUIPMENT.get(eq, 0)
-        bs.luggage = lug
-        bs.equipment = eq
-        bs.total_price = total + extra
+        bs.set_luggage(lug)
+        bs.set_equipment(eq)
+        bs.set_total_price(total + extra)
 
         return redirect("book_step5", flight_id=flight.id)
 
@@ -135,16 +145,17 @@ def book_step4(request, flight_id):
         "equipment_options": EQUIPMENT,
     })
 
+
 @login_required
 def book_step5(request, flight_id):
     bs = BookingSession(request)
     flight = get_object_or_404(Flight, id=flight_id)
     return_flight = get_return_flight(bs)
-    passengers = bs.passengers
-    seat_class = bs.seat_class
-    all_selected = bs.selected_seats
-    luggage = bs.luggage
-    equipment = bs.equipment
+    passengers = bs.get_passengers()
+    seat_class = bs.get_seat_class()
+    all_selected = bs.get_selected_seats()
+    luggage = bs.get_luggage()
+    equipment = bs.get_equipment()
     total_price = bs.init_price(float(flight.price))
 
     if request.method == "GET":
@@ -173,8 +184,9 @@ def book_step5(request, flight_id):
     )
 
     if result["status"] == "ok":
-        bs.clear() 
+        bs.clear()
     return JsonResponse(result)
+
 
 @login_required
 def book_success(request):

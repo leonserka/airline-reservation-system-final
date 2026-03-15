@@ -1,15 +1,11 @@
-import logging
 from django.db import transaction, IntegrityError
 from ..models import Ticket
 from .pdf_service import generate_receipt_pdf
 from .email_service import send_receipt_email
 
-logger = logging.getLogger(__name__)
-
 
 def process_booking(user, flight, return_flight, passengers, seat_class,
                     all_selected_seats, total_price, luggage=None, equipment=None):
-
     try:
         with transaction.atomic():
             flights = [flight]
@@ -61,7 +57,7 @@ def process_booking(user, flight, return_flight, passengers, seat_class,
     try:
         pdf_buffer, total_sum = generate_receipt_pdf(flight, passengers, seat_class, user)
     except Exception as e:
-        logger.error("PDF generation failed: %s", e, exc_info=True)
+        print(f"PDF generation failed: {e}")
         pdf_buffer = None
 
     if to_email:
@@ -72,6 +68,6 @@ def process_booking(user, flight, return_flight, passengers, seat_class,
             flight=flight,
             user=user,
         )
-        logger.info("Receipt email to %s: %s", to_email, "sent" if sent else "failed")
+        print(f"Receipt email to {to_email}: {'sent' if sent else 'failed'}")
 
     return {"status": "ok"}

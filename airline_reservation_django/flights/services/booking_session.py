@@ -1,96 +1,72 @@
-from ..constants import (
-    SKEY_OUTBOUND_ID, SKEY_RETURN_ID, SKEY_PASSENGERS, SKEY_NUM_PAX,
-    SKEY_SEAT_CLASS, SKEY_SELECTED_SEATS, SKEY_TOTAL_PRICE,
-    SKEY_LUGGAGE, SKEY_EQUIPMENT
-)
-
-
 class BookingSession:
+
     def __init__(self, request):
         self.session = request.session
 
-    @property
-    def num_passengers(self):
-        return self.session.get(SKEY_NUM_PAX, 1)
+    def get_num_passengers(self):
+        return self.session.get("num_passengers", 1)
 
-    @num_passengers.setter
-    def num_passengers(self, value):
-        self.session[SKEY_NUM_PAX] = value
+    def set_num_passengers(self, value):
+        self.session["num_passengers"] = value
 
-    @property
-    def passengers(self):
-        return self.session.get(SKEY_PASSENGERS, [])
+    def get_passengers(self):
+        return self.session.get("passengers", [])
 
-    @passengers.setter
-    def passengers(self, value):
-        self.session[SKEY_PASSENGERS] = value
+    def set_passengers(self, value):
+        self.session["passengers"] = value
 
-    @property
-    def outbound_flight_id(self):
-        return self.session.get(SKEY_OUTBOUND_ID)
+    def get_outbound_flight_id(self):
+        return self.session.get("outbound_flight_id")
 
-    @outbound_flight_id.setter
-    def outbound_flight_id(self, value):
-        self.session[SKEY_OUTBOUND_ID] = value
+    def set_outbound_flight_id(self, value):
+        self.session["outbound_flight_id"] = value
 
-    @property
-    def return_flight_id(self):
-        return self.session.get(SKEY_RETURN_ID)
+    def get_return_flight_id(self):
+        return self.session.get("return_id")
 
-    @return_flight_id.setter
-    def return_flight_id(self, value):
-        self.session[SKEY_RETURN_ID] = value
+    def set_return_flight_id(self, value):
+        self.session["return_id"] = value
 
-    @property
-    def total_price(self):
-        return float(self.session.get(SKEY_TOTAL_PRICE, 0.0))
+    def get_total_price(self):
+        return float(self.session.get("total_price", 0.0))
 
-    @total_price.setter
-    def total_price(self, value):
-        self.session[SKEY_TOTAL_PRICE] = float(value)
+    def set_total_price(self, value):
+        self.session["total_price"] = float(value)
 
     def init_price(self, price):
-        if SKEY_TOTAL_PRICE not in self.session:
-            self.total_price = price
-        return self.total_price
+        if "total_price" not in self.session:
+            self.set_total_price(price)
+        return self.get_total_price()
 
-    @property
-    def seat_class(self):
-        return self.session.get(SKEY_SEAT_CLASS)
+    def get_seat_class(self):
+        return self.session.get("seat_class")
 
-    @seat_class.setter
-    def seat_class(self, value):
-        self.session[SKEY_SEAT_CLASS] = value
+    def set_seat_class(self, value):
+        self.session["seat_class"] = value
 
-    @property
-    def selected_seats(self):
-        return self.session.get(SKEY_SELECTED_SEATS, {})
+    def get_selected_seats(self):
+        return self.session.get("selected_seats", {})
 
-    @selected_seats.setter
-    def selected_seats(self, value):
-        self.session[SKEY_SELECTED_SEATS] = value
+    def set_selected_seats(self, value):
+        self.session["selected_seats"] = value
 
-    @property
-    def luggage(self):
-        return self.session.get(SKEY_LUGGAGE)
+    def get_luggage(self):
+        return self.session.get("selected_luggage")
 
-    @luggage.setter
-    def luggage(self, value):
-        self.session[SKEY_LUGGAGE] = value
+    def set_luggage(self, value):
+        self.session["selected_luggage"] = value
 
-    @property
-    def equipment(self):
-        return self.session.get(SKEY_EQUIPMENT)
+    def get_equipment(self):
+        return self.session.get("selected_equipment")
 
-    @equipment.setter
-    def equipment(self, value):
-        self.session[SKEY_EQUIPMENT] = value
+    def set_equipment(self, value):
+        self.session["selected_equipment"] = value
 
     def clear(self):
         keys = [
-            SKEY_OUTBOUND_ID, SKEY_PASSENGERS, SKEY_NUM_PAX,
-            SKEY_SELECTED_SEATS, SKEY_SEAT_CLASS, SKEY_TOTAL_PRICE,
-            SKEY_RETURN_ID, SKEY_LUGGAGE, SKEY_EQUIPMENT,
+            "outbound_flight_id", "passengers", "num_passengers",
+            "selected_seats", "seat_class", "total_price",
+            "return_id", "selected_luggage", "selected_equipment",
         ]
         for key in keys:
             self.session.pop(key, None)

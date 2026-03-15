@@ -96,3 +96,4 @@ This setup ensures consistent database state across all environments — develop
 
 - **Reset Password** — complete the full password reset flow (email link → form → confirmation)
 - **Currencies** — add multi-currency support (display prices in user's preferred currency)
+- **Fix prices** — fix prices at final at Ticket Details and BOARDING PASS currently showing only base price with no extras  

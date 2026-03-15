@@ -2,7 +2,6 @@ from django.utils import timezone
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from ..models import Ticket
-from .pdf_service import generate_ticket_pdf
 
 
 def get_user_tickets(user):
