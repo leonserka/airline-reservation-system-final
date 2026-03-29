@@ -1,3 +1,4 @@
+from datetime import date
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -16,8 +17,14 @@ from ..services.pdf_service import generate_ticket_pdf
 
 @login_required
 def check_booked_flights(request):
-    tickets = get_user_tickets(request.user)
-    return render(request, "flights/check_booked_flights.html", {"tickets": tickets})
+    all_tickets = get_user_tickets(request.user)
+    today = date.today()
+    active_tickets = [t for t in all_tickets if t.flight.date >= today]
+    past_tickets   = [t for t in all_tickets if t.flight.date < today]
+    return render(request, "flights/check_booked_flights.html", {
+        "active_tickets": active_tickets,
+        "past_tickets": past_tickets,
+    })
 
 
 @login_required
@@ -59,6 +66,9 @@ def check_in(request, ticket_id):
 
     if ticket.status == "canceled":
         return render(request, "flights/error.html", {"message": "Canceled tickets cannot be checked in."})
+
+    if ticket.flight.date < date.today():
+        return render(request, "flights/error.html", {"message": "Check-in is not available for past flights."})
 
     if ticket.checked_in:
         return redirect("about_ticket", ticket_id=ticket.id)

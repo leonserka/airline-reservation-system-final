@@ -175,6 +175,16 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     };
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const prefillDep = urlParams.get("departure_city");
+    const prefillArr = urlParams.get("arrival_city");
+    const prefillDate = urlParams.get("departure_date");
+    const prefillReturn = urlParams.get("return_date");
+    if (prefillDep) { selectedFrom.city = prefillDep; fromInput.value = prefillDep; }
+    if (prefillArr) { selectedTo.city = prefillArr; toInput.value = prefillArr; }
+    if (prefillDate) departPicker.setDate(prefillDate);
+    if (prefillReturn) { returnPicker.setDate(prefillReturn); }
+
     document.getElementById("homeSearchBtn").onclick = () => {
 
         if (!window.isLogged) {

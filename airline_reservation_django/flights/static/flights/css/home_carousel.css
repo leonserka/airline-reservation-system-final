@@ -32,6 +32,14 @@
     margin: 10px 0;
 }
 
+@media (max-width: 768px) {
+    .home-carousel { height: 320px; }
+    .caption { bottom: 40px; left: 20px; right: 20px; }
+    .caption h1 { font-size: 22px; }
+    .more { font-size: 14px; padding: 6px 12px; }
+    .carousel-arrow { font-size: 28px; padding: 6px 12px; max-width: 44px; }
+}
+
 .more {
     display: inline-block;
     margin-top: 10px;

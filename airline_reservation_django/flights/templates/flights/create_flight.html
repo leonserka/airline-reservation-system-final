@@ -1,4 +1,5 @@
 {% extends 'flights/base.html' %}
+{% load static %}
 
 {% block title %}Create Flight — Airline Reservation{% endblock %}
 
@@ -20,4 +21,8 @@
 <div class="mt-2 text-center">
     <a href="{% url 'flight_list' %}">Back to Flight List</a>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'flights/js/create_flight.js' %}"></script>
 {% endblock %}

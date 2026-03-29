@@ -1,3 +1,5 @@
+.paypal-container { max-width: 450px; margin: 0 auto; }
+
 .loading-overlay {
     display: none;
     position: fixed;

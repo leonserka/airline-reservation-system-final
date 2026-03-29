@@ -89,12 +89,23 @@ This setup ensures consistent database state across all environments — develop
 | **2026-02-21** | v1.1 | Implemented ticket cancellation workflow (PLUS class restriction), automatic seat release, payment status transition (Paid → Refunded), PDF ticket generation with Code128 barcode, SMTP password reset setup, secure environment variable handling, Ngrok Docker integration, Flyway schema update (country fields), seat selection refactor, template & UX improvements. |
 | **2026-02-28** | v1.2 | Extracted all inline styles and scripts into dedicated CSS/JS static files (per page: `base.css`, `book_step5.css`, `flight_step3.css`, `home_carousel.css`, `home_search.css`, `receipt_pdf.css`, `search.css`, `ticket_pdf.css`). Added interactive home page with promotional image carousel (auto-advance + prev/next controls) and a dynamic flight search widget (AJAX-powered country/city dropdowns, Flatpickr date picker with available-dates-only filtering, one-way/round-trip toggle). Added PayPal SDK integration on booking Step 5 — real payment flow with order capture, loading overlay, seat-conflict detection, and error handling. |
 | **2026-03-14** | v1.3 | Added **online check-in system** — passengers verify identity (name, surname, ID number) before check-in, with timestamp recording and check-in confirmation email; PDF boarding pass download is locked until check-in is complete. Boarding pass PDF upgraded with **QR code** (ticket ID encoded) and gate closing time (departure − 30 min). Added **round-trip booking support** — session now tracks return flight and redirects Step 3 between outbound and return seat selection. Refactored all business logic into a **service layer** (`booking_service`, `ticket_service`, `flight_service`, `email_service`, `pdf_service`, `seatmap_service`, `booking_session`). Added **departure/arrival timezone fields** on the Flight model with timezone-aware datetime properties. Email confirmation now includes the **receipt PDF as attachment** and uses styled HTML email template. Implemented solution to the race condition problem — locking rows in the database (select_for_update) during simultaneous reservations of the same seat in `booking_service.py` |
+| **2026-03-29** | v1.4 | Added **hamburger/mega menu** (slide-in panel, login-only content for unauthenticated users). Replaced `/flights/` search with home-style widget (pre-filled from URL params). Added **forgot password** link on login. Split **My Bookings into Active/Past** — check-in blocked on past flights. Fixed **wrong prices** on confirmation, About Ticket and boarding pass PDF (seat upgrade + extras now included). Fixed **email sending** (Gmail App Password). Auto-generate flight number and auto-fill timezone/city dropdowns on Create Flight. Added **Free seat selection** row to seat class comparison. Extracted all inline CSS/JS to static files; split `base.css` into `base.css`, `components.css`, `nav.css`. Removed unused static files and dead CSS. |
 
 ---
 
 ## 🔜 Next Steps / TODO
 
-- **Reset Password** — complete the full password reset flow (email link → form → confirmation)
 - **Currencies** — add multi-currency support (display prices in user's preferred currency)
-- **Fix prices** — fix prices at final at Ticket Details and BOARDING PASS currently showing only base price with no extras 
-- **Fix email**  — fix sending confirmation email 
+- **Design** — edit hamburger menu with more stuff in it and home edit
+- **Admin panel** 
+- **Plane design** — better plane design
+- **User profile** — basic informations about user (name surname password email date of birth...)
+- **Mail check-in notifications** — sending mails 24h before flight
+- **Check-in 24h window**
+- **better search panel** — maybe better UI for searching flights
+- **Change flight without fee** — only for PLUS pasengers
+- **PayPal refund**
+- **Confirm before cancel ticket** — are you sure?
+- **Admin cancle flight** — sending email to all buyers that flight is cancled
+- **fix receipt** class wrong shown at both places
+- **Responsive design for phones**

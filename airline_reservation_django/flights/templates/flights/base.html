@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Airline Reservation{% endblock %}</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'flights/css/base.css' %}?v=3">
+    <link rel="stylesheet" href="{% static 'flights/css/base.css' %}?v=6">
+    <link rel="stylesheet" href="{% static 'flights/css/components.css' %}?v=1">
+    <link rel="stylesheet" href="{% static 'flights/css/nav.css' %}?v=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
     {% block extra_css %}{% endblock %}
@@ -36,8 +38,68 @@
             <a href="{% url 'login' %}" class="btn-header">Login</a>
             <a href="{% url 'register' %}" class="btn-header">Register</a>
         {% endif %}
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
     </div>
 </header>
+
+<div class="mega-menu-overlay" id="megaMenuOverlay" style="display:none;"></div>
+<div class="mega-menu" id="megaMenu" style="display:none;">
+    <button class="mega-menu-close" id="megaMenuClose">&times;</button>
+    <div class="mega-menu-grid">
+
+        {% if user.is_authenticated %}
+
+        <div class="mega-col">
+            <h4>Planning &amp; Reservations</h4>
+            <a href="{% url 'flight_list' %}">Buy a ticket</a>
+            <a href="{% url 'check_booked_flights' %}">My flights</a>
+            <a href="{% url 'check_booked_flights' %}">Check-in</a>
+        </div>
+
+        <div class="mega-col">
+            <h4>Seat classes</h4>
+            <a href="#">Basic</a>
+            <a href="#">Regular</a>
+            <a href="#">Plus</a>
+        </div>
+
+        <div class="mega-col">
+            <h4>Travel information</h4>
+            <a href="#">Travel documents</a>
+            <a href="#">Baggage</a>
+            <a href="#">Special categories</a>
+            <a href="#">Help</a>
+        </div>
+
+        <div class="mega-col">
+            <h4>Special offers</h4>
+            <a href="{% url 'flight_list' %}" class="mega-offer-card">
+                <span>Zagreb → Milan</span>
+                <strong>from 129 €</strong>
+            </a>
+            <a href="{% url 'flight_list' %}" class="mega-offer-card">
+                <span>Split → Dublin</span>
+                <strong>from 159 €</strong>
+            </a>
+        </div>
+
+        {% else %}
+
+        <div class="mega-col" style="text-align:center; padding-top:20px;">
+            <p style="color:#555; font-size:15px; margin-bottom:20px;">
+                Please log in to access all features.
+            </p>
+            <a href="{% url 'login' %}" class="mega-login-btn">Login</a>
+            <br><br>
+            <a href="{% url 'register' %}" style="font-size:14px; color:#003366;">Create an account</a>
+        </div>
+
+        {% endif %}
+
+    </div>
+</div>
 
 {% block hero %}{% endblock %}
 
@@ -50,6 +112,8 @@
 </footer>
 
 {% block extra_js %}{% endblock %}
+
+<script src="{% static 'flights/js/hamburger.js' %}"></script>
 
 </body>
 </html>

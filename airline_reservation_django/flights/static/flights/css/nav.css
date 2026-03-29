@@ -1,0 +1,117 @@
+.hamburger-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 6px;
+    margin-left: 8px;
+}
+
+.hamburger-btn span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+    transition: background 0.2s;
+}
+
+.hamburger-btn:hover span { background: rgba(255,255,255,0.7); }
+
+.mega-menu-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 200;
+}
+
+.mega-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 460px;
+    max-width: 95vw;
+    height: 100%;
+    background: #fff;
+    z-index: 201;
+    padding: 40px 32px 32px;
+    box-shadow: -4px 0 24px rgba(0,0,0,0.15);
+    overflow-y: auto;
+}
+
+.mega-menu-close {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #555;
+    line-height: 1;
+}
+
+.mega-menu-close:hover { color: #000; }
+
+.mega-menu-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    margin-top: 16px;
+}
+
+.mega-col h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #003366;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #f0f2f5;
+}
+
+.mega-col a {
+    display: block;
+    padding: 6px 0;
+    color: #333;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.mega-col a:hover { color: #003366; text-decoration: underline; }
+
+.mega-offer-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px !important;
+    border: 1px solid #e0e3e8;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    background: #f8f9fb;
+}
+
+.mega-offer-card:hover { background: #eef1f6 !important; }
+.mega-offer-card strong { color: #d92b2b; }
+
+.mega-login-btn {
+    display: inline-block;
+    width: auto;
+    padding: 10px 40px;
+    background: #d92b2b;
+    color: #fff !important;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none !important;
+}
+
+.mega-login-btn:hover { background: #b52020; }
+
+@media (max-width: 768px) {
+    .mega-menu { width: 100%; max-width: 100vw; }
+}

@@ -39,7 +39,7 @@ def send_receipt_email(to_email, total_sum, pdf_buffer=None, flight=None, user=N
         </div>
         """
 
-        from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'no-reply@airline.com')
+        from_email = settings.EMAIL_HOST_USER
         msg = EmailMultiAlternatives(
             subject=subject,
             body=text_body,
@@ -63,7 +63,7 @@ def send_checkin_email(to_email, flight_number):
             subject=f"Check-in Confirmed – Flight {flight_number}",
             body=f"You have successfully checked in for flight {flight_number}.",
             to=[to_email],
-            from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', 'no-reply@airline.com'),
+            from_email=settings.EMAIL_HOST_USER,
         ).send()
         return True
     except Exception as e:

@@ -31,19 +31,32 @@ def generate_ticket_pdf(ticket):
     return BytesIO(HTML(string=html).write_pdf(stylesheets=[CSS(css_path)]))
 
 
-def generate_receipt_pdf(flight, passengers, seat_class, user):
+def generate_receipt_pdf(flight, passengers, seat_class, user,
+                         luggage=None, equipment=None, return_flight=None):
+    from ..constants import SEAT_PRICES, LUGGAGE, EQUIPMENT
+
+    seat_upgrade      = SEAT_PRICES.get(seat_class, 0)
+    luggage_cost      = LUGGAGE.get(luggage, 0) if luggage else 0
+    equip_cost        = EQUIPMENT.get(equipment, 0) if equipment else 0
+    num_flights       = 2 if return_flight else 1
+    extras_per_flight = (luggage_cost + equip_cost) / num_flights
+    price_per_ticket  = float(flight.price) + seat_upgrade + extras_per_flight
+
     rows = []
     total_sum = 0.0
 
     for p in passengers:
-        price = float(flight.price)
         rows.append({
             "name": f"{p['passenger_name']} {p['passenger_surname']}",
             "seat": p.get("seat_number", "N/A"),
             "class": seat_class,
-            "price": f"{price:.2f}",
+            "price": f"{price_per_ticket:.2f}",
         })
-        total_sum += price
+        total_sum += price_per_ticket
+
+    if return_flight:
+        ret_price_per_ticket = float(return_flight.price) + seat_upgrade + extras_per_flight
+        total_sum += ret_price_per_ticket * len(passengers)
 
     context = {
         "flight": flight,
