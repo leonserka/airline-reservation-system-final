@@ -93,19 +93,27 @@ This setup ensures consistent database state across all environments — develop
 
 ---
 
-## 🔜 Next Steps / TODO
+## 🗓️ Development Plan
 
-- **Currencies** — add multi-currency support (display prices in user's preferred currency)
-- **Design** — edit hamburger menu with more stuff in it and home edit
-- **Admin panel** 
-- **Plane design** — better plane design
-- **User profile** — basic informations about user (name surname password email date of birth...)
-- **Mail check-in notifications** — sending mails 24h before flight
-- **Check-in 24h window**
-- **better search panel** — maybe better UI for searching flights
-- **Change flight without fee** — only for PLUS pasengers
-- **PayPal refund**
-- **Confirm before cancel ticket** — are you sure?
-- **Admin cancle flight** — sending email to all buyers that flight is cancled
-- **fix receipt** class wrong shown at both places
-- **Responsive design for phones**
+### Phase 1 — 29.03 → 12.04
+- **Confirm before cancel ticket** — are you sure? (JS confirm dialog)
+- **Fix receipt** — class shown wrong at both places
+- **Check-in 24h window** — block check-in more than 24h before flight and 2 hours before flight
+- **User profile** — basic info (name, surname, password, email, date of birth...)
+- **Admin panel** — reservations list + occupancy analytics...
+
+### Phase 2 — 12.04 → 26.04
+- **Design** — edit hamburger menu with more content, home page edits
+- **Better search panel** — improved UI for searching flights
+- **Gmail check-in notifications** — send email 24h before flight (requires scheduler)
+- **Admin cancel flight** — cancel flight and email all buyers
+- **Plane design** — better seat map design
+
+### Phase 3 — 26.04 → 10.05
+- **Responsive design for phones** — CSS improvements for mobile
+- **PayPal refund** — trigger refund via PayPal API on ticket cancel
+- **Currencies** — multi-currency support
+
+---
+
+Made by **Leon Šerka**
