@@ -1,5 +1,6 @@
 from .flights import home, create_flight, flight_list
-from .auth import register, custom_logout
+from .auth import register, custom_logout, profile, PasswordResetConfirmWithEmail
+from .admin_views import admin_panel, admin_flight_detail
 from .ajax import (
     get_origin_countries,
     get_airports_by_country,
@@ -20,4 +21,5 @@ from .tickets import (
     cancel_booked_flight,
     about_ticket,
     check_in,
+    resend_receipt,
 )

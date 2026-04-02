@@ -53,25 +53,52 @@ document.addEventListener("DOMContentLoaded", () => {
         return true;
     }
 
+    function buildPanelShell(panel, countryColId, airportColId, countryTitle, airportTitle) {
+        panel.innerHTML = `
+            <div class="dropdown-columns">
+                <div class="country-section">
+                    <div class="country-section-title">${countryTitle}</div>
+                    <div class="country-grid" id="${countryColId}"></div>
+                </div>
+                <div class="airport-section">
+                    <div class="airport-section-header">
+                        <span class="airport-section-title">${airportTitle}</span>
+                        <span class="airport-clear" id="${airportColId}Clear">Clear selection</span>
+                    </div>
+                    <div class="airport-list" id="${airportColId}">
+                        <span class="airport-list-placeholder">← Select a country</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
     function loadOriginCountries(panel, callback) {
         fetch("/ajax/origin_countries/")
             .then(res => res.json())
             .then(countries => {
-
-                panel.innerHTML = `
-                    <div class="dropdown-columns">
-                        <div class="country-list" id="countryCol"></div>
-                        <div class="airport-list" id="airportCol">Select a country →</div>
-                    </div>
-                `;
+                buildPanelShell(panel, "countryCol", "airportCol", "Origin country", "Pick an airport");
 
                 const col = panel.querySelector("#countryCol");
+                const clearBtn = panel.querySelector("#airportColClear");
 
-                countries.forEach(c => {
+                clearBtn.onclick = () => {
+                    selectedFrom = { country: null, city: null };
+                    fromInput.value = "";
+                    panel.querySelectorAll(".country-item").forEach(el => el.classList.remove("active"));
+                    panel.querySelector("#airportCol").innerHTML =
+                        '<span class="airport-list-placeholder">← Select a country</span>';
+                };
+
+                countries.sort().forEach(c => {
                     const div = document.createElement("div");
                     div.className = "country-item";
                     div.textContent = c;
-                    div.onclick = () => callback(c, panel);
+                    div.onclick = () => {
+                        panel.querySelectorAll(".country-item").forEach(el => el.classList.remove("active"));
+                        div.classList.add("active");
+                        callback(c, panel);
+                    };
                     col.appendChild(div);
                 });
             });
@@ -89,36 +116,47 @@ document.addEventListener("DOMContentLoaded", () => {
                     const div = document.createElement("div");
                     div.className = "airport-item";
                     div.textContent = a;
-                    div.onclick = () => callback(a);
+                    div.onclick = () => {
+                        col.querySelectorAll(".airport-item").forEach(el => el.classList.remove("active"));
+                        div.classList.add("active");
+                        callback(a);
+                    };
                     col.appendChild(div);
                 });
             });
     }
 
     function loadDestCountries(panel, callback) {
-
         if (!selectedFrom.country || !selectedFrom.city) {
-            panel.innerHTML = "Select origin first!";
+            panel.innerHTML = '<p style="padding:16px;color:#999">Select an origin first.</p>';
             return;
         }
 
         fetch(`/ajax/dest_countries/?origin_country=${encodeURIComponent(selectedFrom.country)}&origin_city=${encodeURIComponent(selectedFrom.city)}`)
             .then(res => res.json())
             .then(countries => {
-
-                panel.innerHTML = `
-                    <div class="dropdown-columns">
-                        <div class="country-list" id="destCountryCol"></div>
-                        <div class="airport-list" id="destAirportCol">Select a country →</div>
-                    </div>
-                `;
+                buildPanelShell(panel, "destCountryCol", "destAirportCol", "Destination country", "Pick an airport");
 
                 const col = panel.querySelector("#destCountryCol");
-                countries.forEach(c => {
+                const clearBtn = panel.querySelector("#destAirportColClear");
+
+                clearBtn.onclick = () => {
+                    selectedTo = { country: null, city: null };
+                    toInput.value = "";
+                    panel.querySelectorAll(".country-item").forEach(el => el.classList.remove("active"));
+                    panel.querySelector("#destAirportCol").innerHTML =
+                        '<span class="airport-list-placeholder">← Select a country</span>';
+                };
+
+                countries.sort().forEach(c => {
                     const div = document.createElement("div");
                     div.className = "country-item";
                     div.textContent = c;
-                    div.onclick = () => callback(c, panel);
+                    div.onclick = () => {
+                        panel.querySelectorAll(".country-item").forEach(el => el.classList.remove("active"));
+                        div.classList.add("active");
+                        callback(c, panel);
+                    };
                     col.appendChild(div);
                 });
             });
@@ -132,12 +170,15 @@ document.addEventListener("DOMContentLoaded", () => {
             .then(res => res.json())
             .then(airports => {
                 col.innerHTML = "";
-
                 airports.forEach(a => {
                     const div = document.createElement("div");
                     div.className = "airport-item";
                     div.textContent = a;
-                    div.onclick = () => callback(a);
+                    div.onclick = () => {
+                        col.querySelectorAll(".airport-item").forEach(el => el.classList.remove("active"));
+                        div.classList.add("active");
+                        callback(a);
+                    };
                     col.appendChild(div);
                 });
             });

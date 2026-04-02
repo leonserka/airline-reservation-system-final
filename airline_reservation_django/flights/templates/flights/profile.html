@@ -1,0 +1,109 @@
+{% extends 'flights/base.html' %}
+{% load static tz %}
+
+{% block title %}My Profile — Airline Reservation{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'flights/css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1 class="page-title">My Profile</h1>
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+  {% endfor %}
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="info">
+
+    <div class="card mb-3">
+        <div class="card-header">Basic Information</div>
+        <div class="profile-grid">
+
+            <div class="form-group">
+                <label>Username</label>
+                <span class="username-val">{{ request.user.username }}</span>
+            </div>
+
+            <div class="form-group">
+                <label for="{{ user_form.first_name.id_for_label }}">First Name</label>
+                {{ user_form.first_name }}
+                {% for e in user_form.first_name.errors %}<p class="form-error">{{ e }}</p>{% endfor %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ user_form.last_name.id_for_label }}">Last Name</label>
+                {{ user_form.last_name }}
+                {% for e in user_form.last_name.errors %}<p class="form-error">{{ e }}</p>{% endfor %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ user_form.email.id_for_label }}">Email</label>
+                {{ user_form.email }}
+                {% for e in user_form.email.errors %}<p class="form-error">{{ e }}</p>{% endfor %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ profile_form.date_of_birth.id_for_label }}">Date of Birth</label>
+                {{ profile_form.date_of_birth }}
+                {% for e in profile_form.date_of_birth.errors %}<p class="form-error">{{ e }}</p>{% endfor %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ profile_form.phone_number.id_for_label }}">Phone Number</label>
+                {{ profile_form.phone_number }}
+                {% for e in profile_form.phone_number.errors %}<p class="form-error">{{ e }}</p>{% endfor %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ profile_form.country.id_for_label }}">Country</label>
+                {{ profile_form.country }}
+                {% for e in profile_form.country.errors %}<p class="form-error">{{ e }}</p>{% endfor %}
+            </div>
+
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </div>
+</form>
+
+<form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="password">
+
+    <div class="card mb-3">
+        <div class="card-header">Change Password</div>
+        <div class="profile-grid">
+
+            <div class="form-group">
+                <label for="{{ password_form.old_password.id_for_label }}">Current Password</label>
+                {{ password_form.old_password }}
+                {% for e in password_form.old_password.errors %}<p class="form-error">{{ e }}</p>{% endfor %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ password_form.new_password1.id_for_label }}">New Password</label>
+                {{ password_form.new_password1 }}
+                {% for e in password_form.new_password1.errors %}<p class="form-error">{{ e }}</p>{% endfor %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ password_form.new_password2.id_for_label }}">Confirm New Password</label>
+                {{ password_form.new_password2 }}
+                {% for e in password_form.new_password2.errors %}<p class="form-error">{{ e }}</p>{% endfor %}
+            </div>
+
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <button type="submit" class="btn btn-secondary">Change Password</button>
+    </div>
+</form>
+{% endblock %}

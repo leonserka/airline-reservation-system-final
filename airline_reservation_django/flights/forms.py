@@ -1,7 +1,7 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import User
-from .models import Flight, Ticket
+from .models import Flight, Ticket, UserProfile
 from .country_codes import COUNTRY_CODES
 from .choices import COUNTRY_CHOICES
 
@@ -33,6 +33,31 @@ class RegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ["username", "email", "password1", "password2"]
+
+
+class UserInfoForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["first_name", "last_name", "email"]
+        widgets = {
+            "first_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "First name"}),
+            "last_name":  forms.TextInput(attrs={"class": "form-control", "placeholder": "Last name"}),
+            "email":      forms.EmailInput(attrs={"class": "form-control", "placeholder": "Email"}),
+        }
+
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ["date_of_birth", "phone_number", "country"]
+        widgets = {
+            "date_of_birth": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+            "phone_number":  forms.TextInput(attrs={"class": "form-control", "placeholder": "e.g. +385 91 234 5678"}),
+            "country":       forms.Select(
+                attrs={"class": "form-control"},
+                choices=[("", "— Select country —")] + list(COUNTRY_CHOICES),
+            ),
+        }
 
 
 class PassengerForm(forms.ModelForm):

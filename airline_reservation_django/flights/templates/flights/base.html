@@ -27,12 +27,13 @@
             <a href="{% url 'check_booked_flights' %}">My Bookings</a>
             {% if user.is_staff %}
                 <a href="{% url 'create_flight' %}">Add Flight</a>
+                <a href="{% url 'admin_panel' %}">Admin Panel</a>
             {% endif %}
         {% endif %}
     </nav>
     <div class="ca-right">
         {% if user.is_authenticated %}
-            <span class="user-welcome">{{ user.username }}</span>
+            <a href="{% url 'profile' %}" class="user-welcome">{{ user.username }}</a>
             <a href="{% url 'logout' %}" class="btn-header btn-logout">Logout</a>
         {% else %}
             <a href="{% url 'login' %}" class="btn-header">Login</a>
@@ -56,6 +57,7 @@
             <a href="{% url 'flight_list' %}">Buy a ticket</a>
             <a href="{% url 'check_booked_flights' %}">My flights</a>
             <a href="{% url 'check_booked_flights' %}">Check-in</a>
+            <a href="{% url 'profile' %}">My Profile</a>
         </div>
 
         <div class="mega-col">

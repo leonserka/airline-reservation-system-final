@@ -32,35 +32,41 @@ def generate_ticket_pdf(ticket):
 
 
 def generate_receipt_pdf(flight, passengers, seat_class, user,
-                         luggage=None, equipment=None, return_flight=None):
+                         luggage=None, equipment=None, return_flight=None,
+                         all_selected_seats=None):
     from ..constants import SEAT_PRICES, LUGGAGE, EQUIPMENT
+
+    flights = [flight]
+    if return_flight:
+        flights.append(return_flight)
 
     seat_upgrade      = SEAT_PRICES.get(seat_class, 0)
     luggage_cost      = LUGGAGE.get(luggage, 0) if luggage else 0
     equip_cost        = EQUIPMENT.get(equipment, 0) if equipment else 0
-    num_flights       = 2 if return_flight else 1
-    extras_per_flight = (luggage_cost + equip_cost) / num_flights
-    price_per_ticket  = float(flight.price) + seat_upgrade + extras_per_flight
+    extras_per_flight = (luggage_cost + equip_cost) / len(flights)
 
     rows = []
     total_sum = 0.0
 
-    for p in passengers:
-        rows.append({
-            "name": f"{p['passenger_name']} {p['passenger_surname']}",
-            "seat": p.get("seat_number", "N/A"),
-            "class": seat_class,
-            "price": f"{price_per_ticket:.2f}",
-        })
-        total_sum += price_per_ticket
-
-    if return_flight:
-        ret_price_per_ticket = float(return_flight.price) + seat_upgrade + extras_per_flight
-        total_sum += ret_price_per_ticket * len(passengers)
+    for fl in flights:
+        seats = (all_selected_seats or {}).get(str(fl.id), [])
+        price_per_ticket = float(fl.price) + seat_upgrade + extras_per_flight
+        for i, p in enumerate(passengers):
+            seat = seats[i] if i < len(seats) else "N/A"
+            rows.append({
+                "flight": f"{fl.departure_city} → {fl.arrival_city}",
+                "name": f"{p['passenger_name']} {p['passenger_surname']}",
+                "seat": seat,
+                "class": seat_class,
+                "price": f"{price_per_ticket:.2f}",
+            })
+            total_sum += price_per_ticket
 
     context = {
-        "flight": flight,
+        "outbound_flight": flight,
+        "return_flight": return_flight,
         "passengers": rows,
+        "seat_class": seat_class,
         "user": user,
         "total_sum": f"{total_sum:.2f}",
         "date_today": datetime.now().strftime("%d/%m/%Y"),

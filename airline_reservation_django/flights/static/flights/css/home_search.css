@@ -72,11 +72,11 @@
     position: absolute;
     top: 70px;
     left: 0;
-    width: 520px;
-    background: white;
+    width: 920px;
+    background: #fff;
     border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-    padding: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    padding: 24px 28px;
     z-index: 50;
 }
 
@@ -86,28 +86,107 @@
 
 .dropdown-columns {
     display: flex;
-    gap: 20px;
+    gap: 0;
+    align-items: flex-start;
 }
 
-.country-list {
-    width: 45%;
+.country-section {
+    flex: 1;
+    padding-right: 28px;
+    min-width: 0;
+}
+
+.country-section-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 16px;
+}
+
+.country-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2px 0;
+}
+
+.country-item {
+    padding: 6px 10px;
+    cursor: pointer;
+    font-size: 13.5px;
+    border-radius: 20px;
+    color: #222 !important;
+    transition: background 0.15s;
+    line-height: 1.4;
+}
+
+.country-item:hover {
+    background: #f0f0f0;
+}
+
+.country-item.active {
+    background: #073590 !important;
+    color: #fff !important;
+}
+
+.airport-section {
+    width: 220px;
+    border-left: 1px solid #e0e0e0;
+    padding-left: 24px;
+    flex-shrink: 0;
+}
+
+.airport-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    white-space: nowrap;
+}
+
+.airport-section-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #111;
+}
+
+.airport-clear {
+    font-size: 12px;
+    color: #073590;
+    cursor: pointer;
+    font-weight: 600;
+    text-decoration: underline;
+    flex-shrink: 0;
 }
 
 .airport-list {
-    width: 55%;
-    max-height: 320px;
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
-.country-item, .airport-item {
-    padding: 6px 4px;
+.airport-list-placeholder {
+    font-size: 13px;
+    color: #aaa;
+    padding: 6px 0;
+}
+
+.airport-item {
+    padding: 6px 12px;
     cursor: pointer;
+    font-size: 14px;
+    border-radius: 20px;
+    color: #222 !important;
+    transition: background 0.15s;
 }
 
-.country-item:hover,
 .airport-item:hover {
-    background: #f2f2f2;
-    border-radius: 4px;
+    background: #f0f0f0;
+}
+
+.airport-item.active {
+    background: #073590 !important;
+    color: #fff !important;
 }
 
 .search-btn {

@@ -1,0 +1,134 @@
+{% extends 'flights/base.html' %}
+
+{% block title %}Flight {{ flight.flight_number }} — Admin{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'flights/css/admin.css' %}">
+{% endblock %}
+
+{% block content %}
+<div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
+    <a href="{% url 'admin_panel' %}" class="btn btn-secondary btn-sm">← Back to Panel</a>
+    <h1 class="page-title" style="margin:0;">Flight {{ flight.flight_number }}</h1>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">Flight Details</div>
+    <div class="detail-grid">
+        <div class="detail-item">
+            <span class="detail-label">Route</span>
+            <span class="detail-value">{{ flight.departure_city }} → {{ flight.arrival_city }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Date</span>
+            <span class="detail-value">{{ flight.date }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Departure</span>
+            <span class="detail-value">{{ flight.departure_time|time:"H:i" }} ({{ flight.departure_timezone }})</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Arrival (local)</span>
+            <span class="detail-value">{{ flight.arrival_datetime|date:"H:i" }} ({{ flight.arrival_timezone }})</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Base Price</span>
+            <span class="detail-value">€{{ flight.price }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Type</span>
+            <span class="detail-value">{{ flight.flight_type }}</span>
+        </div>
+    </div>
+</div>
+
+<div class="kpi-grid">
+    <div class="kpi-card green">
+        <div class="kpi-label">Booked</div>
+        <div class="kpi-value">{{ booked }}</div>
+    </div>
+    <div class="kpi-card red">
+        <div class="kpi-label">Canceled</div>
+        <div class="kpi-value">{{ canceled }}</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label">Available</div>
+        <div class="kpi-value">{{ flight.available_seats }}</div>
+    </div>
+    <div class="kpi-card gold">
+        <div class="kpi-label">Revenue</div>
+        <div class="kpi-value">€{{ revenue|floatformat:0 }}</div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">Occupancy — {{ fill_pct }}%</div>
+    <div style="display:flex;align-items:center;gap:12px;">
+        <div class="occ-bar tall" style="flex:1">
+            <div class="occ-fill {% if fill_pct >= 80 %}occ-high{% elif fill_pct >= 50 %}occ-mid{% else %}occ-low{% endif %}"
+                 style="width:{{ fill_pct }}%"></div>
+        </div>
+        <span style="font-size:14px;color:#555;white-space:nowrap;">{{ booked }} / {{ flight.total_seats }} seats</span>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">Passengers ({{ tickets.count }})</div>
+    <div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Seat</th>
+                <th>Passenger</th>
+                <th>Class</th>
+                <th>Price Paid</th>
+                <th>Extras</th>
+                <th>Payment</th>
+                <th>Status</th>
+                <th>Check-in</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in tickets %}
+            <tr {% if t.status == 'canceled' %}class="past-row"{% endif %}>
+                <td><strong>{{ t.seat_number|default:"—" }}</strong></td>
+                <td>{{ t.passenger_name }} {{ t.passenger_surname }}</td>
+                <td>{{ t.seat_class }}</td>
+                <td>€{{ t.price_paid }}</td>
+                <td style="font-size:12px;color:#666;">
+                    {% if t.extra_luggage %}{{ t.extra_luggage }}{% endif %}
+                    {% if t.extra_equipment %} / {{ t.extra_equipment }}{% endif %}
+                    {% if not t.extra_luggage and not t.extra_equipment %}—{% endif %}
+                </td>
+                <td>
+                    {% if t.payment_status == 'paid' %}
+                        <span class="badge badge-paid">Paid</span>
+                    {% elif t.payment_status == 'refunded' %}
+                        <span class="badge badge-refunded">Refunded</span>
+                    {% else %}
+                        <span class="badge">{{ t.payment_status }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if t.status == 'booked' %}
+                        <span class="badge badge-booked">Booked</span>
+                    {% else %}
+                        <span class="badge badge-canceled">Canceled</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if t.checked_in %}
+                        <span class="badge badge-paid">✓ Done</span>
+                    {% else %}
+                        <span style="color:#aaa;font-size:12px;">—</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="8" style="text-align:center;color:#aaa;">No passengers yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</div>
+{% endblock %}

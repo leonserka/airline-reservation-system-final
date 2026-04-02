@@ -61,7 +61,8 @@ def process_booking(user, flight, return_flight, passengers, seat_class,
 
     try:
         pdf_buffer, total_sum = generate_receipt_pdf(
-            flight, passengers, seat_class, user, luggage, equipment, return_flight
+            flight, passengers, seat_class, user, luggage, equipment, return_flight,
+            all_selected_seats=all_selected_seats,
         )
     except Exception as e:
         print(f"PDF generation failed: {e}")

@@ -57,6 +57,42 @@ def send_receipt_email(to_email, total_sum, pdf_buffer=None, flight=None, user=N
         return False
 
 
+def send_password_changed_email(to_email, username):
+    try:
+        subject = "Your password was changed"
+        text_body = (
+            f"Hi {username},\n\n"
+            f"Your Airline Reservation account password was just changed.\n"
+            f"If you did not do this, please contact support immediately.\n\n"
+            f"Airline Reservation System"
+        )
+        html_body = f"""
+        <div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;border:1px solid #e0e3e8;border-radius:8px;overflow:hidden;">
+          <div style="background:#003366;padding:24px;text-align:center;">
+            <h2 style="color:#fff;margin:0;font-size:20px;">Password Changed</h2>
+          </div>
+          <div style="padding:28px 32px;">
+            <p style="font-size:16px;color:#222;">Hi <strong>{username}</strong>,</p>
+            <p style="color:#444;">Your account password was successfully changed.</p>
+            <p style="color:#888;font-size:13px;margin-top:20px;">
+              If you did not make this change, please contact support immediately.
+            </p>
+          </div>
+          <div style="background:#f0f2f5;padding:14px;text-align:center;font-size:12px;color:#aaa;">
+            Airline Reservation System &copy; 2026
+          </div>
+        </div>
+        """
+        from_email = settings.EMAIL_HOST_USER
+        msg = EmailMultiAlternatives(subject=subject, body=text_body, from_email=from_email, to=[to_email])
+        msg.attach_alternative(html_body, "text/html")
+        msg.send()
+        return True
+    except Exception as e:
+        print(f"[EMAIL ERROR] Failed to send password changed email to {to_email}: {e}")
+        return False
+
+
 def send_checkin_email(to_email, flight_number):
     try:
         EmailMessage(

@@ -1,0 +1,225 @@
+{% extends 'flights/base.html' %}
+{% load static %}
+
+{% block title %}Admin Panel — Airline Reservation{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'flights/css/admin.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Admin Panel</h1>
+
+<div class="kpi-grid-5">
+    <div class="kpi-card green">
+        <span class="kpi-label">Active Bookings</span>
+        <span class="kpi-value">{{ total_bookings }}</span>
+        <span class="kpi-sub">tickets booked</span>
+    </div>
+    <div class="kpi-card gold">
+        <span class="kpi-label">Total Revenue</span>
+        <span class="kpi-value">€{{ total_revenue|floatformat:0 }}</span>
+        <span class="kpi-sub">all time</span>
+    </div>
+    <div class="kpi-card">
+        <span class="kpi-label">Upcoming Flights</span>
+        <span class="kpi-value">{{ active_flights }}</span>
+        <span class="kpi-sub">from today</span>
+    </div>
+    <div class="kpi-card red">
+        <span class="kpi-label">Cancellations</span>
+        <span class="kpi-value">{{ canceled_count }}</span>
+        <span class="kpi-sub">all time</span>
+    </div>
+    <div class="kpi-card">
+        <span class="kpi-label">Avg. Occupancy</span>
+        <span class="kpi-value">{% if avg_occupancy %}{{ avg_occupancy }}%{% else %}—{% endif %}</span>
+        <span class="kpi-sub">upcoming flights</span>
+    </div>
+</div>
+
+<div class="panel-row">
+
+    <div class="card">
+        <div class="panel-section-title">Bookings & Revenue — Last 14 Days</div>
+        <canvas id="bookingChart" height="160"></canvas>
+        <script>
+            window.chartData = {
+                labels:   {{ chart_labels|safe }},
+                bookings: {{ chart_bookings|safe }},
+                revenue:  {{ chart_revenue|safe }}
+            };
+        </script>
+    </div>
+
+    <div class="card">
+        <div class="panel-section-title">Top Routes by Bookings</div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Route</th>
+                    <th>Bookings</th>
+                    <th>Revenue</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in top_routes %}
+                <tr>
+                    <td>{{ r.route }}</td>
+                    <td>{{ r.bookings }}</td>
+                    <td>€{{ r.revenue|floatformat:2 }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="3" style="text-align:center;color:#aaa;">No data yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="panel-section-title">Flight Occupancy</div>
+
+    <form method="get" style="display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap;">
+        {% if status_filter != 'all' %}<input type="hidden" name="status" value="{{ status_filter }}">{% endif %}
+        <input type="text"
+               name="from_city"
+               value="{{ from_city }}"
+               placeholder="From (city)"
+               class="form-control"
+               style="max-width:160px;">
+        <input type="text"
+               name="to_city"
+               value="{{ to_city }}"
+               placeholder="To (city)"
+               class="form-control"
+               style="max-width:160px;">
+        <input type="text"
+               name="flight_search"
+               value="{{ flight_search }}"
+               placeholder="Flight № or country…"
+               class="form-control"
+               style="max-width:200px;">
+        <input type="date"
+               name="flight_date"
+               value="{{ flight_date }}"
+               class="form-control"
+               style="max-width:160px;">
+        <button type="submit" class="btn btn-primary btn-sm">Search</button>
+        {% if flight_search or flight_date or from_city or to_city %}
+            <a href="?" class="btn btn-secondary btn-sm">Clear</a>
+        {% endif %}
+        <span style="font-size:13px;color:#888;margin-left:4px;">{{ flights_occ|length }} flight{{ flights_occ|length|pluralize }} shown</span>
+    </form>
+    <div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Flight</th>
+                <th>Route</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Total</th>
+                <th>Booked</th>
+                <th>Available</th>
+                <th>Fill %</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for f in flights_occ %}
+            {% with pct=f.booked|default:0 %}
+            <tr>
+                <td><a href="{% url 'admin_flight_detail' f.id %}" style="font-weight:600;color:#003366;">{{ f.flight_number }}</a></td>
+                <td>{{ f.departure_city }} → {{ f.arrival_city }}</td>
+                <td>{{ f.date }}</td>
+                <td>{{ f.departure_time|time:"H:i" }}</td>
+                <td>{{ f.total_seats }}</td>
+                <td>{{ f.booked }}</td>
+                <td>{{ f.available_seats }}</td>
+                <td>
+                    {% if f.total_seats %}
+                        {% widthratio f.booked f.total_seats 100 as fill_pct %}
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <div class="occ-bar" style="flex:1">
+                                <div class="occ-fill {% if fill_pct >= 80 %}occ-high{% elif fill_pct >= 50 %}occ-mid{% else %}occ-low{% endif %}"
+                                     style="width:{{ fill_pct }}%"></div>
+                            </div>
+                            <span style="font-size:12px;color:#555;width:36px">{{ fill_pct }}%</span>
+                        </div>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endwith %}
+            {% empty %}
+            <tr><td colspan="8" style="text-align:center;color:#aaa;">No upcoming flights.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</div>
+
+<div class="card">
+    <div class="panel-section-title">All Reservations</div>
+
+    <div class="filter-bar">
+        <span style="font-size:13px;color:#555;font-weight:600;">Filter:</span>
+        <a href="?status=all"      class="{% if status_filter == 'all' %}active{% endif %}">All</a>
+        <a href="?status=booked"   class="{% if status_filter == 'booked' %}active{% endif %}">Booked</a>
+        <a href="?status=canceled" class="{% if status_filter == 'canceled' %}active{% endif %}">Canceled</a>
+    </div>
+
+    <div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Passenger</th>
+                <th>Route</th>
+                <th>Date</th>
+                <th>Seat</th>
+                <th>Class</th>
+                <th>Price</th>
+                <th>Payment</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in reservations %}
+            <tr {% if t.status == 'canceled' %}class="past-row"{% endif %}>
+                <td style="color:#aaa;font-size:12px;">{{ t.id }}</td>
+                <td>{{ t.passenger_name }} {{ t.passenger_surname }}</td>
+                <td>{{ t.flight.departure_city }} → {{ t.flight.arrival_city }}</td>
+                <td>{{ t.flight.date }}</td>
+                <td>{{ t.seat_number|default:"—" }}</td>
+                <td>{{ t.seat_class }}</td>
+                <td>€{{ t.price_paid }}</td>
+                <td>
+                    {% if t.payment_status == 'paid' %}
+                        <span class="badge badge-paid">Paid</span>
+                    {% elif t.payment_status == 'refunded' %}
+                        <span class="badge badge-refunded">Refunded</span>
+                    {% else %}
+                        <span class="badge">{{ t.payment_status }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if t.status == 'booked' %}
+                        <span class="badge badge-booked">Booked</span>
+                    {% else %}
+                        <span class="badge badge-canceled">Canceled</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="9" style="text-align:center;color:#aaa;">No reservations found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="{% static 'flights/js/admin_panel.js' %}"></script>
+{% endblock %}

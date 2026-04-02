@@ -1,5 +1,5 @@
 {% extends 'flights/base.html' %}
-{% load static %}
+{% load static tz %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'flights/css/home_search.css' %}">
@@ -54,6 +54,8 @@
           <tr>
             <th></th>
             <th>Route</th>
+            <th>Departure</th>
+            <th>Arrival (local)</th>
             <th>Date</th>
             <th>Price</th>
           </tr>
@@ -63,6 +65,8 @@
           <tr>
             <td><input type="radio" name="departure_flight" value="{{ flight.id }}"></td>
             <td>{{ flight.departure_city }} → {{ flight.arrival_city }}</td>
+            <td>{{ flight.departure_time|time:"H:i" }}</td>
+            <td>{{ flight.arrival_datetime|timezone:flight.arrival_timezone|date:"H:i" }}</td>
             <td>{{ flight.date }}</td>
             <td>€{{ flight.price }}</td>
           </tr>
@@ -79,6 +83,8 @@
           <tr>
             <th></th>
             <th>Route</th>
+            <th>Departure</th>
+            <th>Arrival (local)</th>
             <th>Date</th>
             <th>Price</th>
           </tr>
@@ -88,6 +94,8 @@
           <tr>
             <td><input type="radio" name="return_flight" value="{{ flight.id }}"></td>
             <td>{{ flight.departure_city }} → {{ flight.arrival_city }}</td>
+            <td>{{ flight.departure_time|time:"H:i" }}</td>
+            <td>{{ flight.arrival_datetime|timezone:flight.arrival_timezone|date:"H:i" }}</td>
             <td>{{ flight.date }}</td>
             <td>€{{ flight.price }}</td>
           </tr>

@@ -13,19 +13,23 @@ urlpatterns = [
     path('book/<int:flight_id>/step5/', views.book_step5, name='book_step5'),
     path('book/success/', views.book_success, name='book_success'),
 
+    path('profile/', views.profile, name='profile'),
+    path('admin-panel/', views.admin_panel, name='admin_panel'),
+    path('admin-panel/flight/<int:flight_id>/', views.admin_flight_detail, name='admin_flight_detail'),
     path('login/', auth_views.LoginView.as_view(template_name='flights/empty_login.html'), name='login'),
     path('logout/', views.custom_logout, name='logout'),
     path('register/', views.register, name='register'),
 
     path('password-reset/', auth_views.PasswordResetView.as_view(template_name='flights/password_reset.html'), name='password_reset'),
     path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='flights/password_reset_done.html'), name='password_reset_done'),
-    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='flights/password_reset_confirm.html'), name='password_reset_confirm'),
+    path('reset/<uidb64>/<token>/', views.PasswordResetConfirmWithEmail.as_view(), name='password_reset_confirm'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='flights/password_reset_complete.html'), name='password_reset_complete'),
 
     path('check-booked-flights/', views.check_booked_flights, name='check_booked_flights'),
     path('cancel-booked-flight/<int:ticket_id>/', views.cancel_booked_flight, name='cancel_booked_flight'),
     path('about-ticket/<int:ticket_id>/', views.about_ticket, name='about_ticket'),
     path('ticket/<int:ticket_id>/check-in/', views.check_in, name='check_in'),
+    path('ticket/<int:ticket_id>/resend-receipt/', views.resend_receipt, name='resend_receipt'),
 
     path('ajax/origin_countries/', views.get_origin_countries, name='ajax_origin_countries'),
     path('ajax/airports/', views.get_airports_by_country, name='ajax_airports'),

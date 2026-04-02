@@ -23,8 +23,12 @@
     <hr>
 
     <h2>Flight Details</h2>
-    <p><b>Route:</b> {{ flight.departure_city }} → {{ flight.arrival_city }}</p>
-    <p><b>Date:</b> {{ flight.date }}</p>
+    <p><b>Route:</b> {{ outbound_flight.departure_city }} → {{ outbound_flight.arrival_city }}</p>
+    <p><b>Date:</b> {{ outbound_flight.date }}</p>
+    {% if return_flight %}
+    <p><b>Return:</b> {{ return_flight.departure_city }} → {{ return_flight.arrival_city }}</p>
+    <p><b>Return Date:</b> {{ return_flight.date }}</p>
+    {% endif %}
     <p><b>Class:</b> {{ seat_class }}</p>
 
     <hr>
@@ -33,6 +37,7 @@
 
     <table class="tbl">
         <tr>
+            <th>Flight</th>
             <th>Passenger</th>
             <th>Seat</th>
             <th>Class</th>
@@ -41,9 +46,10 @@
 
         {% for p in passengers %}
         <tr>
+            <td>{{ p.flight }}</td>
             <td>{{ p.name }}</td>
-            <td>{{ p.base }} €</td>
-            <td>{{ p.class }} €</td>
+            <td>{{ p.seat }}</td>
+            <td>{{ p.class }}</td>
             <td>{{ p.price }} €</td>
         </tr>
         {% endfor %}

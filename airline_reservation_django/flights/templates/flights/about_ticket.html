@@ -88,9 +88,15 @@
     </div>
 </div>
 
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} mt-3">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+
 <div class="mt-3 gap-sm">
     {% if can_cancel and ticket.status != 'canceled' %}
-        <a href="{% url 'cancel_booked_flight' ticket.id %}" class="btn btn-danger">Cancel Ticket</a>
+        <a href="{% url 'cancel_booked_flight' ticket.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel this ticket? This action cannot be undone.')">Cancel Ticket</a>
     {% endif %}
 
     {% if ticket.checked_in %}
@@ -98,6 +104,8 @@
     {% else %}
         <a href="{% url 'check_in' ticket.id %}" class="btn btn-success">Check-In Now</a>
     {% endif %}
+
+    <a href="{% url 'resend_receipt' ticket.id %}" class="btn btn-secondary">Resend Receipt Email</a>
 
     <a href="{% url 'check_booked_flights' %}" class="btn btn-secondary">Back</a>
 </div>
