@@ -67,7 +67,7 @@ def about_ticket(request, ticket_id):
 def check_in(request, ticket_id):
     ticket = get_ticket(ticket_id, request.user)
 
-    if ticket.status == "canceled":
+    if ticket.status == Ticket.STATUS_CANCELED:
         return render(request, "flights/error.html", {"message": "Canceled tickets cannot be checked in."})
 
     if ticket.flight.date < date.today():
@@ -96,7 +96,7 @@ def check_in(request, ticket_id):
 @login_required
 def resend_receipt(request, ticket_id):
     ticket = get_ticket(ticket_id, request.user)
-    window = timedelta(seconds=30)
+    window = timedelta(seconds=3)
     outbound_tickets = list(Ticket.objects.filter(
         purchased_by=request.user,
         flight=ticket.flight,

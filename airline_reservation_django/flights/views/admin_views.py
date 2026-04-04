@@ -2,7 +2,7 @@ import json
 from datetime import date, timedelta
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum, Count, F, CharField, Value
+from django.db.models import Sum, Count, F, CharField, Value, Q
 from django.db.models.functions import Concat, TruncDate
 
 from django.shortcuts import get_object_or_404
@@ -15,12 +15,12 @@ def admin_panel(request):
         return redirect("home")
 
     today = date.today()
-    total_bookings = Ticket.objects.filter(status="booked").count()
-    total_revenue  = Ticket.objects.filter(status="booked").aggregate(
+    total_bookings = Ticket.objects.filter(status=Ticket.STATUS_BOOKED).count()
+    total_revenue  = Ticket.objects.filter(status=Ticket.STATUS_BOOKED).aggregate(
         r=Sum("price_paid")
     )["r"] or 0
     active_flights = Flight.objects.filter(date__gte=today).count()
-    canceled_count = Ticket.objects.filter(status="canceled").count()
+    canceled_count = Ticket.objects.filter(status=Ticket.STATUS_CANCELED).count()
     avg_occupancy  = None
 
     occ_data = Flight.objects.filter(date__gte=today).aggregate(
@@ -33,7 +33,7 @@ def admin_panel(request):
     cutoff = today - timedelta(days=13)
     daily_qs = (
         Ticket.objects
-        .filter(created_at__date__gte=cutoff, status="booked")
+        .filter(created_at__date__gte=cutoff, status=Ticket.STATUS_BOOKED)
         .annotate(day=TruncDate("created_at"))
         .values("day")
         .annotate(count=Count("id"), revenue=Sum("price_paid"))
@@ -52,7 +52,7 @@ def admin_panel(request):
 
     top_routes = (
         Ticket.objects
-        .filter(status="booked")
+        .filter(status=Ticket.STATUS_BOOKED)
         .annotate(route=Concat(
             "flight__departure_city", Value(" → "),
             "flight__arrival_city", output_field=CharField()
@@ -62,7 +62,6 @@ def admin_panel(request):
         .order_by("-bookings")[:10]
     )
 
-    from django.db.models import Q
     flight_search = request.GET.get("flight_search", "").strip()
     flight_date   = request.GET.get("flight_date", "").strip()
     from_city     = request.GET.get("from_city", "").strip()
@@ -129,9 +128,9 @@ def admin_flight_detail(request, flight_id):
     flight = get_object_or_404(Flight, id=flight_id)
     tickets = Ticket.objects.filter(flight=flight).select_related("purchased_by").order_by("seat_number")
 
-    booked = tickets.filter(status="booked").count()
-    canceled = tickets.filter(status="canceled").count()
-    revenue = tickets.filter(status="booked").aggregate(r=Sum("price_paid"))["r"] or 0
+    booked = tickets.filter(status=Ticket.STATUS_BOOKED).count()
+    canceled = tickets.filter(status=Ticket.STATUS_CANCELED).count()
+    revenue = tickets.filter(status=Ticket.STATUS_BOOKED).aggregate(r=Sum("price_paid"))["r"] or 0
     fill_pct = round(booked / flight.total_seats * 100, 1) if flight.total_seats else 0
 
     return render(request, "flights/admin_flight_detail.html", {

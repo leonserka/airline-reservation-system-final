@@ -52,14 +52,19 @@ class Flight(models.Model):
 
 
 class Ticket(models.Model):
+    STATUS_BOOKED   = 'booked'
+    STATUS_CANCELED = 'canceled'
+    PAYMENT_PAID      = 'paid'
+    PAYMENT_REFUNDED  = 'refunded'
+
     PAYMENT_STATUS_CHOICES = [
-        ('paid', 'Paid'),
-        ('refunded', 'Refunded'),
+        (PAYMENT_PAID,     'Paid'),
+        (PAYMENT_REFUNDED, 'Refunded'),
     ]
 
     STATUS_CHOICES = [
-        ('booked', 'Booked'),
-        ('canceled', 'Canceled'),
+        (STATUS_BOOKED,   'Booked'),
+        (STATUS_CANCELED, 'Canceled'),
     ]
 
     flight = models.ForeignKey(Flight, on_delete=models.CASCADE)

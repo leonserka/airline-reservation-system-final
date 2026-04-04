@@ -13,7 +13,7 @@ def get_ticket(ticket_id, user):
 
 
 def can_cancel(ticket):
-    return ticket.seat_class == "PLUS" and ticket.status != "canceled"
+    return ticket.seat_class == "PLUS" and ticket.status != Ticket.STATUS_CANCELED
 
 
 @transaction.atomic
@@ -21,8 +21,8 @@ def cancel_ticket(ticket):
     if not can_cancel(ticket):
         raise ValueError("You can only cancel PLUS class tickets.")
     flight = ticket.flight
-    ticket.status = "canceled"
-    ticket.payment_status = "refunded"
+    ticket.status = Ticket.STATUS_CANCELED
+    ticket.payment_status = Ticket.PAYMENT_REFUNDED
     if ticket.seat_number:
         flight.available_seats += 1
         flight.save()
@@ -31,11 +31,11 @@ def cancel_ticket(ticket):
 
 
 def can_download_pdf(ticket):
-    return bool(ticket.checked_in) and ticket.status != "canceled"
+    return bool(ticket.checked_in) and ticket.status != Ticket.STATUS_CANCELED
 
 
 def verify_checkin_data(ticket, first_name, last_name, id_number):
-    if ticket.status == "canceled":
+    if ticket.status == Ticket.STATUS_CANCELED:
         return False, "Canceled tickets cannot be checked in."
     if not first_name or not last_name or not id_number:
         return False, "Missing data."
