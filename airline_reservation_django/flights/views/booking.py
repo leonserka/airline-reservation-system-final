@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.conf import settings
+from django.contrib import messages
 import json
 from ..models import Flight, Ticket
 from ..forms import PassengerForm
@@ -49,6 +50,10 @@ def book_step1(request, flight_id):
 @login_required
 def book_step2(request, flight_id):
     bs = BookingSession(request)
+    if not bs.get_passengers():
+        messages.warning(request, "Vaša sesija je istekla. Molimo počnite rezervaciju iznova.")
+        return redirect("home")
+
     flight = get_object_or_404(Flight, id=flight_id)
     return_flight = get_return_flight(bs)
 
@@ -75,6 +80,10 @@ def book_step2(request, flight_id):
 @login_required
 def book_step3(request, flight_id):
     bs = BookingSession(request)
+    if not bs.get_passengers() or not bs.get_seat_class():
+        messages.warning(request, "Vaša sesija je istekla. Molimo počnite rezervaciju iznova.")
+        return redirect("home")
+
     flight = get_object_or_404(Flight, id=flight_id)
     return_flight = get_return_flight(bs)
 
@@ -125,6 +134,10 @@ def book_step3(request, flight_id):
 @login_required
 def book_step4(request, flight_id):
     bs = BookingSession(request)
+    if not bs.get_passengers() or not bs.get_seat_class() or not bs.get_selected_seats():
+        messages.warning(request, "Vaša sesija je istekla. Molimo počnite rezervaciju iznova.")
+        return redirect("home")
+
     flight = get_object_or_404(Flight, id=flight_id)
     total = bs.init_price(float(flight.price))
 
@@ -149,6 +162,10 @@ def book_step4(request, flight_id):
 @login_required
 def book_step5(request, flight_id):
     bs = BookingSession(request)
+    if not bs.get_passengers() or not bs.get_seat_class() or not bs.get_selected_seats():
+        messages.warning(request, "Vaša sesija je istekla. Molimo počnite rezervaciju iznova.")
+        return redirect("home")
+
     flight = get_object_or_404(Flight, id=flight_id)
     return_flight = get_return_flight(bs)
     passengers = bs.get_passengers()

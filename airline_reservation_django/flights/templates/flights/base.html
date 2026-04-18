@@ -106,6 +106,13 @@
 {% block hero %}{% endblock %}
 
 <main class="main-content">
+    {% if messages %}
+        <div class="django-messages">
+            {% for message in messages %}
+                <div class="django-message django-message--{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
     {% block content %}{% endblock %}
 </main>
 
