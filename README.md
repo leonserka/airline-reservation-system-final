@@ -101,6 +101,7 @@ This setup ensures consistent database state across all environments — develop
 - **Gmail check-in notifications** — send email 24h before flight (requires scheduler)
 - **Admin cancel flight** — cancel flight and email all buyers
 - **Plane design** — better seat map design
+- **Plane insert script** - make script that at each start make inserts of departures 
 
 ### Phase 3 — 26.04 → 12.05
 - **PayPal refund** — trigger refund via PayPal API on ticket cancel 
