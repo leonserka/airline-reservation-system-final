@@ -1,5 +1,5 @@
 from django.db import transaction, IntegrityError
-from ..models import Ticket
+from ..models import Flight, Ticket
 from ..constants import SEAT_PRICES, LUGGAGE, EQUIPMENT
 from .pdf_service import generate_receipt_pdf
 from .email_service import send_receipt_email
@@ -9,9 +9,17 @@ def process_booking(user, flight, return_flight, passengers, seat_class,
                     all_selected_seats, total_price, luggage=None, equipment=None):
     try:
         with transaction.atomic():
-            flights = [flight]
+            requested_flights = [flight]
             if return_flight:
-                flights.append(return_flight)
+                requested_flights.append(return_flight)
+
+            locked_flights = {
+                fl.id: fl for fl in Flight.objects.select_for_update()
+                .filter(id__in=[fl.id for fl in requested_flights])
+                .order_by("id")
+            }
+            flights = [locked_flights[fl.id] for fl in requested_flights]
+
             seat_upgrade  = SEAT_PRICES.get(seat_class, 0)
             luggage_cost  = LUGGAGE.get(luggage, 0) if luggage else 0
             equip_cost    = EQUIPMENT.get(equipment, 0) if equipment else 0
@@ -19,9 +27,20 @@ def process_booking(user, flight, return_flight, passengers, seat_class,
 
             for fl in flights:
                 selected_seats = all_selected_seats.get(str(fl.id), [])
+                if len(selected_seats) != len(passengers):
+                    return {"status": "error", "msg": "Please select one seat for each passenger."}
+                if len(selected_seats) != len(set(selected_seats)):
+                    return {"status": "seat_taken", "seat": "duplicate"}
+                if fl.available_seats < len(passengers):
+                    return {"status": "error", "msg": "Not enough seats are available on this flight."}
+
                 taken_seats = set(
                     Ticket.objects.select_for_update()
-                    .filter(flight=fl)
+                    .filter(
+                        flight=fl,
+                        status=Ticket.STATUS_BOOKED,
+                        seat_number__isnull=False,
+                    )
                     .values_list("seat_number", flat=True)
                 )
                 for seat in selected_seats:

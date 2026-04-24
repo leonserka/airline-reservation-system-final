@@ -109,6 +109,15 @@ class Ticket(models.Model):
     def __str__(self):
         return f"{self.passenger_name} {self.passenger_surname} | {self.flight.flight_number}"
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["flight", "seat_number"],
+                condition=models.Q(seat_number__isnull=False, status="booked"),
+                name="uniq_booked_seat_per_flight",
+            ),
+        ]
+
 
 class UserProfile(models.Model):
     user         = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")

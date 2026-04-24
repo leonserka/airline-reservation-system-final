@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const form = input ? input.closest('form') : null;
     const confirmBtn = document.getElementById('confirm-seats-btn');
     const counterEl = document.getElementById('seat-counter');
+    const recommendedSeat = document.getElementById('recommended-seat');
     const numPassengers = parseInt(document.getElementById('num-passengers').value || '1', 10);
 
     if (!input || !form) return;
@@ -30,17 +31,31 @@ document.addEventListener("DOMContentLoaded", function () {
         if (confirmBtn) {
             confirmBtn.disabled = count !== numPassengers;
         }
+        if (recommendedSeat) {
+            recommendedSeat.textContent = Array.from(selectedSeats)[0] || '--';
+        }
+    }
+
+    function toggleSeat(seat) {
+        const id = seat.dataset.seat;
+        if (selectedSeats.has(id)) {
+            selectedSeats.delete(id);
+        } else if (selectedSeats.size < numPassengers) {
+            selectedSeats.add(id);
+        }
+        update();
     }
 
     document.querySelectorAll('.seat:not(.occupied)').forEach(function (seat) {
         seat.addEventListener('click', function () {
-            const id = seat.dataset.seat;
-            if (selectedSeats.has(id)) {
-                selectedSeats.delete(id);
-            } else if (selectedSeats.size < numPassengers) {
-                selectedSeats.add(id);
+            toggleSeat(seat);
+        });
+
+        seat.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                toggleSeat(seat);
             }
-            update();
         });
     });
 

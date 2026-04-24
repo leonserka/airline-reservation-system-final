@@ -1,13 +1,31 @@
-SEAT_LETTERS = {1: 'A', 2: 'B', 3: 'C', 4: 'D'}
+SEAT_LETTERS = {1: 'A', 2: 'B', 3: 'C', 4: 'D', 5: 'E', 6: 'F'}
 
 
-def build_seat_positions(total_seats, taken_seats, selected_seats, seats_per_row=4):
+def get_row_zone(row_number):
+    if row_number <= 2:
+        return "extra"
+    if row_number <= 6:
+        return "quick"
+    if row_number <= 13:
+        return "front"
+    if row_number <= 20:
+        return "regular"
+    return "back"
+
+
+def get_price_label(row_number):
+    return ""
+
+
+def build_seat_positions(total_seats, taken_seats, selected_seats, seats_per_row=6):
     seat_positions = []
     num_rows = total_seats // seats_per_row
 
     for row_number in range(1, num_rows + 1):
         row = {
             "row_number": row_number,
+            "zone": get_row_zone(row_number),
+            "price_label": get_price_label(row_number),
             "left": [],
             "right": [],
         }
@@ -15,7 +33,7 @@ def build_seat_positions(total_seats, taken_seats, selected_seats, seats_per_row
             seat_id = f"{row_number}{SEAT_LETTERS[seat_index]}"
             is_occupied = seat_id in taken_seats or seat_id in selected_seats
             seat = {"seat_id": seat_id, "occupied": is_occupied}
-            if seat_index <= 2:
+            if seat_index <= 3:
                 row["left"].append(seat)
             else:
                 row["right"].append(seat)

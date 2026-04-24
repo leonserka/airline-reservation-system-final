@@ -120,7 +120,7 @@ def book_step3(request, flight_id):
         total_seats=flight.total_seats,
         taken_seats=set(map(str, taken)),
         selected_seats=set(),
-        seats_per_row=4,
+        seats_per_row=6,
     )
 
     return render(request, "flights/book_step3.html", {

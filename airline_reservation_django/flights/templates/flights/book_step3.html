@@ -2,7 +2,7 @@
 {% load static tz %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'flights/css/flight_step3.css' %}?v=4">
+<link rel="stylesheet" href="{% static 'flights/css/flight_step3.css' %}?v=9">
 {% endblock %}
 
 {% block content %}
@@ -21,40 +21,44 @@
   <h2 class="card-header">Flight Summary</h2>
 
   <div class="flight-info">
-    <span class="route">{{ flight.departure_city }} → {{ flight.arrival_city }}</span>
+    <span class="route">{{ flight.departure_city }} &rarr; {{ flight.arrival_city }}</span>
     <span class="details">
       {{ flight.date|date:"M. d, Y" }} &middot;
       {{ flight.departure_datetime|timezone:flight.departure_timezone|date:"H:i" }} ({{ flight.departure_timezone }})
-      → {{ flight.arrival_datetime|timezone:flight.arrival_timezone|date:"H:i" }} ({{ flight.arrival_timezone }})
+      &rarr; {{ flight.arrival_datetime|timezone:flight.arrival_timezone|date:"H:i" }} ({{ flight.arrival_timezone }})
     </span>
   </div>
 
   {% if return_flight %}
   <div class="flight-info return">
-    <span class="route">{{ return_flight.departure_city }} → {{ return_flight.arrival_city }}</span>
+    <span class="route">{{ return_flight.departure_city }} &rarr; {{ return_flight.arrival_city }}</span>
     <span class="details">
       {{ return_flight.date|date:"M. d, Y" }} &middot;
       {{ return_flight.departure_datetime|timezone:return_flight.departure_timezone|date:"H:i" }} ({{ return_flight.departure_timezone }})
-      → {{ return_flight.arrival_datetime|timezone:return_flight.arrival_timezone|date:"H:i" }} ({{ return_flight.arrival_timezone }})
+      &rarr; {{ return_flight.arrival_datetime|timezone:return_flight.arrival_timezone|date:"H:i" }} ({{ return_flight.arrival_timezone }})
     </span>
   </div>
   {% endif %}
 
   <div class="mt-2">
     <strong>Class:</strong> {{ request.session.seat_class }} &middot;
-    <strong>Total:</strong> €{{ total_price }} &middot;
+    <strong>Total:</strong> EUR {{ total_price }} &middot;
     <strong>Selected:</strong> <span id="seat-counter">{{ selected_seats|length }} / {{ num_passengers }}</span>
     {% if remaining > 0 %}<span class="text-muted">({{ remaining }} remaining)</span>{% endif %}
   </div>
 </div>
 
-<div class="card">
-  <h2 class="card-header">Seat Map</h2>
-
-  <div class="seatmap-legend">
-    <span class="legend-item"><span class="legend-dot available"></span> Available</span>
-    <span class="legend-item"><span class="legend-dot occupied"></span> Taken</span>
-    <span class="legend-item"><span class="legend-dot selected"></span> Selected</span>
+<div class="card seat-card">
+  <div class="seat-card-header">
+    <div>
+      <p class="eyebrow">Free seat selection</p>
+      <h2 class="card-header seat-title">Choose seats on the aircraft</h2>
+    </div>
+    <div class="seatmap-legend" aria-label="Seat map legend">
+      <span class="legend-item"><span class="legend-dot available"></span> Available</span>
+      <span class="legend-item"><span class="legend-dot occupied"></span> Taken</span>
+      <span class="legend-item"><span class="legend-dot selected"></span> Selected</span>
+    </div>
   </div>
 
   {{ selected_seats|json_script:"pre-selected-seats" }}
@@ -64,51 +68,78 @@
     <input type="hidden" id="num-passengers" value="{{ num_passengers }}">
     <input type="hidden" name="selected_seats_json" id="selected_seats_json" value="">
 
-    <div class="airplane-fuselage">
+    <div class="seat-selection-layout">
+      <div class="aircraft-scene">
+        <div class="aircraft-wing wing-left"></div>
+        <div class="aircraft-wing wing-right"></div>
 
-      <div class="airplane-nose"></div>
+        <div class="aircraft-body" aria-label="Seat map">
+          <div class="aircraft-nose">
+            <span></span><span></span>
+          </div>
 
-      <div class="seatmap">
+          <div class="door-row">
+            <span></span><strong>Cabin</strong><span></span>
+          </div>
 
-        <div class="seat-header-row">
-          <div class="row-num-col"></div>
-          <div class="seat-label">A</div>
-          <div class="seat-label">B</div>
-          <div class="aisle-label">✈</div>
-          <div class="seat-label">C</div>
-          <div class="seat-label">D</div>
-        </div>
+          <div class="seat-header-row">
+            <span>A</span><span>B</span><span>C</span>
+            <span class="aisle-title"></span>
+            <span>D</span><span>E</span><span>F</span>
+          </div>
 
-        {% for row in seat_positions %}
-        <div class="seat-row">
-          <div class="row-num-col">{{ row.row_number }}</div>
-          {% for seat in row.left %}
-          <div class="seat {% if seat.occupied %}occupied{% elif seat.seat_id in selected_seats %}selected{% endif %}"
-               data-seat="{{ seat.seat_id }}">
+          {% for row in seat_positions %}
+          <div class="seat-row zone-{{ row.zone }}">
+            {% for seat in row.left %}
+            <div class="seat {% if seat.occupied %}occupied{% elif seat.seat_id in selected_seats %}selected{% endif %}"
+                 data-seat="{{ seat.seat_id }}"
+                 role="button"
+                 tabindex="{% if seat.occupied %}-1{% else %}0{% endif %}"
+                 aria-label="Seat {{ seat.seat_id }}">
+            </div>
+            {% endfor %}
+
+            <div class="row-number">{{ row.row_number }}</div>
+
+            {% for seat in row.right %}
+            <div class="seat {% if seat.occupied %}occupied{% elif seat.seat_id in selected_seats %}selected{% endif %}"
+                 data-seat="{{ seat.seat_id }}"
+                 role="button"
+                 tabindex="{% if seat.occupied %}-1{% else %}0{% endif %}"
+                 aria-label="Seat {{ seat.seat_id }}">
+            </div>
+            {% endfor %}
           </div>
           {% endfor %}
-          <div class="aisle"></div>
-          {% for seat in row.right %}
-          <div class="seat {% if seat.occupied %}occupied{% elif seat.seat_id in selected_seats %}selected{% endif %}"
-               data-seat="{{ seat.seat_id }}">
-          </div>
-          {% endfor %}
-        </div>
-        {% endfor %}
 
+          <div class="door-row rear">
+            <span></span><strong>Exit</strong><span></span>
+          </div>
+
+          <div class="aircraft-tail"></div>
+        </div>
       </div>
 
-      <div class="airplane-tail"></div>
+      <aside class="seat-summary-panel">
+        <div class="summary-route">
+          <strong>{{ flight.departure_city }} to {{ flight.arrival_city }}</strong>
+          <span>Passengers</span>
+        </div>
 
-    </div>
+        <div class="summary-passenger">
+          <span class="avatar">{{ request.user.username|slice:":1"|upper }}</span>
+          <span>{{ request.user.get_full_name|default:request.user.username }}</span>
+          <strong id="recommended-seat">--</strong>
+        </div>
 
-    <div class="seat-confirm-area">
-      <button type="submit" id="confirm-seats-btn" class="btn btn-primary" disabled>
-        Confirm Seats
-      </button>
-      <p class="text-muted seat-hint">
-        Select {{ num_passengers }} seat{% if num_passengers != 1 %}s{% endif %} to continue
-      </p>
+        <button type="submit" id="confirm-seats-btn" class="summary-submit" disabled>
+          Add selected seats
+        </button>
+
+        <p class="text-muted seat-hint">
+          Select {{ num_passengers }} seat{% if num_passengers != 1 %}s{% endif %} to continue
+        </p>
+      </aside>
     </div>
   </form>
 </div>
@@ -116,5 +147,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'flights/js/flight_step3.js' %}?v=4"></script>
+<script src="{% static 'flights/js/flight_step3.js' %}?v=7"></script>
 {% endblock %}
