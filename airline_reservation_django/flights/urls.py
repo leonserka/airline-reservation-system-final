@@ -16,6 +16,7 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('admin-panel/', views.admin_panel, name='admin_panel'),
     path('admin-panel/flight/<int:flight_id>/', views.admin_flight_detail, name='admin_flight_detail'),
+    path('admin-panel/flight/<int:flight_id>/cancel/', views.cancel_flight, name='cancel_flight'),
     path('login/', auth_views.LoginView.as_view(template_name='flights/empty_login.html'), name='login'),
     path('logout/', views.custom_logout, name='logout'),
     path('register/', views.register, name='register'),

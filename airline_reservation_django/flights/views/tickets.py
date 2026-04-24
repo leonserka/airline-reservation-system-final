@@ -12,6 +12,7 @@ from ..services.ticket_service import (
     can_cancel,
     cancel_ticket,
     can_download_pdf,
+    get_checkin_button_state,
     verify_checkin_data,
     mark_checked_in,
 )
@@ -60,6 +61,7 @@ def about_ticket(request, ticket_id):
     return render(request, "flights/about_ticket.html", {
         "ticket": ticket,
         "can_cancel": can_cancel(ticket),
+        "checkin_state": get_checkin_button_state(ticket),
     })
 
 

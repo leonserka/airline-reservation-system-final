@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.utils import timezone
 from django.db import transaction
 from django.shortcuts import get_object_or_404
@@ -34,9 +35,32 @@ def can_download_pdf(ticket):
     return bool(ticket.checked_in) and ticket.status != Ticket.STATUS_CANCELED
 
 
+def get_checkin_button_state(ticket):
+    if ticket.status == Ticket.STATUS_CANCELED:
+        return "canceled"
+    if ticket.checked_in:
+        return "checked_in"
+    now = timezone.now()
+    time_until = ticket.flight.departure_datetime - now
+    if time_until > timedelta(hours=24):
+        return "too_early"
+    if time_until < timedelta(hours=2):
+        return "too_late"
+    return "open"
+
+
 def verify_checkin_data(ticket, first_name, last_name, id_number):
     if ticket.status == Ticket.STATUS_CANCELED:
         return False, "Canceled tickets cannot be checked in."
+
+    now = timezone.now()
+    time_until = ticket.flight.departure_datetime - now
+    if time_until > timedelta(hours=24):
+        opens_at = (ticket.flight.departure_datetime - timedelta(hours=24)).strftime("%b %d at %H:%M")
+        return False, f"Check-in is not yet open. Online check-in opens on {opens_at}."
+    if time_until < timedelta(hours=2):
+        return False, "Online check-in is closed (less than 2 hours before departure)."
+
     if not first_name or not last_name or not id_number:
         return False, "Missing data."
     name_matches = first_name.strip().lower() == ticket.passenger_name.lower()

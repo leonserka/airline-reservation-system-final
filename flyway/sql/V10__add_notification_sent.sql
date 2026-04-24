@@ -1,0 +1,1 @@
+ALTER TABLE flights_flight ADD COLUMN notification_sent BOOLEAN NOT NULL DEFAULT FALSE;

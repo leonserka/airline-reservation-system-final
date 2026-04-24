@@ -29,6 +29,7 @@ class Flight(models.Model):
     total_seats = models.IntegerField()
     available_seats = models.IntegerField()
     flight_type = models.CharField(max_length=3, choices=FLIGHT_TYPE_CHOICES)
+    notification_sent = models.BooleanField(default=False)
 
     @property
     def departure_datetime(self):

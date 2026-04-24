@@ -37,7 +37,10 @@ def book_step1(request, flight_id):
             bs.set_num_passengers(num_passengers)
             return redirect("book_step2", flight_id=flight.id)
     else:
-        forms = [PassengerForm(prefix=str(i)) for i in range(num_passengers)]
+        forms = [
+            PassengerForm(prefix=str(i), initial={"email": request.user.email} if i == 0 else {})
+            for i in range(num_passengers)
+        ]
 
     return render(request, "flights/book_step1.html", {
         "flight": flight,

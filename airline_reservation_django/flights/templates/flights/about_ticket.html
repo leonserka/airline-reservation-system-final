@@ -99,9 +99,13 @@
         <a href="{% url 'cancel_booked_flight' ticket.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel this ticket? This action cannot be undone.')">Cancel Ticket</a>
     {% endif %}
 
-    {% if ticket.checked_in %}
+    {% if checkin_state == "checked_in" %}
         <a href="?download=pdf" class="btn btn-primary">Download Boarding Pass (PDF)</a>
-    {% else %}
+    {% elif checkin_state == "too_early" %}
+        <button class="btn btn-secondary" disabled title="Check-in opens 24 hours before departure">Check-In Not Open Yet</button>
+    {% elif checkin_state == "too_late" %}
+        <button class="btn btn-secondary" disabled title="Online check-in closed 2 hours before departure">Check-In Closed</button>
+    {% elif checkin_state == "open" %}
         <a href="{% url 'check_in' ticket.id %}" class="btn btn-success">Check-In Now</a>
     {% endif %}
 

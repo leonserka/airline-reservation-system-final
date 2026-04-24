@@ -6,7 +6,9 @@ from django.db.models import Sum, Count, F, CharField, Value, Q
 from django.db.models.functions import Concat, TruncDate
 
 from django.shortcuts import get_object_or_404
+from django.db import transaction
 from ..models import Flight, Ticket
+from ..services.email_service import send_flight_canceled_email
 
 
 @login_required
@@ -141,3 +143,23 @@ def admin_flight_detail(request, flight_id):
         "revenue":  revenue,
         "fill_pct": fill_pct,
     })
+
+
+@login_required
+@transaction.atomic
+def cancel_flight(request, flight_id):
+    if not request.user.is_staff:
+        return redirect("home")
+    if request.method != "POST":
+        return redirect("admin_flight_detail", flight_id=flight_id)
+
+    flight = get_object_or_404(Flight, id=flight_id)
+    booked_tickets = Ticket.objects.filter(flight=flight, status=Ticket.STATUS_BOOKED)
+
+    for ticket in booked_tickets:
+        ticket.status = Ticket.STATUS_CANCELED
+        ticket.payment_status = Ticket.PAYMENT_REFUNDED
+        ticket.save()
+        send_flight_canceled_email(ticket.email, ticket.passenger_name, flight)
+
+    return redirect("admin_panel")

@@ -93,6 +93,100 @@ def send_password_changed_email(to_email, username):
         return False
 
 
+def send_flight_canceled_email(to_email, passenger_name, flight):
+    try:
+        flight_number = flight.flight_number
+        route = f"{flight.departure_city} → {flight.arrival_city}"
+        flight_date = str(flight.date)
+
+        subject = f"Flight {flight_number} Canceled"
+        text_body = (
+            f"Dear {passenger_name},\n\n"
+            f"We regret to inform you that flight {flight_number} ({route}) on {flight_date} has been canceled.\n"
+            f"Your refund will be available within the next 24 hours. We apologize for the inconvenience.\n\n"
+            f"Airline Reservation System"
+        )
+        html_body = f"""
+        <div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;border:1px solid #e0e3e8;border-radius:8px;overflow:hidden;">
+          <div style="background:#c0392b;padding:24px;text-align:center;">
+            <h2 style="color:#fff;margin:0;font-size:20px;">Flight Canceled</h2>
+          </div>
+          <div style="padding:28px 32px;">
+            <p style="font-size:16px;color:#222;">Dear <strong>{passenger_name}</strong>,</p>
+            <p style="color:#444;">We regret to inform you that your flight has been <strong>canceled</strong>.</p>
+            <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+              <tr><td style="padding:8px 0;color:#888;font-size:13px;">Flight</td><td style="padding:8px 0;font-weight:600;">{flight_number}</td></tr>
+              <tr><td style="padding:8px 0;color:#888;font-size:13px;">Route</td><td style="padding:8px 0;font-weight:600;">{route}</td></tr>
+              <tr><td style="padding:8px 0;color:#888;font-size:13px;">Date</td><td style="padding:8px 0;font-weight:600;">{flight_date}</td></tr>
+            </table>
+            <p style="color:#444;font-size:14px;">Your refund will be available within the next <strong>24 hours</strong>. We apologize for the inconvenience.</p>
+          </div>
+          <div style="background:#f0f2f5;padding:14px;text-align:center;font-size:12px;color:#aaa;">
+            Airline Reservation System &copy; 2026
+          </div>
+        </div>
+        """
+        msg = EmailMultiAlternatives(
+            subject=subject,
+            body=text_body,
+            from_email=settings.EMAIL_HOST_USER,
+            to=[to_email],
+        )
+        msg.attach_alternative(html_body, "text/html")
+        msg.send()
+        return True
+    except Exception as e:
+        print(f"[EMAIL ERROR] Failed to send flight canceled email to {to_email}: {e}")
+        return False
+
+
+def send_flight_reminder_email(to_email, passenger_name, flight):
+    try:
+        flight_number = flight.flight_number
+        route = f"{flight.departure_city} → {flight.arrival_city}"
+        departure = flight.departure_datetime.strftime("%b %d at %H:%M")
+
+        subject = f"Reminder: Your flight {flight_number} departs in 24 hours"
+        text_body = (
+            f"Dear {passenger_name},\n\n"
+            f"Your flight {flight_number} ({route}) departs in approximately 24 hours ({departure} local time).\n\n"
+            f"If you haven't checked in online yet, please do so before departure.\n\n"
+            f"Airline Reservation System"
+        )
+        html_body = f"""
+        <div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;border:1px solid #e0e3e8;border-radius:8px;overflow:hidden;">
+          <div style="background:#003366;padding:24px;text-align:center;">
+            <h2 style="color:#fff;margin:0;font-size:20px;">✈️ Flight Reminder</h2>
+          </div>
+          <div style="padding:28px 32px;">
+            <p style="font-size:16px;color:#222;">Dear <strong>{passenger_name}</strong>,</p>
+            <p style="color:#444;">Your flight departs in approximately <strong>24 hours</strong>.</p>
+            <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+              <tr><td style="padding:8px 0;color:#888;font-size:13px;">Flight</td><td style="padding:8px 0;font-weight:600;color:#003366;">{flight_number}</td></tr>
+              <tr><td style="padding:8px 0;color:#888;font-size:13px;">Route</td><td style="padding:8px 0;font-weight:600;">{route}</td></tr>
+              <tr><td style="padding:8px 0;color:#888;font-size:13px;">Departure</td><td style="padding:8px 0;font-weight:600;">{departure}</td></tr>
+            </table>
+            <p style="color:#444;font-size:14px;">Please complete online check-in before your flight.</p>
+          </div>
+          <div style="background:#f0f2f5;padding:14px;text-align:center;font-size:12px;color:#aaa;">
+            Airline Reservation System &copy; 2026
+          </div>
+        </div>
+        """
+        msg = EmailMultiAlternatives(
+            subject=subject,
+            body=text_body,
+            from_email=settings.EMAIL_HOST_USER,
+            to=[to_email],
+        )
+        msg.attach_alternative(html_body, "text/html")
+        msg.send()
+        return True
+    except Exception as e:
+        print(f"[EMAIL ERROR] Failed to send flight reminder email to {to_email}: {e}")
+        return False
+
+
 def send_checkin_email(to_email, flight_number):
     try:
         EmailMessage(
