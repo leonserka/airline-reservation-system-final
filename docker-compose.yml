@@ -40,6 +40,8 @@ services:
       -user=bususer
       -password=bus
       -locations=filesystem:/flyway/sql
+      -baselineOnMigrate=true
+      -baselineVersion=0
       migrate
     volumes:
       - ./flyway/sql:/flyway/sql
