@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
         enable: [],
         onChange: function(selectedDates, dateStr) {
             if (!dateStr) return;
-            // Povratak ne moze biti prije polaska
             returnPicker.set("minDate", dateStr);
             const currentReturn = returnPicker.selectedDates[0];
             if (currentReturn && currentReturn < selectedDates[0]) {
