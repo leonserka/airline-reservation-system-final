@@ -108,6 +108,9 @@ flyway/conf/
 airline_reservation_django/flights/migrations/*.py
 !airline_reservation_django/flights/migrations/__init__.py
 
+# --- Local seed/management commands (ne pusha se) ---
+airline_reservation_django/flights/management/
+
 
 # Django collectstatic output
 staticfiles/

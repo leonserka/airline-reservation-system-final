@@ -5,16 +5,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const toDropdown = document.getElementById("toDropdown");
     let selectedFrom = { country: null, city: null };
     let selectedTo = { country: null, city: null };
-    const departPicker = flatpickr("#departDate", {
+    const returnPicker = flatpickr("#returnDate", {
         dateFormat: "Y-m-d",
         minDate: "today",
         enable: []
     });
 
-    const returnPicker = flatpickr("#returnDate", {
+    const departPicker = flatpickr("#departDate", {
         dateFormat: "Y-m-d",
         minDate: "today",
-        enable: []
+        enable: [],
+        onChange: function(selectedDates, dateStr) {
+            if (!dateStr) return;
+            // Povratak ne moze biti prije polaska
+            returnPicker.set("minDate", dateStr);
+            const currentReturn = returnPicker.selectedDates[0];
+            if (currentReturn && currentReturn < selectedDates[0]) {
+                returnPicker.clear();
+            }
+        }
     });
 
     const tripRadios = document.querySelectorAll('input[name="tripType"]');
