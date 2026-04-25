@@ -15,6 +15,24 @@ services:
       timeout: 5s
       retries: 5
 
+  django_init:
+    build: .
+    working_dir: /app/airline_reservation_django
+    command: >
+      bash -c "
+      while ! nc -z db 5432; do sleep 1; done;
+      python manage.py migrate
+      "
+    volumes:
+      - .:/app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - PYTHONUNBUFFERED=1
+    env_file:
+      - .env
+
   flyway:
     image: flyway/flyway:10
     command: >
@@ -26,16 +44,14 @@ services:
     volumes:
       - ./flyway/sql:/flyway/sql
     depends_on:
-      db:
-        condition: service_healthy
+      django_init:
+        condition: service_completed_successfully
 
   django:
     build: .
     working_dir: /app/airline_reservation_django
     command: >
       bash -c "
-      while ! nc -z db 5432; do sleep 1; done;
-      python manage.py migrate &&
       python manage.py collectstatic --noinput &&
       python manage.py runserver 0.0.0.0:8000
       "
