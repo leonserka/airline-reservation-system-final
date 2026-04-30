@@ -1,7 +1,7 @@
 import sys
 from django.apps import AppConfig
 
-_SKIP_COMMANDS = {'migrate', 'makemigrations', 'test', 'collectstatic', 'shell', 'createsuperuser'}
+_SKIP_COMMANDS = {'migrate', 'makemigrations', 'test', 'collectstatic', 'shell', 'createsuperuser', 'seed_routes'}
 
 
 class FlightsConfig(AppConfig):

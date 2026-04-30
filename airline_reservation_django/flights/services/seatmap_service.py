@@ -13,7 +13,7 @@ def get_row_zone(row_number):
     return "back"
 
 
-def build_seat_positions(total_seats, taken_seats, selected_seats, seats_per_row=6):
+def build_seat_positions(total_seats, taken_seats, seats_per_row=6):
     seat_positions = []
     num_rows = total_seats // seats_per_row
 
@@ -26,8 +26,7 @@ def build_seat_positions(total_seats, taken_seats, selected_seats, seats_per_row
         }
         for seat_index in range(1, seats_per_row + 1):
             seat_id = f"{row_number}{SEAT_LETTERS[seat_index]}"
-            is_occupied = seat_id in taken_seats or seat_id in selected_seats
-            seat = {"seat_id": seat_id, "occupied": is_occupied}
+            seat = {"seat_id": seat_id, "occupied": seat_id in taken_seats}
             if seat_index <= 3:
                 row["left"].append(seat)
             else:

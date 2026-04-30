@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.conf import settings
-from django.contrib import messages
 import json
 import requests as http_requests
+from ..decorators import require_booking_session
 from ..models import Flight, Ticket
 from ..forms import PassengerForm
 from ..constants import SEAT_PRICES, LUGGAGE, EQUIPMENT
@@ -39,14 +39,12 @@ def _base_total(flight, return_flight):
     return float(flight.price) + (float(return_flight.price) if return_flight else 0)
 
 
-def require_booking_session(view_func):
-    def wrapper(request, *args, **kwargs):
-        bs = BookingSession(request)
-        if not bs.get_passengers():
-            messages.warning(request, "Vaša sesija je istekla. Molimo počnite rezervaciju iznova.")
-            return redirect("home")
-        return view_func(request, *args, **kwargs)
-    return wrapper
+def _parse_seat_picks(request, taken_seats):
+    try:
+        picks = json.loads(request.POST.get("selected_seats_json", "[]"))
+    except (json.JSONDecodeError, ValueError):
+        return []
+    return [p for p in picks if isinstance(p, str) and p not in taken_seats]
 
 
 @login_required
@@ -96,9 +94,9 @@ def book_step2(request, flight_id):
         seat_class = request.POST.get("seat_class")
         bs.set_seat_class(seat_class)
 
-        dep_price = flight.price + SEAT_PRICES.get(seat_class, 0)
-        ret_price = return_flight.price + SEAT_PRICES.get(seat_class, 0) if return_flight else 0
-        bs.set_total_price(float(dep_price + ret_price))
+        seat_upgrade = SEAT_PRICES.get(seat_class, 0)
+        legs = 2 if return_flight else 1
+        bs.set_total_price(_base_total(flight, return_flight) + seat_upgrade * legs)
 
         return redirect("book_step3", flight_id=flight.id)
 
@@ -124,31 +122,30 @@ def book_step3(request, flight_id):
     selected = all_selected.get(str(flight_id), [])
 
     taken = set(
-        Ticket.objects.filter(flight=flight)
-        .values_list("seat_number", flat=True)
+        Ticket.objects.filter(
+            flight=flight,
+            status=Ticket.STATUS_BOOKED,
+            seat_number__isnull=False,
+        ).values_list("seat_number", flat=True)
     )
 
     if request.method == "POST":
-        try:
-            picks = json.loads(request.POST.get("selected_seats_json", "[]"))
-        except (json.JSONDecodeError, ValueError):
-            picks = []
-
-        picks = [p for p in picks if isinstance(p, str) and p not in taken]
-        all_selected[str(flight_id)] = picks
+        selected = _parse_seat_picks(request, taken)
+        all_selected[str(flight_id)] = selected
         bs.set_selected_seats(all_selected)
-        selected = picks
 
-        if len(selected) >= num_passengers:
-            if return_flight and str(return_flight.id) not in all_selected:
-                return redirect("book_step3", flight_id=return_flight.id)
+        all_seats_chosen = len(selected) >= num_passengers
+        return_seats_missing = return_flight and str(return_flight.id) not in all_selected
+
+        if all_seats_chosen and return_seats_missing:
+            return redirect("book_step3", flight_id=return_flight.id)
+        if all_seats_chosen:
             outbound_id = bs.get_outbound_flight_id() or flight.id
             return redirect("book_step4", flight_id=outbound_id)
 
     seat_positions = build_seat_positions(
         total_seats=flight.total_seats,
-        taken_seats=set(map(str, taken)),
-        selected_seats=set(),
+        taken_seats=taken,
         seats_per_row=6,
     )
 
@@ -167,9 +164,8 @@ def book_step3(request, flight_id):
 @require_booking_session
 def book_step4(request, flight_id):
     bs = BookingSession(request)
-
     flight = get_object_or_404(Flight, id=flight_id)
-    total = bs.init_price(float(flight.price))
+    total = bs.get_total_price() or float(flight.price)
 
     if request.method == "POST":
         lug = request.POST.get("luggage_option")
@@ -194,25 +190,18 @@ def book_step4(request, flight_id):
 def book_step5(request, flight_id):
     bs = BookingSession(request)
     flight = get_object_or_404(Flight, id=flight_id)
-    return_flight = bs.get_return_flight()
-    passengers = bs.get_passengers()
-    seat_class = bs.get_seat_class()
-    all_selected = bs.get_selected_seats()
-    luggage = bs.get_luggage()
-    equipment = bs.get_equipment()
-    total_price = bs.init_price(float(flight.price))
 
     if request.method == "GET":
+        total_price = bs.get_total_price() or float(flight.price)
         currency = request.session.get('currency', 'EUR')
         rate = get_rates().get(currency, 1.0)
-        converted_total = round(float(total_price) * rate, 2)
         return render(request, "flights/book_step5.html", {
             "flight": flight,
-            "return_flight": return_flight,
+            "return_flight": bs.get_return_flight(),
             "total_price": total_price,
             "PAYPAL_CLIENT_ID": getattr(settings, "PAYPAL_CLIENT_ID", ""),
             "paypal_currency": currency,
-            "paypal_amount": f"{converted_total:.2f}",
+            "paypal_amount": f"{round(total_price * rate, 2):.2f}",
         })
 
     try:
@@ -232,13 +221,12 @@ def book_step5(request, flight_id):
     result = process_booking(
         user=request.user,
         flight=flight,
-        return_flight=return_flight,
-        passengers=passengers,
-        seat_class=seat_class,
-        all_selected_seats=all_selected,
-        total_price=total_price,
-        luggage=luggage,
-        equipment=equipment,
+        return_flight=bs.get_return_flight(),
+        passengers=bs.get_passengers(),
+        seat_class=bs.get_seat_class(),
+        all_selected_seats=bs.get_selected_seats(),
+        luggage=bs.get_luggage(),
+        equipment=bs.get_equipment(),
         currency=request.session.get('currency', 'EUR'),
     )
 

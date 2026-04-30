@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from ..models import Ticket
 from ..services.email_service import send_checkin_email, send_receipt_email, send_ticket_canceled_email
-from ..services.pdf_service import generate_receipt_pdf
+from ..services.pdf_service import generate_receipt_pdf, generate_ticket_pdf
 from ..services.ticket_service import (
     get_user_tickets,
     get_ticket,
@@ -16,7 +16,6 @@ from ..services.ticket_service import (
     verify_checkin_data,
     mark_checked_in,
 )
-from ..services.pdf_service import generate_ticket_pdf
 
 
 @login_required

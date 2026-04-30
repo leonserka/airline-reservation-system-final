@@ -5,11 +5,17 @@ from io import BytesIO
 from datetime import datetime, timedelta
 from django.template.loader import render_to_string
 from django.conf import settings
-from weasyprint import HTML, CSS
 from ..constants import SEAT_PRICES, LUGGAGE, EQUIPMENT
 from .currency_service import format_price, get_rates
 
+
+def _get_weasyprint():
+    from weasyprint import HTML, CSS
+    return HTML, CSS
+
+
 def generate_ticket_pdf(ticket):
+    HTML, CSS = _get_weasyprint()
     departure_local = ticket.flight.departure_datetime.strftime("%Y-%m-%d %H:%M")
     arrival_local = ticket.flight.arrival_datetime.strftime("%Y-%m-%d %H:%M")
 
@@ -35,6 +41,7 @@ def generate_ticket_pdf(ticket):
 def generate_receipt_pdf(flight, passengers, seat_class, user,
                          luggage=None, equipment=None, return_flight=None,
                          all_selected_seats=None, currency='EUR'):
+    HTML, CSS = _get_weasyprint()
 
     flights = [flight]
     if return_flight:

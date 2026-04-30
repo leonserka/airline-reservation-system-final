@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Min
+from ..decorators import staff_required
 from ..forms import FlightForm
 from ..models import Flight
 from ..services.flight_service import search, future_flights_q
@@ -11,9 +12,8 @@ def home(request):
 
 
 @login_required
+@staff_required
 def create_flight(request):
-    if not request.user.is_staff:
-        return redirect("home")
     form = FlightForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
         form.save()

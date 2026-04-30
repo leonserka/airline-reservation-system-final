@@ -40,11 +40,6 @@ class BookingSession:
     def set_total_price(self, value):
         self.session["total_price"] = float(value)
 
-    def init_price(self, price):
-        if "total_price" not in self.session:
-            self.set_total_price(price)
-        return self.get_total_price()
-
     def get_seat_class(self):
         return self.session.get("seat_class")
 
@@ -69,11 +64,12 @@ class BookingSession:
     def set_equipment(self, value):
         self.session["selected_equipment"] = value
 
+    SESSION_KEYS = (
+        "outbound_flight_id", "passengers", "num_passengers",
+        "selected_seats", "seat_class", "total_price",
+        "return_id", "selected_luggage", "selected_equipment",
+    )
+
     def clear(self):
-        keys = [
-            "outbound_flight_id", "passengers", "num_passengers",
-            "selected_seats", "seat_class", "total_price",
-            "return_id", "selected_luggage", "selected_equipment",
-        ]
-        for key in keys:
+        for key in self.SESSION_KEYS:
             self.session.pop(key, None)

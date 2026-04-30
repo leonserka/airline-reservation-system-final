@@ -5,16 +5,10 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Count, F, CharField, Value, Q
 from django.db.models.functions import Concat, TruncDate
 from django.db import transaction
+from ..decorators import staff_required
 from ..models import Flight, Ticket
 from ..services.email_service import send_flight_canceled_email
-
-
-def staff_required(view_func):
-    def wrapper(request, *args, **kwargs):
-        if not request.user.is_staff:
-            return redirect("home")
-        return view_func(request, *args, **kwargs)
-    return wrapper
+from ..services.flight_service import future_flights_q
 
 
 @login_required
@@ -26,11 +20,11 @@ def admin_panel(request):
     total_revenue  = Ticket.objects.filter(status=Ticket.STATUS_BOOKED).aggregate(
         r=Sum("price_paid")
     )["r"] or 0
-    active_flights = Flight.objects.filter(date__gte=today).count()
+    active_flights = Flight.objects.filter(future_flights_q()).count()
     canceled_count = Ticket.objects.filter(status=Ticket.STATUS_CANCELED).count()
     avg_occupancy  = None
 
-    occ_data = Flight.objects.filter(date__gte=today).aggregate(
+    occ_data = Flight.objects.filter(future_flights_q()).aggregate(
         total=Sum("total_seats"), avail=Sum("available_seats")
     )
     if occ_data["total"]:
@@ -95,19 +89,18 @@ def admin_panel(request):
     if flight_date:
         flights_qs = flights_qs.filter(date=flight_date)
     else:
-        flights_qs = flights_qs.filter(date__gte=today)
+        flights_qs = flights_qs.filter(future_flights_q())
 
     flights_occ = flights_qs[:100]
     status_filter = request.GET.get("status", "all")
     qs = Ticket.objects.select_related("flight", "purchased_by").order_by("-id")
     if status_filter == "booked":
-        qs = qs.filter(status="booked")
+        qs = qs.filter(status=Ticket.STATUS_BOOKED)
     elif status_filter == "canceled":
-        qs = qs.filter(status="canceled")
+        qs = qs.filter(status=Ticket.STATUS_CANCELED)
     reservations = qs[:200]
 
     return render(request, "flights/admin_panel.html", {
-        "page": "panel",
         "total_bookings": total_bookings,
         "total_revenue":  total_revenue,
         "active_flights": active_flights,

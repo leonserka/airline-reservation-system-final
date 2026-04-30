@@ -1,9 +1,9 @@
 import json
-from datetime import date
 from collections import defaultdict
 from django.db.models import Min
 from django.shortcuts import render
 from ..models import Flight
+from ..services.flight_service import future_flights_q
 
 CITY_COORDS = {
     'Zagreb': (45.815, 15.982),
@@ -70,10 +70,9 @@ COUNTRY_CODES = {
 
 
 def destinations(request):
-    today = date.today()
     dest_qs = (
         Flight.objects
-        .filter(date__gte=today)
+        .filter(future_flights_q())
         .values('arrival_country', 'arrival_city')
         .annotate(min_price=Min('price'))
         .order_by('arrival_country', 'arrival_city')
@@ -109,8 +108,7 @@ def destinations(request):
 
 
 def timetable(request):
-    today = date.today()
-    flights = Flight.objects.filter(date__gte=today).order_by('date')
+    flights = Flight.objects.filter(future_flights_q()).order_by('date')
 
     DAY_NAMES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
     schedule = defaultdict(lambda: defaultdict(list))
@@ -165,7 +163,7 @@ def help_page(request):
 def special_offers(request):
     cheapest = (
         Flight.objects
-        .filter(date__gte=date.today(), available_seats__gt=0)
+        .filter(future_flights_q(), available_seats__gt=0)
         .order_by('?')[:9]
     )
     return render(request, 'flights/special_offers.html', {'offers': cheapest})
