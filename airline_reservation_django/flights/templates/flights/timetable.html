@@ -1,10 +1,10 @@
-{% extends 'flights/base.html' %}
+﻿{% extends 'flights/base.html' %}
 {% load static %}
 
 {% block title %}Timetable — Airline Reservation{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'flights/css/timetable.css' %}">
+<link rel="stylesheet" href="{% static 'flights/css/timetable.css' %}?v=20">
 {% endblock %}
 
 {% block content %}
@@ -49,7 +49,7 @@
                     <span class="day-badge {% if day == 'Sat' or day == 'Sun' %}day-weekend{% endif %}">{{ day }}</span>
                     {% endfor %}
                 </td>
-                <td><a href="{% url 'flight_list' %}" class="tt-book-btn">Book</a></td>
+                <td><a href="{% url 'flight_list' %}?departure_city={{ dep_city|urlencode }}&arrival_city={{ route.destination|urlencode }}" class="tt-book-btn">Book</a></td>
             </tr>
             {% endfor %}
         </tbody>

@@ -63,10 +63,9 @@ def verify_checkin_data(ticket, first_name, last_name, id_number):
 
     if not first_name or not last_name or not id_number:
         return False, "Missing data."
-    name_matches = first_name.strip().lower() == ticket.passenger_name.lower()
-    surname_matches = last_name.strip().lower() == ticket.passenger_surname.lower()
-    id_matches = id_number.strip() == ticket.id_number
-    if name_matches and surname_matches and id_matches:
+    if (first_name.strip().lower() == ticket.passenger_name.lower()
+            and last_name.strip().lower() == ticket.passenger_surname.lower()
+            and id_number.strip() == ticket.id_number):
         return True, None
     return False, "❌ Entered data does not match our records!"
 

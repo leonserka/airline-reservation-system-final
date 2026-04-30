@@ -35,9 +35,18 @@ def capture_paypal_order(order_id):
     return capture.json()
 
 
-def get_return_flight(bs):
-    rid = bs.get_return_flight_id()
-    return Flight.objects.filter(id=rid).first() if rid else None
+def _base_total(flight, return_flight):
+    return float(flight.price) + (float(return_flight.price) if return_flight else 0)
+
+
+def require_booking_session(view_func):
+    def wrapper(request, *args, **kwargs):
+        bs = BookingSession(request)
+        if not bs.get_passengers():
+            messages.warning(request, "Vaša sesija je istekla. Molimo počnite rezervaciju iznova.")
+            return redirect("home")
+        return view_func(request, *args, **kwargs)
+    return wrapper
 
 
 @login_required
@@ -50,7 +59,7 @@ def book_step1(request, flight_id):
     if request.GET.get("return_id"):
         bs.set_return_flight_id(request.GET.get("return_id"))
 
-    return_flight = get_return_flight(bs)
+    return_flight = bs.get_return_flight()
     num_passengers = int(request.GET.get("pax", bs.get_num_passengers()))
 
     if request.method == "POST":
@@ -65,7 +74,7 @@ def book_step1(request, flight_id):
             for i in range(num_passengers)
         ]
 
-    base_total = float(flight.price) + (float(return_flight.price) if return_flight else 0)
+    base_total = _base_total(flight, return_flight)
 
     return render(request, "flights/book_step1.html", {
         "flight": flight,
@@ -77,14 +86,11 @@ def book_step1(request, flight_id):
 
 
 @login_required
+@require_booking_session
 def book_step2(request, flight_id):
     bs = BookingSession(request)
-    if not bs.get_passengers():
-        messages.warning(request, "Vaša sesija je istekla. Molimo počnite rezervaciju iznova.")
-        return redirect("home")
-
     flight = get_object_or_404(Flight, id=flight_id)
-    return_flight = get_return_flight(bs)
+    return_flight = bs.get_return_flight()
 
     if request.method == "POST":
         seat_class = request.POST.get("seat_class")
@@ -97,25 +103,21 @@ def book_step2(request, flight_id):
         return redirect("book_step3", flight_id=flight.id)
 
     seat_options = [{"name": k, "price": v} for k, v in SEAT_PRICES.items()]
-    base_total = float(flight.price) + (float(return_flight.price) if return_flight else 0)
 
     return render(request, "flights/book_step2.html", {
         "flight": flight,
         "return_flight": return_flight,
         "seat_options": seat_options,
-        "total_price": base_total,
+        "total_price": _base_total(flight, return_flight),
     })
 
 
 @login_required
+@require_booking_session
 def book_step3(request, flight_id):
     bs = BookingSession(request)
-    if not bs.get_passengers() or not bs.get_seat_class():
-        messages.warning(request, "Vaša sesija je istekla. Molimo počnite rezervaciju iznova.")
-        return redirect("home")
-
     flight = get_object_or_404(Flight, id=flight_id)
-    return_flight = get_return_flight(bs)
+    return_flight = bs.get_return_flight()
 
     num_passengers = bs.get_num_passengers()
     all_selected = bs.get_selected_seats()
@@ -162,11 +164,9 @@ def book_step3(request, flight_id):
 
 
 @login_required
+@require_booking_session
 def book_step4(request, flight_id):
     bs = BookingSession(request)
-    if not bs.get_passengers() or not bs.get_seat_class() or not bs.get_selected_seats():
-        messages.warning(request, "Vaša sesija je istekla. Molimo počnite rezervaciju iznova.")
-        return redirect("home")
 
     flight = get_object_or_404(Flight, id=flight_id)
     total = bs.init_price(float(flight.price))
@@ -190,14 +190,11 @@ def book_step4(request, flight_id):
 
 
 @login_required
+@require_booking_session
 def book_step5(request, flight_id):
     bs = BookingSession(request)
-    if not bs.get_passengers() or not bs.get_seat_class() or not bs.get_selected_seats():
-        messages.warning(request, "Vaša sesija je istekla. Molimo počnite rezervaciju iznova.")
-        return redirect("home")
-
     flight = get_object_or_404(Flight, id=flight_id)
-    return_flight = get_return_flight(bs)
+    return_flight = bs.get_return_flight()
     passengers = bs.get_passengers()
     seat_class = bs.get_seat_class()
     all_selected = bs.get_selected_seats()

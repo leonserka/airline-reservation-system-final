@@ -1,16 +1,16 @@
-.seat-card-header {
+﻿.seat-card-header {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 18px;
     margin-bottom: 22px;
     padding-bottom: 16px;
-    border-bottom: 1px solid #e4e9ef;
+    border-bottom: 1px solid var(--border-light);
 }
 
 .eyebrow {
     margin: 0 0 4px;
-    color: #0b5fab;
+    color: var(--accent);
     font-size: 11px;
     font-weight: 800;
     text-transform: uppercase;
@@ -36,12 +36,12 @@
     gap: 7px;
     min-height: 30px;
     padding: 5px 9px;
-    border: 1px solid #d9e2ec;
+    border: 1px solid var(--border);
     border-radius: 6px;
-    background: #f8fafc;
-    color: #334155;
+    background: var(--surface-warm);
+    color: var(--text);
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .legend-dot {
@@ -69,8 +69,9 @@
     width: 100%;
     margin: 0;
     padding: 20px 0 36px;
-    background: #f5f9fc;
-    border: 1px solid #d6e0ea;
+    background: var(--surface-warm);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
 }
 
 .aircraft-body {
@@ -296,8 +297,8 @@
 
 .summary-route,
 .summary-passenger {
-    border: 1px solid #cfd8e4;
-    background: #fff;
+    border: 1px solid var(--border);
+    background: var(--surface);
 }
 
 .summary-route {

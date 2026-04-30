@@ -1,125 +1,130 @@
-.tt-hero {
+﻿.tt-hero {
     text-align: center;
-    padding: 48px 20px 32px;
-    background: linear-gradient(135deg, #003366 0%, #0055a5 100%);
+    padding: 52px 20px 36px;
+    background: linear-gradient(135deg, var(--primary) 0%, #1c3466 100%);
     color: #fff;
 }
 
 .tt-hero h1 {
-    font-size: 2.2rem;
-    font-weight: 700;
-    margin: 0 0 8px;
+    font-family: var(--font-serif);
+    font-size: 2.4rem;
+    font-weight: 600;
+    font-style: italic;
+    margin: 0 0 10px;
+    letter-spacing: -0.3px;
 }
 
 .tt-hero p {
     font-size: 1.05rem;
-    opacity: 0.85;
+    opacity: 0.82;
     margin: 0;
 }
 
 .tt-filter {
     max-width: 1000px;
-    margin: 28px auto 0;
+    margin: 32px auto 0;
     padding: 0 20px;
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 16px;
 }
 
 .tt-filter label {
-    font-size: 14px;
+    font-size: 13.5px;
     font-weight: 600;
-    color: #333;
+    color: var(--primary);
     white-space: nowrap;
 }
 
 .tt-filter select {
     padding: 9px 14px;
-    border: 1px solid #c5cdd8;
-    border-radius: 6px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--r-sm);
+    font-family: var(--font-sans);
     font-size: 14px;
-    color: #333;
-    background: #fff;
+    color: var(--text);
+    background: var(--surface);
     cursor: pointer;
     outline: none;
     min-width: 220px;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .tt-filter select:focus {
-    border-color: #003366;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(208,90,53,0.10);
 }
 
 .tt-section {
     max-width: 1000px;
-    margin: 40px auto;
+    margin: 44px auto;
     padding: 0 20px;
 }
 
 .tt-city-header {
     margin-bottom: 16px;
     padding-bottom: 10px;
-    border-bottom: 2px solid #003366;
+    border-bottom: 2px solid var(--accent);
 }
 
 .tt-city-header h2 {
-    font-size: 1.3rem;
-    color: #333;
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    color: var(--text);
     font-weight: 600;
     margin: 0;
+    letter-spacing: -0.1px;
 }
 
 .tt-city-header h2 span {
-    color: #003366;
+    color: var(--primary);
     font-weight: 700;
 }
 
 .tt-table {
     width: 100%;
     border-collapse: collapse;
-    background: #fff;
-    border-radius: 8px;
+    background: var(--surface);
+    border-radius: var(--r-md);
     overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
 }
 
 .tt-table thead th {
-    background: #f0f4f8;
-    color: #555;
-    font-size: 12px;
-    font-weight: 600;
+    background: var(--surface-warm);
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.09em;
     padding: 12px 16px;
     text-align: left;
+    border-bottom: 1px solid var(--border);
 }
 
 .tt-table tbody tr {
-    border-bottom: 1px solid #eef1f5;
+    border-bottom: 1px solid var(--border-light);
     transition: background 0.15s;
 }
 
-.tt-table tbody tr:last-child {
-    border-bottom: none;
-}
-
-.tt-table tbody tr:hover {
-    background: #f8fafd;
-}
+.tt-table tbody tr:last-child { border-bottom: none; }
+.tt-table tbody tr:hover { background: var(--surface-warm); }
 
 .tt-table td {
     padding: 14px 16px;
     font-size: 14px;
-    color: #333;
+    color: var(--text);
     vertical-align: middle;
 }
 
 .tt-dest {
     font-weight: 600;
-    color: #003366;
+    color: var(--primary);
 }
 
 .tt-period {
-    color: #555;
+    color: var(--text-muted);
     font-size: 13px;
 }
 
@@ -130,44 +135,48 @@
 }
 
 .day-badge {
-    background: #e8f0fb;
-    color: #003366;
-    font-size: 11px;
+    background: #EEF0F8;
+    color: var(--primary);
+    font-size: 10.5px;
     font-weight: 700;
     padding: 3px 8px;
     border-radius: 4px;
+    letter-spacing: 0.03em;
 }
 
 .day-weekend {
-    background: #fde8e8;
-    color: #c0392b;
+    background: #FEF0EC;
+    color: var(--accent);
 }
 
 .tt-book-btn {
     display: inline-block;
-    background: #003366;
+    background: var(--accent);
     color: #fff;
-    font-size: 12px;
+    font-size: 12.5px;
     font-weight: 600;
-    padding: 6px 14px;
-    border-radius: 4px;
+    padding: 6px 16px;
+    border-radius: 6px;
     text-decoration: none;
-    transition: background 0.2s;
+    transition: background 0.2s, transform 0.2s;
 }
 
 .tt-book-btn:hover {
-    background: #0055a5;
+    background: #b84a28;
+    transform: translateY(-1px);
+    text-decoration: none;
+    color: #fff;
 }
 
 .tt-empty {
     text-align: center;
-    color: #888;
-    padding: 60px 20px;
+    color: var(--text-muted);
+    padding: 64px 20px;
     font-size: 15px;
 }
 
 @media (max-width: 768px) {
-    .tt-hero h1 { font-size: 1.6rem; }
+    .tt-hero h1 { font-size: 1.7rem; }
     .tt-filter { flex-direction: column; align-items: flex-start; }
     .tt-filter select { width: 100%; min-width: unset; }
     .tt-section { padding: 0 12px; }

@@ -1,67 +1,308 @@
-<!DOCTYPE html>
-<html>
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Receipt</title>
-    <link rel="stylesheet" href="receipt_pdf.css">
+    <title>Receipt – {{ order_number }}</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            color: #1C1C1C;
+            background: #F4EFE6;
+            padding: 0;
+        }
+
+        .wrapper {
+            max-width: 620px;
+            margin: 0 auto;
+            background: #fff;
+        }
+
+        /* Accent bar */
+        .accent-bar {
+            height: 5px;
+            background: #D05A35;
+        }
+
+        /* Header */
+        .header {
+            background: #0E1B3A;
+            padding: 32px 40px;
+        }
+
+        .header-label {
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            color: rgba(255,255,255,0.45);
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .header h1 {
+            font-family: Georgia, serif;
+            font-size: 26px;
+            font-weight: normal;
+            font-style: italic;
+            color: #fff;
+            letter-spacing: -0.3px;
+        }
+
+        .header-meta {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            color: rgba(255,255,255,0.45);
+            margin-top: 8px;
+        }
+
+        /* Body */
+        .body {
+            padding: 36px 40px;
+        }
+
+        /* Section label */
+        .section-label {
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #7C7168;
+            margin: 0 0 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #E4DAD0;
+        }
+
+        /* Route pill */
+        .route-pill {
+            background: #F4EFE6;
+            border: 1px solid #E4DAD0;
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin-bottom: 28px;
+        }
+
+        .route-pill .route-small {
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            color: #7C7168;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 4px;
+        }
+
+        .route-pill .route-text {
+            font-family: Georgia, serif;
+            font-size: 20px;
+            font-style: italic;
+            color: #0E1B3A;
+        }
+
+        /* Info grid */
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 28px;
+        }
+
+        .info-table td {
+            padding: 9px 0;
+            border-bottom: 1px solid #E4DAD0;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            vertical-align: top;
+        }
+
+        .info-table td.lbl {
+            color: #7C7168;
+            width: 40%;
+        }
+
+        .info-table td.val {
+            color: #1C1C1C;
+            font-weight: 600;
+        }
+
+        /* Divider */
+        .divider {
+            border: none;
+            border-top: 1px solid #E4DAD0;
+            margin: 28px 0;
+        }
+
+        /* Payment table */
+        .pay-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .pay-table thead th {
+            background: #0E1B3A;
+            color: rgba(255,255,255,0.9);
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 10px 12px;
+            text-align: left;
+        }
+
+        .pay-table thead th:first-child { border-radius: 4px 0 0 0; }
+        .pay-table thead th:last-child  { border-radius: 0 4px 0 0; }
+
+        .pay-table tbody td {
+            padding: 11px 12px;
+            border-bottom: 1px solid #E4DAD0;
+            font-size: 13px;
+            color: #1C1C1C;
+        }
+
+        .pay-table tbody tr:last-child td { border-bottom: none; }
+
+        .pay-table tfoot td {
+            padding: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            background: #F4EFE6;
+            border-top: 2px solid #E4DAD0;
+        }
+
+        .pay-table tfoot .total-label {
+            color: #7C7168;
+            font-family: Arial, sans-serif;
+        }
+
+        .pay-table tfoot .total-value {
+            color: #286B4E;
+            font-size: 16px;
+            text-align: right;
+            font-family: Georgia, serif;
+            font-style: italic;
+        }
+
+        /* Thank you */
+        .thanks {
+            text-align: center;
+            font-family: Georgia, serif;
+            font-style: italic;
+            font-size: 15px;
+            color: #7C7168;
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 1px solid #E4DAD0;
+        }
+
+        /* Footer */
+        .footer {
+            background: #FAF7F2;
+            border-top: 1px solid #E4DAD0;
+            padding: 18px 40px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            color: #7C7168;
+        }
+    </style>
 </head>
-
 <body>
+<div class="wrapper">
 
-<div class="box">
-    <h1>FLIGHT RECEIPT</h1>
+    <div class="accent-bar"></div>
 
-    <p><b>Order number:</b> {{ order_number }}</p>
-    <p><b>Date:</b> {{ date_today }}</p>
+    <div class="header">
+        <p class="header-label">Airline Reservation</p>
+        <h1>Flight Receipt</h1>
+        <p class="header-meta">Order #{{ order_number }} &nbsp;·&nbsp; {{ date_today }}</p>
+    </div>
 
-    <hr>
+    <div class="body">
 
-    <h2>Customer</h2>
-    <p><b>Name:</b> {{ user.get_full_name|default:user.username }}</p>
-    <p><b>Email:</b> {{ user.email }}</p>
+        
+        <p class="section-label">Customer</p>
+        <table class="info-table">
+            <tr>
+                <td class="lbl">Name</td>
+                <td class="val">{{ user.get_full_name|default:user.username }}</td>
+            </tr>
+            <tr>
+                <td class="lbl">Email</td>
+                <td class="val">{{ user.email }}</td>
+            </tr>
+        </table>
 
-    <hr>
+        
+        <p class="section-label">Flight Details</p>
 
-    <h2>Flight Details</h2>
-    <p><b>Route:</b> {{ outbound_flight.departure_city }} → {{ outbound_flight.arrival_city }}</p>
-    <p><b>Date:</b> {{ outbound_flight.date }}</p>
-    {% if return_flight %}
-    <p><b>Return:</b> {{ return_flight.departure_city }} → {{ return_flight.arrival_city }}</p>
-    <p><b>Return Date:</b> {{ return_flight.date }}</p>
-    {% endif %}
-    <p><b>Class:</b> {{ seat_class }}</p>
+        <div class="route-pill">
+            <p class="route-small">Outbound</p>
+            <p class="route-text">{{ outbound_flight.departure_city }} &rarr; {{ outbound_flight.arrival_city }}</p>
+        </div>
 
-    <hr>
+        <table class="info-table">
+            <tr>
+                <td class="lbl">Date</td>
+                <td class="val">{{ outbound_flight.date }}</td>
+            </tr>
+            {% if return_flight %}
+            <tr>
+                <td class="lbl">Return route</td>
+                <td class="val">{{ return_flight.departure_city }} &rarr; {{ return_flight.arrival_city }}</td>
+            </tr>
+            <tr>
+                <td class="lbl">Return date</td>
+                <td class="val">{{ return_flight.date }}</td>
+            </tr>
+            {% endif %}
+            <tr>
+                <td class="lbl">Class</td>
+                <td class="val">{{ seat_class }}</td>
+            </tr>
+        </table>
 
-    <h2>Payment Overview</h2>
+        <hr class="divider">
 
-    <table class="tbl">
-        <tr>
-            <th>Flight</th>
-            <th>Passenger</th>
-            <th>Seat</th>
-            <th>Class</th>
-            <th>Price ({{ currency }})</th>
-        </tr>
+        
+        <p class="section-label">Payment Overview</p>
 
-        {% for p in passengers %}
-        <tr>
-            <td>{{ p.flight }}</td>
-            <td>{{ p.name }}</td>
-            <td>{{ p.seat }}</td>
-            <td>{{ p.class }}</td>
-            <td>{{ p.price }}</td>
-        </tr>
-        {% endfor %}
+        <table class="pay-table">
+            <thead>
+                <tr>
+                    <th>Flight</th>
+                    <th>Passenger</th>
+                    <th>Seat</th>
+                    <th>Class</th>
+                    <th>Price ({{ currency }})</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in passengers %}
+                <tr>
+                    <td>{{ p.flight }}</td>
+                    <td>{{ p.name }}</td>
+                    <td>{{ p.seat }}</td>
+                    <td>{{ p.class }}</td>
+                    <td>{{ p.price }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4" class="total-label">Total paid</td>
+                    <td class="total-value">{{ total_sum }}</td>
+                </tr>
+            </tfoot>
+        </table>
 
-        <tr class="final">
-            <td colspan="3"><b>Total:</b></td>
-            <td><b>{{ total_sum }}</b></td>
-        </tr>
-    </table>
+        <p class="thanks">Thank you for choosing our airline.</p>
 
-    <p class="thanks">Thank you for choosing our airline.</p>
+    </div>
+
+    <div class="footer">
+        &copy; 2026 Airline Reservation System &nbsp;·&nbsp; All rights reserved
+    </div>
+
 </div>
-
 </body>
 </html>

@@ -1,4 +1,4 @@
-.profile-grid {
+﻿.profile-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px 32px;
@@ -11,26 +11,26 @@
 }
 
 .profile-grid .form-group label {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.4px;
-    color: #555;
+    letter-spacing: 0.07em;
+    color: var(--text-muted);
 }
 
 .profile-grid .form-group .username-val {
-    padding: 10px 12px;
-    background: #f4f6f8;
-    border: 1px solid #e0e3e8;
-    border-radius: 6px;
+    padding: 10px 14px;
+    background: var(--surface-warm);
+    border: 1.5px solid var(--border);
+    border-radius: var(--r-sm);
     font-size: 15px;
-    color: #333;
+    color: var(--text);
 }
 
 .form-error {
-    color: #d92b2b;
+    color: var(--danger);
     font-size: 13px;
-    margin: 2px 0 0;
+    margin: 4px 0 0;
 }
 
 @media (max-width: 640px) {

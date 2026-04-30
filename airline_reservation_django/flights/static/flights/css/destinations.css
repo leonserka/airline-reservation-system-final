@@ -1,60 +1,57 @@
-.dest-hero {
+﻿.dest-hero {
     text-align: center;
-    padding: 48px 20px 32px;
-    background: linear-gradient(135deg, #003366 0%, #0055a5 100%);
+    padding: 52px 20px 36px;
+    background: linear-gradient(135deg, var(--primary) 0%, #1c3466 100%);
     color: #fff;
 }
 
 .dest-hero h1 {
-    font-size: 2.2rem;
-    font-weight: 700;
-    margin: 0 0 8px;
+    font-family: var(--font-serif);
+    font-size: 2.4rem;
+    font-weight: 600;
+    font-style: italic;
+    margin: 0 0 10px;
+    letter-spacing: -0.3px;
 }
 
 .dest-hero p {
     font-size: 1.05rem;
-    opacity: 0.85;
+    opacity: 0.82;
     margin: 0;
+    font-weight: 400;
 }
 
 .dest-map-wrapper {
     width: 100%;
     height: 420px;
-    border-bottom: 3px solid #003366;
+    border-bottom: 3px solid var(--accent);
 }
 
-#dest-map {
-    width: 100%;
-    height: 100%;
-}
+#dest-map { width: 100%; height: 100%; }
 
 .map-marker-dot {
     width: 14px;
     height: 14px;
-    background: #e63946;
+    background: var(--accent);
     border: 2px solid #fff;
     border-radius: 50%;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.40);
 }
 
 .dest-countries {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 48px 20px;
+    padding: 52px 20px;
 }
 
-.section-title {
-    font-size: 1.6rem;
-    color: #003366;
-    font-weight: 700;
-    margin: 0 0 32px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #e8edf3;
+.dest-countries .section-title {
+    font-size: 1.8rem;
+    margin-bottom: 32px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-light);
 }
 
-.country-block {
-    margin-bottom: 36px;
-}
+.country-block { margin-bottom: 40px; }
 
 .country-header {
     display: flex;
@@ -71,9 +68,10 @@
 }
 
 .country-header h3 {
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: #003366;
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary);
     margin: 0;
 }
 
@@ -87,19 +85,21 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    background: #fff;
-    border: 1px solid #dde3ec;
-    border-radius: 8px;
-    padding: 12px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: var(--r-md);
+    padding: 13px 16px;
     text-decoration: none;
     color: inherit;
-    transition: box-shadow 0.2s, border-color 0.2s;
+    transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
     min-width: 200px;
 }
 
 .city-card:hover {
-    box-shadow: 0 4px 14px rgba(0,51,102,0.12);
-    border-color: #003366;
+    box-shadow: var(--shadow-sm);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    text-decoration: none;
 }
 
 .city-card-body {
@@ -111,22 +111,26 @@
 .city-name {
     font-weight: 600;
     font-size: 14px;
-    color: #1a1a2e;
+    color: var(--primary);
 }
 
 .city-price {
     font-size: 13px;
-    color: #e63946;
+    color: var(--accent);
     font-weight: 500;
 }
 
 .city-card-action {
     margin-left: auto;
     font-size: 13px;
-    color: #003366;
+    color: var(--primary);
     font-weight: 600;
     white-space: nowrap;
+    opacity: 0.6;
+    transition: opacity 0.2s;
 }
+
+.city-card:hover .city-card-action { opacity: 1; }
 
 .dest-gallery {
     display: grid;
@@ -142,28 +146,29 @@
     background-size: cover;
     background-position: center;
     overflow: hidden;
-    border-radius: 10px;
+    border-radius: var(--r-md);
     cursor: pointer;
     text-decoration: none;
     display: block;
+    transition: transform 0.3s;
 }
+
+.gallery-card:hover { transform: scale(1.01); }
 
 .gallery-card::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 55%);
+    background: linear-gradient(to top, rgba(14,27,58,0.65) 0%, transparent 55%);
     transition: opacity 0.3s;
 }
 
-.gallery-card:hover::after {
-    opacity: 0.8;
-}
+.gallery-card:hover::after { opacity: 0.8; }
 
 .gallery-caption {
     position: absolute;
-    bottom: 20px;
-    left: 20px;
+    bottom: 22px;
+    left: 22px;
     z-index: 1;
     display: flex;
     flex-direction: column;
@@ -172,22 +177,24 @@
 
 .gallery-caption span {
     color: #fff;
-    font-size: 1.3rem;
-    font-weight: 700;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    font-weight: 600;
+    font-style: italic;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 
 .gallery-caption small {
-    color: rgba(255,255,255,0.85);
+    color: rgba(255,255,255,0.82);
     font-size: 13px;
 }
 
 .dest-footer {
-    background: #f5f7fa;
-    color: #333;
+    background: var(--surface-warm);
+    color: var(--text);
     padding: 0 20px;
-    margin-top: 48px;
-    border-top: 1px solid #dde3ec;
+    margin-top: 52px;
+    border-top: 1px solid var(--border);
     width: 100vw;
     position: relative;
     left: 50%;
@@ -200,54 +207,49 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 40px;
-    padding: 48px 0 36px;
+    padding: 52px 0 40px;
 }
 
 .dest-footer-col h4 {
-    color: #1a1a2e;
-    font-size: 12px;
+    color: var(--primary);
+    font-size: 11px;
     font-weight: 700;
-    margin: 0 0 16px;
+    margin: 0 0 18px;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
     padding-bottom: 12px;
-    border-bottom: 1px solid #c5cdd8;
+    border-bottom: 1px solid var(--border);
 }
 
 .dest-footer-col a {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    color: #555;
-    font-size: 13px;
+    color: var(--text-muted);
+    font-size: 13.5px;
     text-decoration: none;
-    padding: 7px 0;
-    border-bottom: 1px solid #e8ecf0;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-light);
     transition: color 0.2s;
 }
 
 .dest-footer-col a::after {
     content: '›';
-    font-size: 16px;
-    color: #003366;
-    opacity: 0.6;
+    font-size: 17px;
+    color: var(--accent);
+    opacity: 0.65;
 }
 
-.dest-footer-col a:hover {
-    color: #003366;
-}
-
-.dest-footer-col a:hover::after {
-    opacity: 1;
-}
-
+.dest-footer-col a:hover { color: var(--primary); text-decoration: none; }
+.dest-footer-col a:hover::after { opacity: 1; }
 
 .no-dest {
-    color: #888;
+    color: var(--text-muted);
     padding: 24px 0;
 }
 
 @media (max-width: 768px) {
-    .dest-hero h1 { font-size: 1.6rem; }
+    .dest-hero h1 { font-size: 1.7rem; }
     .dest-map-wrapper { height: 280px; }
+    .dest-footer-grid { grid-template-columns: 1fr 1fr; gap: 24px; padding: 36px 0 28px; }
 }

@@ -236,6 +236,16 @@ document.addEventListener("DOMContentLoaded", () => {
     if (prefillDate) departPicker.setDate(prefillDate);
     if (prefillReturn) { returnPicker.setDate(prefillReturn); }
 
+    document.getElementById("swapBtn").onclick = () => {
+        const tmpFrom = { ...selectedFrom };
+        const tmpFromVal = fromInput.value;
+        selectedFrom = { ...selectedTo };
+        fromInput.value = toInput.value;
+        selectedTo = { ...tmpFrom };
+        toInput.value = tmpFromVal;
+        loadAvailableDates();
+    };
+
     document.getElementById("homeSearchBtn").onclick = () => {
 
         if (!window.isLogged) {

@@ -50,7 +50,6 @@ CITY_COORDS = {
     'Istanbul': (41.015, 28.979),
     'Ankara': (39.925, 32.837),
     'Antalya': (36.896, 30.713),
-    'Sarajevo': (43.850, 18.356),
 }
 
 COUNTRY_CODES = {

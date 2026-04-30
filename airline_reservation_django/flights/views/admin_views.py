@@ -1,20 +1,25 @@
 import json
 from datetime import date, timedelta
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Count, F, CharField, Value, Q
 from django.db.models.functions import Concat, TruncDate
-
-from django.shortcuts import get_object_or_404
 from django.db import transaction
 from ..models import Flight, Ticket
 from ..services.email_service import send_flight_canceled_email
 
 
+def staff_required(view_func):
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_staff:
+            return redirect("home")
+        return view_func(request, *args, **kwargs)
+    return wrapper
+
+
 @login_required
+@staff_required
 def admin_panel(request):
-    if not request.user.is_staff:
-        return redirect("home")
 
     today = date.today()
     total_bookings = Ticket.objects.filter(status=Ticket.STATUS_BOOKED).count()
@@ -123,9 +128,8 @@ def admin_panel(request):
 
 
 @login_required
+@staff_required
 def admin_flight_detail(request, flight_id):
-    if not request.user.is_staff:
-        return redirect("home")
 
     flight = get_object_or_404(Flight, id=flight_id)
     tickets = Ticket.objects.filter(flight=flight).select_related("purchased_by").order_by("seat_number")
@@ -146,10 +150,9 @@ def admin_flight_detail(request, flight_id):
 
 
 @login_required
+@staff_required
 @transaction.atomic
 def cancel_flight(request, flight_id):
-    if not request.user.is_staff:
-        return redirect("home")
     if request.method != "POST":
         return redirect("admin_flight_detail", flight_id=flight_id)
 

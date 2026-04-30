@@ -13,10 +13,6 @@ def get_row_zone(row_number):
     return "back"
 
 
-def get_price_label(row_number):
-    return ""
-
-
 def build_seat_positions(total_seats, taken_seats, selected_seats, seats_per_row=6):
     seat_positions = []
     num_rows = total_seats // seats_per_row
@@ -25,7 +21,6 @@ def build_seat_positions(total_seats, taken_seats, selected_seats, seats_per_row
         row = {
             "row_number": row_number,
             "zone": get_row_zone(row_number),
-            "price_label": get_price_label(row_number),
             "left": [],
             "right": [],
         }

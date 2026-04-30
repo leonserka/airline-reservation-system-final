@@ -1,132 +1,289 @@
-@page {
-  size: A4;
-  margin: 18mm; 
+﻿@page {
+    size: A4;
+    margin: 14mm 16mm;
 }
 
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 13.5px;          
-  line-height: 1.6;           
-  color: #111;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: #1C1C1C;
+    background: #F4EFE6;
 }
 
 .bp-page {
-  width: 100%;
-  border: 1px solid #ddd;
-  padding: 18px;          
+    width: 100%;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #E4DAD0;
 }
 
+.bp-accent {
+    height: 5px;
+    background: #D05A35;
+}
 
 .bp-header {
-  display: table;
-  width: 100%;
-  margin-bottom: 16px;       
+    display: table;
+    width: 100%;
+    background: #0E1B3A;
+    padding: 22px 28px;
 }
 
-.bp-title {
-  display: table-cell;
-  font-weight: bold;
-  font-size: 15px;
-  letter-spacing: 0.5px;
+.bp-header-left {
+    display: table-cell;
+    vertical-align: middle;
 }
 
-.bp-airline {
-  display: table-cell;
-  text-align: right;
-  font-weight: bold;
-  font-size: 14px;
+.bp-header-right {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: right;
 }
 
-.bp-main-box {
-  border: 1px solid #ccc;
-  padding: 16px;           
-  border-radius: 6px;
-  margin-bottom: 18px;
+.bp-airline-name {
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 4px;
 }
 
-.bp-row {
-  display: table;
-  width: 100%;
-  margin-bottom: 14px;       
+.bp-pass-title {
+    font-family: Georgia, serif;
+    font-size: 22px;
+    font-style: italic;
+    font-weight: normal;
+    color: #fff;
+    letter-spacing: -0.2px;
 }
 
-.bp-row > div {
-  display: table-cell;
-  vertical-align: top;
-  padding-right: 14px;
+.bp-class-badge {
+    display: inline-block;
+    background: #D05A35;
+    color: #fff;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
 }
 
-.bp-passenger .bp-qr {
-  width: 130px;
-  text-align: right;
+.bp-route-section {
+    background: #0E1B3A;
+    padding: 0 28px 24px;
+    display: table;
+    width: 100%;
+}
+
+.bp-route-left {
+    display: table-cell;
+    vertical-align: bottom;
+}
+
+.bp-route-right {
+    display: table-cell;
+    vertical-align: bottom;
+    text-align: right;
+    width: 120px;
+}
+
+.bp-route-label {
+    font-size: 9.5px;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 6px;
+}
+
+.bp-route-text {
+    font-family: Georgia, serif;
+    font-size: 30px;
+    font-style: italic;
+    font-weight: normal;
+    color: #fff;
+    letter-spacing: -0.3px;
+    line-height: 1.1;
 }
 
 .bp-qr img {
-  width: 115px;
-  height: auto;
+    width: 100px;
+    height: 100px;
 }
 
-.big {
-  font-size: 18px;            
-  font-weight: bold;
-  line-height: 1.4;
+.bp-tear {
+    border: none;
+    border-top: 2px dashed #E4DAD0;
+    margin: 0;
+    position: relative;
 }
 
-.bp-times > div {
-  width: 33%;
+.bp-tear-label {
+    text-align: center;
+    font-size: 9px;
+    color: #B0A89E;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 0;
+    background: #fff;
 }
 
-.bp-info > div {
-  width: 25%;
+.bp-details {
+    display: table;
+    width: 100%;
+    padding: 20px 28px;
+    border-bottom: 1px solid #E4DAD0;
 }
 
-.label {
-  font-size: 10.5px;
-  color: #666;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  margin-bottom: 2px;
+.bp-detail-cell {
+    display: table-cell;
+    vertical-align: top;
+    padding-right: 20px;
 }
 
-.value {
-  font-size: 14px;
-  font-weight: bold;
+.bp-detail-cell:last-child {
+    padding-right: 0;
 }
+
+.bp-detail-cell.right {
+    text-align: right;
+}
+
+.lbl {
+    font-size: 9px;
+    font-weight: bold;
+    color: #7C7168;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+}
+
+.val {
+    font-size: 15px;
+    font-weight: bold;
+    color: #0E1B3A;
+    line-height: 1.2;
+}
+
+.val-large {
+    font-family: Georgia, serif;
+    font-size: 22px;
+    font-style: italic;
+    font-weight: normal;
+    color: #D05A35;
+}
+
+.bp-passenger-row {
+    display: table;
+    width: 100%;
+    padding: 16px 28px;
+    background: #FAF7F2;
+    border-bottom: 1px solid #E4DAD0;
+}
+
+.bp-passenger-cell {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.bp-passenger-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #0E1B3A;
+}
+
+.bp-passenger-id {
+    font-size: 11px;
+    color: #7C7168;
+    margin-top: 2px;
+}
+
+.bp-flight-num {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: right;
+}
+
+.flight-num-val {
+    font-family: Georgia, serif;
+    font-size: 20px;
+    font-style: italic;
+    color: #0E1B3A;
+}
+
+.bp-info-row {
+    display: table;
+    width: 100%;
+    padding: 16px 28px;
+    border-bottom: 1px solid #E4DAD0;
+}
+
+.bp-info-cell {
+    display: table-cell;
+    vertical-align: top;
+    padding-right: 16px;
+}
+
+.bp-info-cell:last-child { padding-right: 0; }
 
 .bp-bottom {
-  display: table;
-  width: 100%;
-  margin-top: 18px;           
+    display: table;
+    width: 100%;
+    padding: 18px 28px;
+    background: #FAF7F2;
 }
 
-.bp-box {
-  display: table-cell;
-  width: 50%;
-  border: 1px solid #ccc;
-  padding: 14px;               
-  border-radius: 6px;
-  vertical-align: top;
+.bp-bottom-cell {
+    display: table-cell;
+    vertical-align: top;
+    width: 50%;
+    padding-right: 20px;
 }
 
-.bp-box + .bp-box {
-  margin-left: 14px;
+.bp-bottom-cell:last-child { padding-right: 0; }
+
+.bp-section-title {
+    font-size: 9px;
+    font-weight: bold;
+    color: #7C7168;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #E4DAD0;
 }
 
-.box-title {
-  font-weight: bold;
-  margin-bottom: 10px;
-  font-size: 13px;
+.bp-bag-item {
+    font-size: 11.5px;
+    color: #1C1C1C;
+    padding: 4px 0;
+    border-bottom: 1px solid #EDE7DF;
+    line-height: 1.5;
 }
 
-.box-value {
-  font-size: 12.5px;
-  line-height: 1.6;
-  margin-bottom: 6px;
+.bp-bag-item:last-child { border-bottom: none; }
+
+.bp-bag-included {
+    color: #286B4E;
+    font-weight: bold;
 }
+
+.bp-bag-extra {
+    color: #D05A35;
+    font-weight: bold;
+}
+
+.bp-bag-muted { color: #B0A89E; }
 
 .bp-warning {
-  margin-top: 16px;
-  font-size: 11.5px;
-  text-align: center;
-  font-weight: bold;
+    background: #0E1B3A;
+    padding: 12px 28px;
+    text-align: center;
+    font-size: 10.5px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.04em;
 }

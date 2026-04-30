@@ -41,11 +41,14 @@ def profile(request):
     user = request.user
     profile_obj, _ = UserProfile.objects.get_or_create(user=user)
 
+    def _style_password_form(form):
+        for field in form.fields.values():
+            field.widget.attrs["class"] = "form-control"
+
     user_form    = UserInfoForm(instance=user)
     profile_form = UserProfileForm(instance=profile_obj)
     password_form = PasswordChangeForm(user)
-    for field in password_form.fields.values():
-        field.widget.attrs["class"] = "form-control"
+    _style_password_form(password_form)
 
     if request.method == "POST":
         action = request.POST.get("action")
@@ -61,8 +64,7 @@ def profile(request):
 
         elif action == "password":
             password_form = PasswordChangeForm(user, request.POST)
-            for field in password_form.fields.values():
-                field.widget.attrs["class"] = "form-control"
+            _style_password_form(password_form)
             if password_form.is_valid():
                 password_form.save()
                 update_session_auth_hash(request, password_form.user)

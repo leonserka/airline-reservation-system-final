@@ -1,7 +1,14 @@
+from ..models import Flight
+
+
 class BookingSession:
 
     def __init__(self, request):
         self.session = request.session
+
+    def get_return_flight(self):
+        rid = self.get_return_flight_id()
+        return Flight.objects.filter(id=rid).first() if rid else None
 
     def get_num_passengers(self):
         return self.session.get("num_passengers", 1)

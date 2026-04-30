@@ -127,11 +127,9 @@ def resend_receipt(request, ticket_id):
 
     all_selected_seats = {}
     for t in outbound_tickets + return_tickets:
-        fid = str(t.flight_id)
-        if fid not in all_selected_seats:
-            all_selected_seats[fid] = []
+        seats = all_selected_seats.setdefault(str(t.flight_id), [])
         if t.seat_number:
-            all_selected_seats[fid].append(t.seat_number)
+            seats.append(t.seat_number)
 
     try:
         pdf_buffer, total_sum = generate_receipt_pdf(
