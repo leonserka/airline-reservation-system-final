@@ -1,5 +1,5 @@
 {% extends 'flights/base.html' %}
-{% load static tz %}
+{% load static tz currency_tags %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'flights/css/flight_step3.css' %}?v=9">
@@ -42,7 +42,7 @@
 
   <div class="mt-2">
     <strong>Class:</strong> {{ request.session.seat_class }} &middot;
-    <strong>Total:</strong> EUR {{ total_price }} &middot;
+    <strong>Total:</strong> {{ total_price|currency:selected_currency }} &middot;
     <strong>Selected:</strong> <span id="seat-counter">{{ selected_seats|length }} / {{ num_passengers }}</span>
     {% if remaining > 0 %}<span class="text-muted">({{ remaining }} remaining)</span>{% endif %}
   </div>

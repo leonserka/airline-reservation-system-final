@@ -6,7 +6,8 @@ from datetime import datetime, timedelta
 from django.template.loader import render_to_string
 from django.conf import settings
 from weasyprint import HTML, CSS
-
+from ..constants import SEAT_PRICES, LUGGAGE, EQUIPMENT
+from .currency_service import format_price, get_rates
 
 def generate_ticket_pdf(ticket):
     departure_local = ticket.flight.departure_datetime.strftime("%Y-%m-%d %H:%M")
@@ -33,8 +34,7 @@ def generate_ticket_pdf(ticket):
 
 def generate_receipt_pdf(flight, passengers, seat_class, user,
                          luggage=None, equipment=None, return_flight=None,
-                         all_selected_seats=None):
-    from ..constants import SEAT_PRICES, LUGGAGE, EQUIPMENT
+                         all_selected_seats=None, currency='EUR'):
 
     flights = [flight]
     if return_flight:
@@ -58,7 +58,7 @@ def generate_receipt_pdf(flight, passengers, seat_class, user,
                 "name": f"{p['passenger_name']} {p['passenger_surname']}",
                 "seat": seat,
                 "class": seat_class,
-                "price": f"{price_per_ticket:.2f}",
+                "price": format_price(price_per_ticket, currency),
             })
             total_sum += price_per_ticket
 
@@ -68,7 +68,8 @@ def generate_receipt_pdf(flight, passengers, seat_class, user,
         "passengers": rows,
         "seat_class": seat_class,
         "user": user,
-        "total_sum": f"{total_sum:.2f}",
+        "total_sum": format_price(total_sum, currency),
+        "currency": currency,
         "date_today": datetime.now().strftime("%d/%m/%Y"),
         "order_number": datetime.now().strftime("%Y%m%d-%H%M%S"),
     }

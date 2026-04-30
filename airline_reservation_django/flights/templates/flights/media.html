@@ -1,0 +1,99 @@
+{% extends 'flights/base.html' %}
+{% load static %}
+
+{% block title %}Media & News — Airline Reservation{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'flights/css/info_pages.css' %}">
+<link rel="stylesheet" href="{% static 'flights/css/media.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="ip-hero">
+    <h1>Media &amp; News</h1>
+    <p>Latest updates, press releases and company announcements</p>
+</div>
+
+<div class="ip-body">
+
+    <div class="ip-section">
+        <h2>Latest News</h2>
+        <div class="news-grid">
+
+            <article class="news-card">
+                <div class="news-img" style="background-image: url('{% static 'flights/img/zagreb-lisabon.png' %}');"></div>
+                <div class="news-body">
+                    <span class="news-tag">Announcement</span>
+                    <h3>New route: Zagreb – Lisbon launching June 2026</h3>
+                    <p class="news-date">28 April 2026</p>
+                    <p class="news-excerpt">We are pleased to announce a new direct connection between Zagreb and Lisbon, operating twice weekly from June 15th. Tickets are now on sale.</p>
+                </div>
+            </article>
+
+            <article class="news-card">
+                <div class="news-img" style="background-image: url('{% static 'flights/img/two.png' %}');"></div>
+                <div class="news-body">
+                    <span class="news-tag">Fleet</span>
+                    <h3>Two new Airbus A320neo aircraft join our fleet</h3>
+                    <p class="news-date">14 March 2026</p>
+                    <p class="news-excerpt">We have taken delivery of two new Airbus A320neo aircraft, bringing our total fleet to 18. The new jets offer a 20% reduction in fuel consumption and a quieter cabin.</p>
+                </div>
+            </article>
+
+            <article class="news-card">
+                <div class="news-img" style="background-image: url('{% static 'flights/img/best.png' %}');"></div>
+                <div class="news-body">
+                    <span class="news-tag">Award</span>
+                    <h3>Best Regional Carrier in South-East Europe 2025</h3>
+                    <p class="news-date">10 January 2026</p>
+                    <p class="news-excerpt">For the third consecutive year, we have been awarded Best Regional Carrier in South-East Europe at the Aviation Excellence Awards held in Vienna.</p>
+                </div>
+            </article>
+
+            <article class="news-card">
+                <div class="news-img" style="background-image: url('{% static 'flights/img/sust.png' %}');"></div>
+                <div class="news-body">
+                    <span class="news-tag">Sustainability</span>
+                    <h3>18% reduction in per-passenger CO₂ emissions since 2020</h3>
+                    <p class="news-date">5 December 2025</p>
+                    <p class="news-excerpt">Our annual sustainability report confirms an 18% reduction in per-passenger carbon emissions, driven by fleet renewal, optimised routing and sustainable fuel trials.</p>
+                </div>
+            </article>
+
+            <article class="news-card">
+                <div class="news-img" style="background-image: url('{% static 'flights/img/code.png' %}');"></div>
+                <div class="news-body">
+                    <span class="news-tag">Partnership</span>
+                    <h3>Code-share agreement signed with three European carriers</h3>
+                    <p class="news-date">20 October 2025</p>
+                    <p class="news-excerpt">We have formalised code-share agreements with three European airlines, expanding our effective network to over 80 destinations without adding direct services.</p>
+                </div>
+            </article>
+
+            <article class="news-card">
+                <div class="news-img" style="background-image: url('{% static 'flights/img/online.png' %}');"></div>
+                <div class="news-body">
+                    <span class="news-tag">Service</span>
+                    <h3>New online check-in system launched for all routes</h3>
+                    <p class="news-date">1 September 2025</p>
+                    <p class="news-excerpt">Passengers can now check in online up to 24 hours before departure, choose seats and download a boarding pass with a QR code directly from My Bookings.</p>
+                </div>
+            </article>
+
+        </div>
+    </div>
+
+    <div class="ip-section">
+        <h2>Press Contact</h2>
+        <p>For media enquiries, interview requests or press materials, please contact our communications team:</p>
+        <p><strong>Email:</strong> press@airlinereservation.com</p>
+        <p><strong>Phone:</strong> +385 1 234 5679 (Mon–Fri, 09:00–17:00 CET)</p>
+        <div class="ip-note">Press releases and high-resolution images are available on request.</div>
+    </div>
+
+</div>
+
+{% include 'flights/includes/info_footer.html' %}
+
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends 'flights/base.html' %}
+{% load static %}
+
+{% block title %}Timetable — Airline Reservation{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'flights/css/timetable.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="tt-hero">
+    <h1>Flight Timetable</h1>
+    <p>Scheduled flights for all upcoming departures</p>
+</div>
+
+<div class="tt-filter">
+    <label for="cityFilter">Departure city:</label>
+    <select id="cityFilter">
+        <option value="">— All cities —</option>
+        {% for dep_city in timetable.keys %}
+        <option value="{{ dep_city }}">{{ dep_city }}</option>
+        {% endfor %}
+    </select>
+</div>
+
+{% for dep_city, routes in timetable.items %}
+<section class="tt-section" data-city="{{ dep_city }}">
+    <div class="tt-city-header">
+        <h2>Flights from <span>{{ dep_city }}</span></h2>
+    </div>
+
+    <table class="tt-table">
+        <thead>
+            <tr>
+                <th>Destination</th>
+                <th>Operating period</th>
+                <th>Days of operation</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for route in routes %}
+            <tr>
+                <td class="tt-dest">{{ route.destination }}</td>
+                <td class="tt-period">{{ route.period_from }} – {{ route.period_to }}</td>
+                <td class="tt-days">
+                    {% for day in route.days %}
+                    <span class="day-badge {% if day == 'Sat' or day == 'Sun' %}day-weekend{% endif %}">{{ day }}</span>
+                    {% endfor %}
+                </td>
+                <td><a href="{% url 'flight_list' %}" class="tt-book-btn">Book</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% empty %}
+<p class="tt-empty">No scheduled flights at this time.</p>
+{% endfor %}
+
+{% include 'flights/includes/info_footer.html' %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'flights/js/timetable.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,211 @@
+.ip-hero {
+    text-align: center;
+    padding: 48px 20px 32px;
+    background: linear-gradient(135deg, #003366 0%, #0055a5 100%);
+    color: #fff;
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    margin-left: -50vw;
+    margin-bottom: 40px;
+}
+
+.ip-hero h1 { font-size: 2.2rem; font-weight: 700; margin: 0 0 8px; }
+.ip-hero p  { font-size: 1.05rem; opacity: 0.85; margin: 0; }
+
+.ip-body {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.ip-section {
+    margin-bottom: 40px;
+}
+
+.ip-section h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #003366;
+    margin: 0 0 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e8edf3;
+}
+
+.ip-section p {
+    font-size: 14px;
+    color: #444;
+    line-height: 1.7;
+    margin: 0 0 10px;
+}
+
+.ip-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin-top: 8px;
+}
+
+.ip-card {
+    background: #fff;
+    border: 1px solid #dde3ec;
+    border-radius: 10px;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ip-card-icon { font-size: 2rem; }
+
+.ip-card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #003366;
+    margin: 0;
+}
+
+.ip-card p {
+    font-size: 13px;
+    color: #555;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.ip-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.ip-table th {
+    background: #f0f4f8;
+    color: #555;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 10px 14px;
+    text-align: left;
+}
+
+.ip-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid #eef1f5;
+    color: #333;
+}
+
+.ip-table tr:last-child td { border-bottom: none; }
+
+.ip-faq-item {
+    border: 1px solid #dde3ec;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.ip-faq-q {
+    padding: 16px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a2e;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    user-select: none;
+}
+
+.ip-faq-q::after { content: '+'; font-size: 20px; color: #003366; }
+.ip-faq-item.open .ip-faq-q::after { content: '−'; }
+
+.ip-faq-a {
+    display: none;
+    padding: 0 20px 16px;
+    font-size: 13px;
+    color: #555;
+    line-height: 1.7;
+    background: #fff;
+}
+
+.ip-faq-item.open .ip-faq-a { display: block; }
+
+.ip-note {
+    background: #e8f0fb;
+    border-left: 4px solid #003366;
+    padding: 14px 18px;
+    border-radius: 0 6px 6px 0;
+    font-size: 13px;
+    color: #003366;
+    margin: 16px 0;
+}
+
+.ip-offers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.ip-offer-card {
+    background: #fff;
+    border: 1px solid #dde3ec;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: box-shadow 0.2s, transform 0.2s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.ip-offer-card:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    transform: translateY(-3px);
+}
+
+.ip-offer-img {
+    height: 180px;
+    background-size: cover;
+    background-position: center;
+}
+
+.ip-offer-body { padding: 18px 20px; }
+
+.ip-offer-route {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #003366;
+    margin: 0 0 6px;
+}
+
+.ip-offer-meta {
+    font-size: 13px;
+    color: #666;
+    margin: 0 0 12px;
+}
+
+.ip-offer-price {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #e63946;
+}
+
+.ip-offer-price small {
+    font-size: 13px;
+    font-weight: 400;
+    color: #888;
+}
+
+@media (max-width: 768px) {
+    .ip-hero { padding: 32px 16px 24px; }
+    .ip-hero h1 { font-size: 1.6rem; }
+
+    .ip-body { padding: 0 4px; }
+
+    .ip-grid { grid-template-columns: 1fr; }
+
+    .ip-table { display: block; overflow-x: auto; white-space: nowrap; }
+
+    .ip-offers-grid { grid-template-columns: 1fr; }
+
+    .ip-faq-q { font-size: 13px; padding: 14px 16px; }
+}

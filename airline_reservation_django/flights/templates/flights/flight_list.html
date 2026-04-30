@@ -1,8 +1,9 @@
 {% extends 'flights/base.html' %}
-{% load static tz %}
+{% load static tz currency_tags %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'flights/css/home_search.css' %}">
+<link rel="stylesheet" href="{% static 'flights/css/flight_list.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -44,12 +45,52 @@
     </div>
 </div>
 
+{% if not show_results %}
+
+<div class="fl-tips">
+    <div class="fl-tip">📅 Book 14+ days early for the best prices</div>
+    <div class="fl-tip">🔄 Plus class tickets include free cancellation</div>
+    <div class="fl-tip">📱 Online check-in opens 24 hours before departure</div>
+</div>
+
+{% if popular_routes %}
+<div class="fl-section">
+    <h2 class="fl-section-title">Popular Routes</h2>
+    <div class="fl-routes-grid">
+        {% for r in popular_routes %}
+        <button class="fl-route-pill" data-from="{{ r.departure_city }}" data-to="{{ r.arrival_city }}">
+            {{ r.departure_city }} → {{ r.arrival_city }}
+            <span>from {{ r.min_price|currency:selected_currency }}</span>
+        </button>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+{% if cheapest_flights %}
+<div class="fl-section">
+    <h2 class="fl-section-title">Cheapest Upcoming Flights</h2>
+    <div class="fl-cheapest-grid">
+        {% for f in cheapest_flights %}
+        <div class="fl-cheap-card">
+            <div class="fl-cheap-route">{{ f.departure_city }} → {{ f.arrival_city }}</div>
+            <div class="fl-cheap-meta">{{ f.date|date:"d M Y" }} · {{ f.departure_time|time:"H:i" }} · {{ f.available_seats }} seat{{ f.available_seats|pluralize }} left</div>
+            <div class="fl-cheap-price">{{ f.price|currency:selected_currency }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+{% endif %}
+
 {% if show_results %}
   {% if flights %}
   <form id="selectFlightsForm" onsubmit="return handleFlightSelection(event)">
     <div class="card mb-3">
       <h2 class="card-header">Available Flights</h2>
-      <table class="table">
+      <div class="fl-table-wrap">
+      <table class="table fl-table">
         <thead>
           <tr>
             <th></th>
@@ -63,22 +104,24 @@
         <tbody>
           {% for flight in flights %}
           <tr>
-            <td><input type="radio" name="departure_flight" value="{{ flight.id }}"></td>
-            <td>{{ flight.departure_city }} → {{ flight.arrival_city }}</td>
-            <td>{{ flight.departure_time|time:"H:i" }}</td>
-            <td>{{ flight.arrival_datetime|timezone:flight.arrival_timezone|date:"H:i" }}</td>
-            <td>{{ flight.date }}</td>
-            <td>€{{ flight.price }}</td>
+            <td data-label="Select"><input type="radio" name="departure_flight" value="{{ flight.id }}"></td>
+            <td data-label="Route">{{ flight.departure_city }} → {{ flight.arrival_city }}</td>
+            <td data-label="Departure">{{ flight.departure_time|time:"H:i" }}</td>
+            <td data-label="Arrival">{{ flight.arrival_datetime|timezone:flight.arrival_timezone|date:"H:i" }}</td>
+            <td data-label="Date">{{ flight.date }}</td>
+            <td data-label="Price">{{ flight.price|currency:selected_currency }}</td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
+      </div>
     </div>
 
     {% if return_flights %}
     <div class="card mb-3">
       <h2 class="card-header">Return Flights</h2>
-      <table class="table">
+      <div class="fl-table-wrap">
+      <table class="table fl-table">
         <thead>
           <tr>
             <th></th>
@@ -92,16 +135,17 @@
         <tbody>
           {% for flight in return_flights %}
           <tr>
-            <td><input type="radio" name="return_flight" value="{{ flight.id }}"></td>
-            <td>{{ flight.departure_city }} → {{ flight.arrival_city }}</td>
-            <td>{{ flight.departure_time|time:"H:i" }}</td>
-            <td>{{ flight.arrival_datetime|timezone:flight.arrival_timezone|date:"H:i" }}</td>
-            <td>{{ flight.date }}</td>
-            <td>€{{ flight.price }}</td>
+            <td data-label="Select"><input type="radio" name="return_flight" value="{{ flight.id }}"></td>
+            <td data-label="Route">{{ flight.departure_city }} → {{ flight.arrival_city }}</td>
+            <td data-label="Departure">{{ flight.departure_time|time:"H:i" }}</td>
+            <td data-label="Arrival">{{ flight.arrival_datetime|timezone:flight.arrival_timezone|date:"H:i" }}</td>
+            <td data-label="Date">{{ flight.date }}</td>
+            <td data-label="Price">{{ flight.price|currency:selected_currency }}</td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
+      </div>
     </div>
     {% endif %}
 
@@ -122,9 +166,12 @@
   {% endif %}
 {% endif %}
 
+{% include 'flights/includes/info_footer.html' %}
+
 {% endblock %}
 
 {% block extra_js %}
 <script src="{% static 'flights/js/flight_list.js' %}"></script>
 <script src="{% static 'flights/js/home_search.js' %}"></script>
+<script src="{% static 'flights/js/flight_list_search.js' %}"></script>
 {% endblock %}

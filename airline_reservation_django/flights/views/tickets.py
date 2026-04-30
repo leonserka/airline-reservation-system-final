@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from ..models import Ticket
-from ..services.email_service import send_checkin_email, send_receipt_email
+from ..services.email_service import send_checkin_email, send_receipt_email, send_ticket_canceled_email
 from ..services.pdf_service import generate_receipt_pdf
 from ..services.ticket_service import (
     get_user_tickets,
@@ -34,10 +34,14 @@ def check_booked_flights(request):
 @login_required
 def cancel_booked_flight(request, ticket_id):
     ticket = get_ticket(ticket_id, request.user)
+    passenger_name = ticket.passenger_name
+    passenger_email = ticket.email
+    flight = ticket.flight
     try:
         cancel_ticket(ticket)
     except ValueError as e:
         return render(request, "flights/error.html", {"message": str(e)})
+    send_ticket_canceled_email(passenger_email, passenger_name, flight, ticket)
     return redirect("check_booked_flights")
 
 
@@ -134,6 +138,7 @@ def resend_receipt(request, ticket_id):
             ticket.flight, passengers, ticket.seat_class, request.user,
             ticket.extra_luggage, ticket.extra_equipment, return_flight,
             all_selected_seats=all_selected_seats,
+            currency=request.session.get('currency', 'EUR'),
         )
         to_email = request.user.email or ticket.email
         send_receipt_email(
@@ -142,6 +147,7 @@ def resend_receipt(request, ticket_id):
             pdf_buffer=pdf_buffer,
             flight=ticket.flight,
             user=request.user,
+            currency=request.session.get('currency', 'EUR'),
         )
         messages.success(request, f"Receipt resent to {to_email}.")
     except Exception as e:

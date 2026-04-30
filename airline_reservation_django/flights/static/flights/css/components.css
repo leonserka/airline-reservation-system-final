@@ -303,4 +303,5 @@ fieldset.passenger-fieldset legend {
     .btn { padding: 10px 16px; font-size: 14px; }
     .form-control { font-size: 16px; }
     .flight-info { flex-direction: column; gap: 6px; }
+    .flight-info .details { font-size: 12px; word-break: break-word; line-height: 1.6; }
 }

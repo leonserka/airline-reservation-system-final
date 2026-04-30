@@ -1,0 +1,78 @@
+{% extends 'flights/base.html' %}
+{% load static %}
+
+{% block title %}About Us — Airline Reservation{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'flights/css/info_pages.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="ip-hero">
+    <h1>About Us</h1>
+    <p>Connecting Croatia and Europe since 2010</p>
+</div>
+
+<div class="ip-body">
+
+    <div class="ip-section">
+        <h2>Who We Are</h2>
+        <p>Airline Reservation is a Croatian regional carrier headquartered in Zagreb. We operate scheduled passenger services connecting Croatia's major cities with key European destinations, with a focus on reliability, comfort and value.</p>
+        <p>From our main hub at Zagreb Airport, we serve over 30 routes across 15 European countries, carrying more than 2 million passengers annually.</p>
+    </div>
+
+    <div class="ip-section">
+        <h2>Our Mission</h2>
+        <p>We believe that everyone deserves to fly without compromise. Our mission is to make air travel accessible, comfortable, and straightforward — offering transparent pricing, modern aircraft, and attentive service on every flight.</p>
+    </div>
+
+    <div class="ip-section">
+        <h2>Key Facts</h2>
+        <div class="ip-grid">
+            <div class="ip-card">
+                <div class="ip-card-icon">✈️</div>
+                <h3>Fleet</h3>
+                <p>Modern Airbus A320 family aircraft with an average age of under 8 years, equipped with WiFi and full in-seat entertainment.</p>
+            </div>
+            <div class="ip-card">
+                <div class="ip-card-icon">🌍</div>
+                <h3>Network</h3>
+                <p>30+ routes across 15 European countries, with year-round and seasonal services from Zagreb, Split and Dubrovnik.</p>
+            </div>
+            <div class="ip-card">
+                <div class="ip-card-icon">👥</div>
+                <h3>People</h3>
+                <p>Over 1,200 employees including pilots, cabin crew, engineers and ground staff — all committed to safe, on-time operations.</p>
+            </div>
+            <div class="ip-card">
+                <div class="ip-card-icon">🏆</div>
+                <h3>Recognition</h3>
+                <p>Rated among the top regional carriers in South-East Europe for punctuality and passenger satisfaction three years running.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="ip-section">
+        <h2>Our Hubs</h2>
+        <table class="ip-table">
+            <thead><tr><th>Airport</th><th>City</th><th>Code</th><th>Type</th></tr></thead>
+            <tbody>
+                <tr><td>Zagreb Airport</td><td>Zagreb</td><td>ZAG</td><td>Main hub</td></tr>
+                <tr><td>Split Airport</td><td>Split</td><td>SPU</td><td>Secondary hub</td></tr>
+                <tr><td>Dubrovnik Airport</td><td>Dubrovnik</td><td>DBV</td><td>Seasonal hub</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="ip-section">
+        <h2>Sustainability</h2>
+        <p>We are committed to reducing our environmental footprint. Our fleet renewal programme, single-engine taxi procedures and partnership with sustainable aviation fuel suppliers have reduced our per-passenger CO₂ emissions by 18% since 2020.</p>
+        <div class="ip-note">We aim to reach net-zero carbon operations by 2050 in line with the IATA industry commitment.</div>
+    </div>
+
+</div>
+
+{% include 'flights/includes/info_footer.html' %}
+
+{% endblock %}

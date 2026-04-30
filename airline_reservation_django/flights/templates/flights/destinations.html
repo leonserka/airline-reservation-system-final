@@ -1,0 +1,102 @@
+{% extends 'flights/base.html' %}
+{% load static currency_tags %}
+
+{% block title %}Destinations — Airline Reservation{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/css/flag-icons.min.css"/>
+<link rel="stylesheet" href="{% static 'flights/css/destinations.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="dest-hero">
+    <h1>Where do you want to fly?</h1>
+    <p>Explore our network across Europe and beyond</p>
+</div>
+
+<div class="dest-map-wrapper">
+    <div id="dest-map"></div>
+</div>
+
+<section class="dest-countries">
+    <h2 class="section-title">All Destinations</h2>
+
+    {% for country, data in destinations_by_country.items %}
+    <div class="country-block">
+        <div class="country-header">
+            {% if data.code %}<span class="fi fi-{{ data.code }} country-flag"></span>{% endif %}
+            <h3>{{ country }}</h3>
+        </div>
+        <div class="city-cards">
+            {% for dest in data.cities %}
+            <a href="{% url 'flight_list' %}" class="city-card">
+                <div class="city-card-body">
+                    <span class="city-name">{{ dest.city }}</span>
+                    <span class="city-price">from {{ dest.min_price|currency:selected_currency }}</span>
+                </div>
+                <div class="city-card-action">Book →</div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% empty %}
+    <p class="no-dest">No upcoming flights available at the moment.</p>
+    {% endfor %}
+</section>
+
+<section class="dest-gallery">
+    <a class="gallery-card gallery-large" style="background-image:url('{% static 'flights/img/promo1.jpg' %}')">
+        <div class="gallery-caption"><span>Barcelona</span><small>Spain · from €60</small></div>
+    </a>
+    <a class="gallery-card gallery-large" style="background-image:url('{% static 'flights/img/promo2.jpg' %}')">
+        <div class="gallery-caption"><span>Lisbon</span><small>Portugal · from €100</small></div>
+    </a>
+    <a class="gallery-card gallery-large" style="background-image:url('{% static 'flights/img/promo3.jpg' %}')">
+        <div class="gallery-caption"><span>Rome</span><small>Italy · from €75</small></div>
+    </a>
+    <a class="gallery-card gallery-large" style="background-image:url('{% static 'flights/img/promo4.jpg' %}')">
+        <div class="gallery-caption"><span>Paris</span><small>France · from €90</small></div>
+    </a>
+</section>
+
+{% include 'flights/includes/info_footer.html' %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    const markers = {{ map_markers_json|safe }};
+
+    const map = L.map('dest-map', {
+        center: [50, 15],
+        zoom: 4,
+        zoomControl: true,
+        scrollWheelZoom: false,
+    });
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '© <a href="https://carto.com/">CARTO</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        subdomains: 'abcd',
+        maxZoom: 19
+    }).addTo(map);
+
+    const icon = L.divIcon({
+        className: '',
+        html: '<div class="map-marker-dot"></div>',
+        iconSize: [14, 14],
+        iconAnchor: [7, 7],
+    });
+
+    markers.forEach(function(m) {
+        L.marker([m.lat, m.lng], {icon: icon})
+            .addTo(map)
+            .bindPopup(
+                '<strong>' + m.city + '</strong><br>' + m.country +
+                '<br><span style="color:#e63946">from €' + m.min_price.toFixed(2) + '</span>'
+            );
+    });
+</script>
+{% endblock %}

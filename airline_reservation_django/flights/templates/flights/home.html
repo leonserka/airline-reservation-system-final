@@ -115,16 +115,112 @@
     </div>
 </div>
 
+<div class="home-stats">
+    <div class="home-stats-item">
+        <span class="home-stats-num">30+</span>
+        <span class="home-stats-label">Routes</span>
+    </div>
+    <div class="home-stats-item">
+        <span class="home-stats-num">15</span>
+        <span class="home-stats-label">Countries</span>
+    </div>
+    <div class="home-stats-item">
+        <span class="home-stats-num">2M+</span>
+        <span class="home-stats-label">Passengers</span>
+    </div>
+    <div class="home-stats-item">
+        <span class="home-stats-num">2010</span>
+        <span class="home-stats-label">Since</span>
+    </div>
+</div>
+
+<div class="home-why">
+    <h2 class="home-why-title">Why fly with us</h2>
+    <div class="home-why-grid">
+        <div class="home-why-card">
+            <div class="home-why-icon">💳</div>
+            <h3>Multiple currencies</h3>
+            <p>Pay in EUR, USD, GBP, CHF, HUF or CZK. Switch currency anytime from the navigation bar and all prices update instantly.</p>
+        </div>
+        <div class="home-why-card">
+            <div class="home-why-icon">🔄</div>
+            <h3>Flexible cancellation</h3>
+            <p>Plus class tickets can be cancelled anytime before departure with a full refund. No questions asked, no hidden fees.</p>
+        </div>
+        <div class="home-why-card">
+            <div class="home-why-icon">📱</div>
+            <h3>Easy online check-in</h3>
+            <p>Check in online up to 24 hours before departure and download your boarding pass with a QR code directly from My Bookings.</p>
+        </div>
+        <div class="home-why-card">
+            <div class="home-why-icon">🪑</div>
+            <h3>Choose your seat</h3>
+            <p>Pick your preferred seat during booking from an interactive seat map. Window, aisle or extra legroom — it's your choice.</p>
+        </div>
+    </div>
+</div>
+
 <div class="promo-cards">
-    <a href="#" class="promo-card" style="background-image: url('{% static "flights/img/ofers.png" %}')"></a>
-    <a href="#" class="promo-card" style="background-image: url('{% static "flights/img/timetable.png" %}')"></a>
+    <a href="{% url 'special_offers' %}" class="promo-card" style="background-image: url('{% static "flights/img/ofers.png" %}')"></a>
+    <a href="{% url 'timetable' %}" class="promo-card" style="background-image: url('{% static "flights/img/timetable.png" %}')"></a>
 </div>
 
 <div class="dest-banner">
-    <a href="#">
+    <a href="{% url 'destinations' %}">
         <img src="{% static 'flights/img/dest.png' %}" alt="Destinations">
     </a>
 </div>
+
+<div class="home-news">
+    <div class="home-news-header">
+        <h2>Latest News</h2>
+        <a href="{% url 'media' %}">See all &rsaquo;</a>
+    </div>
+    <div class="home-news-grid">
+        <div class="home-news-card">
+            <img src="{% static 'flights/img/zagreb-lisabon.png' %}" alt="Zagreb – Lisbon" class="home-news-img">
+            <span class="home-news-tag">Announcement</span>
+            <h3>New route: Zagreb – Lisbon launching June 2026</h3>
+            <p class="home-news-date">28 April 2026</p>
+            <p>A new direct connection between Zagreb and Lisbon, operating twice weekly from June 15th. Tickets are now on sale.</p>
+        </div>
+        <div class="home-news-card">
+            <img src="{% static 'flights/img/two.png' %}" alt="Two new Airbus A320neo" class="home-news-img">
+            <span class="home-news-tag">Fleet</span>
+            <h3>Two new Airbus A320neo aircraft join our fleet</h3>
+            <p class="home-news-date">14 March 2026</p>
+            <p>Two new A320neo aircraft bring our total fleet to 18, offering a 20% reduction in fuel consumption and a quieter cabin.</p>
+        </div>
+        <div class="home-news-card">
+            <img src="{% static 'flights/img/best.png' %}" alt="Best Regional Carrier 2025" class="home-news-img">
+            <span class="home-news-tag">Award</span>
+            <h3>Best Regional Carrier in South-East Europe 2025</h3>
+            <p class="home-news-date">10 January 2026</p>
+            <p>For the third consecutive year, awarded Best Regional Carrier in South-East Europe at the Aviation Excellence Awards in Vienna.</p>
+        </div>
+    </div>
+</div>
+
+<div class="home-info-cards">
+    <a href="{% url 'seat_classes' %}" class="home-info-card">
+        <img src="{% static 'flights/img/cabin.png' %}" alt="Seat Reservation">
+        <div class="home-info-card-body">
+            <h3>Seat Reservation</h3>
+            <p>Choose your perfect seat from our interactive seat map during booking.</p>
+            <p>Compare Basic, Regular and Plus class — find the option that suits your journey.</p>
+        </div>
+    </a>
+    <a href="{% url 'baggage' %}" class="home-info-card">
+        <img src="{% static 'flights/img/lugage.png' %}" alt="Extra Luggage">
+        <div class="home-info-card-body">
+            <h3>Extra Luggage</h3>
+            <p>Every ticket includes 7 kg hand luggage. Need more? Add checked baggage from 10 to 23 kg.</p>
+            <p>Sports equipment, musical instruments and baby gear can also be added during booking.</p>
+        </div>
+    </a>
+</div>
+
+{% include 'flights/includes/info_footer.html' %}
 
 {% endblock %}
 

@@ -1,0 +1,103 @@
+{% extends 'flights/base.html' %}
+{% load static currency_tags %}
+
+{% block title %}Seat Classes — Airline Reservation{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'flights/css/seat_classes.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="sc-hero">
+    <h1>Choose Your Experience</h1>
+    <p>Three classes designed for every type of traveller</p>
+</div>
+
+<div class="sc-cards">
+
+    <div class="sc-card">
+        <div class="sc-card-header sc-basic">
+            <h2>Basic</h2>
+            <div class="sc-price">+{{ 0|currency:selected_currency }}</div>
+        </div>
+        <ul class="sc-features">
+            <li class="yes">Free seat selection</li>
+            <li class="yes">Hand luggage 7 kg</li>
+            <li class="no">Priority boarding</li>
+            <li class="no">Locker bag 10 kg</li>
+            <li class="no">Check-in bag 20 kg</li>
+            <li class="no">Ticket cancellation</li>
+        </ul>
+        <a href="{% url 'flight_list' %}" class="sc-book-btn">Book Basic</a>
+    </div>
+
+    <div class="sc-card sc-featured">
+        <div class="sc-badge">Most Popular</div>
+        <div class="sc-card-header sc-regular">
+            <h2>Regular</h2>
+            <div class="sc-price">+{{ 30|currency:selected_currency }}</div>
+        </div>
+        <ul class="sc-features">
+            <li class="yes">Free seat selection</li>
+            <li class="yes">Hand luggage 7 kg</li>
+            <li class="yes">Priority boarding</li>
+            <li class="yes">Locker bag 10 kg</li>
+            <li class="no">Check-in bag 20 kg</li>
+            <li class="no">Ticket cancellation</li>
+        </ul>
+        <a href="{% url 'flight_list' %}" class="sc-book-btn">Book Regular</a>
+    </div>
+
+    <div class="sc-card">
+        <div class="sc-card-header sc-plus">
+            <h2>Plus</h2>
+            <div class="sc-price">+{{ 45|currency:selected_currency }}</div>
+        </div>
+        <ul class="sc-features">
+            <li class="yes">Free seat selection</li>
+            <li class="yes">Hand luggage 7 kg</li>
+            <li class="yes">Priority boarding</li>
+            <li class="yes">Locker bag 10 kg</li>
+            <li class="yes">Check-in bag 20 kg</li>
+            <li class="yes">Ticket cancellation</li>
+        </ul>
+        <a href="{% url 'flight_list' %}" class="sc-book-btn">Book Plus</a>
+    </div>
+
+</div>
+
+<section class="sc-extras">
+    <h2>Optional Extras</h2>
+    <div class="sc-extras-grid">
+        <div class="sc-extra-card">
+            <div class="sc-extra-icon">🧳</div>
+            <h3>Extra Luggage</h3>
+            <p>10 kg — +{{ 20|currency:selected_currency }}</p>
+            <p>20 kg — +{{ 30|currency:selected_currency }}</p>
+            <p>23 kg — +{{ 40|currency:selected_currency }}</p>
+        </div>
+        <div class="sc-extra-card">
+            <div class="sc-extra-icon">🏄</div>
+            <h3>Sports Equipment</h3>
+            <p>Surf, ski, bike and more</p>
+            <p>+{{ 40|currency:selected_currency }} per flight</p>
+        </div>
+        <div class="sc-extra-card">
+            <div class="sc-extra-icon">🎸</div>
+            <h3>Musical Instrument</h3>
+            <p>Guitars, violins and more</p>
+            <p>+{{ 50|currency:selected_currency }} per flight</p>
+        </div>
+        <div class="sc-extra-card">
+            <div class="sc-extra-icon">👶</div>
+            <h3>Baby Equipment</h3>
+            <p>Stroller, car seat, cot</p>
+            <p>+{{ 10|currency:selected_currency }} per flight</p>
+        </div>
+    </div>
+</section>
+
+{% include 'flights/includes/info_footer.html' %}
+
+{% endblock %}

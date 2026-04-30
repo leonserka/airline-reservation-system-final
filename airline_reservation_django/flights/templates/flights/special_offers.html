@@ -1,0 +1,49 @@
+{% extends 'flights/base.html' %}
+{% load static currency_tags %}
+
+{% block title %}Special Offers — Airline Reservation{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'flights/css/info_pages.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="ip-hero">
+    <h1>Special Offers</h1>
+    <p>Best available prices on upcoming flights — updated on every visit</p>
+</div>
+
+<div class="ip-body">
+
+    {% if offers %}
+    <div class="ip-section">
+        <h2>Available Now</h2>
+        <div class="ip-offers-grid">
+            {% for flight in offers %}
+            <a href="{% url 'flight_list' %}?departure_city={{ flight.departure_city }}&arrival_city={{ flight.arrival_city }}&departure_date={{ flight.date|date:'Y-m-d' }}" class="ip-offer-card">
+                <div class="ip-offer-img" style="background-image: url('{% static 'flights/img/offer_bg.png' %}');"></div>
+                <div class="ip-offer-body">
+                    <p class="ip-offer-route">{{ flight.departure_city }} → {{ flight.arrival_city }}</p>
+                    <p class="ip-offer-meta">{{ flight.date|date:"d M Y" }} · {{ flight.departure_time|time:"H:i" }} · {{ flight.available_seats }} seat{{ flight.available_seats|pluralize }} left</p>
+                    <p class="ip-offer-price">{{ flight.price|currency:selected_currency }} <small>/ person</small></p>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <div class="ip-section">
+        <p>No upcoming offers at the moment. Check back soon!</p>
+    </div>
+    {% endif %}
+
+    <div class="ip-note">
+        All prices are per person. Availability is limited — refresh the page to discover different routes.
+    </div>
+
+</div>
+
+{% include 'flights/includes/info_footer.html' %}
+
+{% endblock %}

@@ -37,4 +37,17 @@ urlpatterns = [
     path('ajax/dest_countries/', views.get_destination_countries, name='ajax_dest_countries'),
     path('ajax/dest_airports/', views.get_destination_airports, name='ajax_dest_airports'),
     path('ajax/available_dates/', views.get_available_dates, name='ajax_available_dates'),
+
+    path('set-currency/', views.set_currency, name='set_currency'),
+
+    path('destinations/', views.destinations, name='destinations'),
+    path('timetable/', views.timetable, name='timetable'),
+    path('seat-classes/', views.seat_classes, name='seat_classes'),
+    path('about/', views.about_company, name='about_company'),
+    path('media/', views.media, name='media'),
+    path('travel-documents/', views.travel_documents, name='travel_documents'),
+    path('baggage/', views.baggage, name='baggage'),
+    path('special-categories/', views.special_categories, name='special_categories'),
+    path('help/', views.help_page, name='help_page'),
+    path('special-offers/', views.special_offers, name='special_offers'),
 ]

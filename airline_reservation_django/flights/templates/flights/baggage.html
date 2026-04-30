@@ -1,0 +1,89 @@
+{% extends 'flights/base.html' %}
+{% load static currency_tags %}
+
+{% block title %}Baggage — Airline Reservation{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'flights/css/info_pages.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="ip-hero">
+    <h1>Baggage Information</h1>
+    <p>Allowances, dimensions and policies for your luggage</p>
+</div>
+
+<div class="ip-body">
+
+    <div class="ip-section">
+        <h2>Cabin Baggage (All Classes)</h2>
+        <div class="ip-grid">
+            <div class="ip-card">
+                <div class="ip-card-icon">🎒</div>
+                <h3>Hand Luggage — 7 kg</h3>
+                <p>Included with every ticket. Max dimensions: 55 × 40 × 20 cm. Must fit in the overhead bin or under the seat in front of you.</p>
+            </div>
+            <div class="ip-card">
+                <div class="ip-card-icon">👜</div>
+                <h3>Personal Item</h3>
+                <p>One small personal item (handbag, laptop bag) is also allowed. Max dimensions: 40 × 30 × 15 cm.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="ip-section">
+        <h2>Checked Baggage (Optional Extra)</h2>
+        <table class="ip-table">
+            <thead>
+                <tr><th>Option</th><th>Weight</th><th>Max dimensions</th><th>Price</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Extra Luggage S</td><td>10 kg</td><td>158 cm total</td><td>+{{ 20|currency:selected_currency }}</td></tr>
+                <tr><td>Extra Luggage M</td><td>20 kg</td><td>158 cm total</td><td>+{{ 30|currency:selected_currency }}</td></tr>
+                <tr><td>Extra Luggage L</td><td>23 kg</td><td>158 cm total</td><td>+{{ 40|currency:selected_currency }}</td></tr>
+            </tbody>
+        </table>
+        <div class="ip-note">Checked baggage must be added during booking (Step 4). It cannot be added at the airport.</div>
+    </div>
+
+    <div class="ip-section">
+        <h2>Special Equipment</h2>
+        <div class="ip-grid">
+            <div class="ip-card">
+                <div class="ip-card-icon">🏄</div>
+                <h3>Sports Equipment — +{{ 40|currency:selected_currency }}</h3>
+                <p>Surfboards, skis, snowboards, bicycles, golf clubs. Must be properly packaged. Max 23 kg.</p>
+            </div>
+            <div class="ip-card">
+                <div class="ip-card-icon">🎸</div>
+                <h3>Musical Instruments — +{{ 50|currency:selected_currency }}</h3>
+                <p>Guitars, violins, cellos and similar instruments. Must be in a hard case. Max 23 kg.</p>
+            </div>
+            <div class="ip-card">
+                <div class="ip-card-icon">👶</div>
+                <h3>Baby Equipment — +{{ 10|currency:selected_currency }}</h3>
+                <p>Stroller, car seat or travel cot. One item per infant. Must be checked at the gate.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="ip-section">
+        <h2>Prohibited Items</h2>
+        <p>The following items are prohibited in both cabin and hold baggage:</p>
+        <table class="ip-table">
+            <thead><tr><th>Category</th><th>Examples</th></tr></thead>
+            <tbody>
+                <tr><td>Explosives &amp; flammable</td><td>Fireworks, lighter fluid, matches (in hold)</td></tr>
+                <tr><td>Sharp objects (cabin only)</td><td>Knives, scissors over 6 cm, razors</td></tr>
+                <tr><td>Liquids over 100ml (cabin)</td><td>Must be in a transparent 1L bag, max 100ml per container</td></tr>
+                <tr><td>Batteries</td><td>Spare lithium batteries must be in cabin baggage only</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+{% include 'flights/includes/info_footer.html' %}
+
+{% endblock %}

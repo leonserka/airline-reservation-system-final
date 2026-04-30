@@ -1,0 +1,175 @@
+.tt-hero {
+    text-align: center;
+    padding: 48px 20px 32px;
+    background: linear-gradient(135deg, #003366 0%, #0055a5 100%);
+    color: #fff;
+}
+
+.tt-hero h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 0 0 8px;
+}
+
+.tt-hero p {
+    font-size: 1.05rem;
+    opacity: 0.85;
+    margin: 0;
+}
+
+.tt-filter {
+    max-width: 1000px;
+    margin: 28px auto 0;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.tt-filter label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    white-space: nowrap;
+}
+
+.tt-filter select {
+    padding: 9px 14px;
+    border: 1px solid #c5cdd8;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #333;
+    background: #fff;
+    cursor: pointer;
+    outline: none;
+    min-width: 220px;
+}
+
+.tt-filter select:focus {
+    border-color: #003366;
+}
+
+.tt-section {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.tt-city-header {
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #003366;
+}
+
+.tt-city-header h2 {
+    font-size: 1.3rem;
+    color: #333;
+    font-weight: 600;
+    margin: 0;
+}
+
+.tt-city-header h2 span {
+    color: #003366;
+    font-weight: 700;
+}
+
+.tt-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+.tt-table thead th {
+    background: #f0f4f8;
+    color: #555;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 12px 16px;
+    text-align: left;
+}
+
+.tt-table tbody tr {
+    border-bottom: 1px solid #eef1f5;
+    transition: background 0.15s;
+}
+
+.tt-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.tt-table tbody tr:hover {
+    background: #f8fafd;
+}
+
+.tt-table td {
+    padding: 14px 16px;
+    font-size: 14px;
+    color: #333;
+    vertical-align: middle;
+}
+
+.tt-dest {
+    font-weight: 600;
+    color: #003366;
+}
+
+.tt-period {
+    color: #555;
+    font-size: 13px;
+}
+
+.tt-days {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.day-badge {
+    background: #e8f0fb;
+    color: #003366;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.day-weekend {
+    background: #fde8e8;
+    color: #c0392b;
+}
+
+.tt-book-btn {
+    display: inline-block;
+    background: #003366;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.tt-book-btn:hover {
+    background: #0055a5;
+}
+
+.tt-empty {
+    text-align: center;
+    color: #888;
+    padding: 60px 20px;
+    font-size: 15px;
+}
+
+@media (max-width: 768px) {
+    .tt-hero h1 { font-size: 1.6rem; }
+    .tt-filter { flex-direction: column; align-items: flex-start; }
+    .tt-filter select { width: 100%; min-width: unset; }
+    .tt-section { padding: 0 12px; }
+    .tt-table { display: block; overflow-x: auto; }
+}

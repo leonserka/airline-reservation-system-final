@@ -62,7 +62,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function buildPanelShell(panel, countryColId, airportColId, countryTitle, airportTitle) {
+        const isMobile = window.innerWidth <= 768;
         panel.innerHTML = `
+            ${isMobile ? `<button class="dropdown-close-btn" onclick="this.closest('.dropdown-panel').classList.remove('show')">&times; Close</button>` : ''}
             <div class="dropdown-columns">
                 <div class="country-section">
                     <div class="country-section-title">${countryTitle}</div>

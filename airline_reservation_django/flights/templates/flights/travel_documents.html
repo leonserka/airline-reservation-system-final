@@ -1,0 +1,78 @@
+{% extends 'flights/base.html' %}
+{% load static %}
+
+{% block title %}Travel Documents — Airline Reservation{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'flights/css/info_pages.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="ip-hero">
+    <h1>Travel Documents</h1>
+    <p>Everything you need to know before you fly</p>
+</div>
+
+<div class="ip-body">
+
+    <div class="ip-section">
+        <h2>Required Documents</h2>
+        <div class="ip-grid">
+            <div class="ip-card">
+                <div class="ip-card-icon">🛂</div>
+                <h3>Passport</h3>
+                <p>Required for all international flights outside the EU/EEA. Must be valid for at least 6 months beyond your travel date.</p>
+            </div>
+            <div class="ip-card">
+                <div class="ip-card-icon">🪪</div>
+                <h3>National ID Card</h3>
+                <p>Accepted for travel within the EU and EEA countries. Croatian citizens may use a valid national ID card for EU destinations.</p>
+            </div>
+            <div class="ip-card">
+                <div class="ip-card-icon">📋</div>
+                <h3>Visa</h3>
+                <p>Depending on your nationality and destination, a visa may be required. Always check entry requirements for your destination country.</p>
+            </div>
+            <div class="ip-card">
+                <div class="ip-card-icon">✈️</div>
+                <h3>Boarding Pass</h3>
+                <p>Print your boarding pass or have it available on your mobile device. Available after completing online check-in.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="ip-section">
+        <h2>Documents for Children</h2>
+        <p>Children travelling with both parents need only their own valid passport or ID card.</p>
+        <p>If a child is travelling with one parent, a written consent from the other parent is recommended and may be required at border control.</p>
+        <p>Unaccompanied minors (under 14) must be registered with our service and accompanied by an airline representative throughout the journey.</p>
+        <div class="ip-note">Children under 2 years (infants) do not require a separate seat but must have a valid travel document.</div>
+    </div>
+
+    <div class="ip-section">
+        <h2>Document Validity</h2>
+        <table class="ip-table">
+            <thead>
+                <tr><th>Document</th><th>Valid for</th><th>Minimum validity</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Passport</td><td>All destinations</td><td>6 months beyond travel date</td></tr>
+                <tr><td>National ID Card</td><td>EU / EEA countries</td><td>Valid on day of travel</td></tr>
+                <tr><td>Visa</td><td>Non-EU destinations</td><td>Valid for entire stay</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="ip-section">
+        <h2>Important Reminders</h2>
+        <p>Always check the entry requirements of your destination country well in advance of travel. Requirements can change at short notice.</p>
+        <p>Carry physical copies of your documents as backup. Lost or expired documents may result in denied boarding.</p>
+        <div class="ip-note">We are not responsible for passengers denied boarding due to missing or invalid travel documents.</div>
+    </div>
+
+</div>
+
+{% include 'flights/includes/info_footer.html' %}
+
+{% endblock %}

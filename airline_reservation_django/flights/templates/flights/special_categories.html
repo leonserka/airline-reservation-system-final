@@ -1,0 +1,81 @@
+{% extends 'flights/base.html' %}
+{% load static currency_tags %}
+
+{% block title %}Special Categories — Airline Reservation{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'flights/css/info_pages.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="ip-hero">
+    <h1>Special Categories</h1>
+    <p>Tailored services for passengers with specific needs</p>
+</div>
+
+<div class="ip-body">
+
+    <div class="ip-section">
+        <h2>Travelling with Children</h2>
+        <div class="ip-grid">
+            <div class="ip-card">
+                <div class="ip-card-icon">👶</div>
+                <h3>Infants (Under 2)</h3>
+                <p>Travel on a parent's lap at a reduced fare. One infant per adult. A baby equipment add-on (stroller, car seat) is available for +{{ '10'|currency:selected_currency }}.</p>
+            </div>
+            <div class="ip-card">
+                <div class="ip-card-icon">🧒</div>
+                <h3>Children (2–11)</h3>
+                <p>Must have their own seat. Children receive the same baggage allowance as adults. We recommend booking seats near family members.</p>
+            </div>
+            <div class="ip-card">
+                <div class="ip-card-icon">🧑</div>
+                <h3>Unaccompanied Minors (Under 14)</h3>
+                <p>Must be registered with our service at least 48 hours before departure. Our staff will escort the child from check-in to arrival gate.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="ip-section">
+        <h2>Passengers with Reduced Mobility</h2>
+        <p>We are committed to making air travel accessible for everyone. Please contact us at least 48 hours before departure to arrange assistance.</p>
+        <div class="ip-grid">
+            <div class="ip-card">
+                <div class="ip-card-icon">♿</div>
+                <h3>Wheelchair Assistance</h3>
+                <p>Available from check-in through boarding. Manual and electric wheelchairs can be transported in the hold free of charge.</p>
+            </div>
+            <div class="ip-card">
+                <div class="ip-card-icon">🦮</div>
+                <h3>Guide Dogs</h3>
+                <p>Guide and assistance dogs are permitted in the cabin free of charge. Please notify us in advance with certification documentation.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="ip-section">
+        <h2>Pregnant Passengers</h2>
+        <table class="ip-table">
+            <thead><tr><th>Week of pregnancy</th><th>Requirements</th></tr></thead>
+            <tbody>
+                <tr><td>Up to 28 weeks</td><td>No medical certificate required</td></tr>
+                <tr><td>29–36 weeks</td><td>Medical certificate required (issued within 7 days of travel)</td></tr>
+                <tr><td>37 weeks or more</td><td>Travel not permitted</td></tr>
+                <tr><td>Multiple pregnancy</td><td>Travel permitted up to 32 weeks with medical certificate</td></tr>
+            </tbody>
+        </table>
+        <div class="ip-note">We recommend consulting your doctor before flying during any stage of pregnancy.</div>
+    </div>
+
+    <div class="ip-section">
+        <h2>Medical Conditions</h2>
+        <p>Passengers with serious medical conditions must carry a doctor's certificate confirming fitness to fly. Oxygen equipment and medical devices must be declared in advance.</p>
+        <p>Medication in liquid form over 100ml is permitted in the cabin if accompanied by a prescription or medical certificate.</p>
+    </div>
+
+</div>
+
+{% include 'flights/includes/info_footer.html' %}
+
+{% endblock %}

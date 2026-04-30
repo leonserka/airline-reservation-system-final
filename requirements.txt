@@ -9,3 +9,4 @@ pydyf==0.8.0
 tinycss2==1.2.1
 cssselect2==0.7.0
 html5lib==1.1
+requests==2.32.3

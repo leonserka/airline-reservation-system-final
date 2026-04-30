@@ -1,5 +1,5 @@
 {% extends 'flights/base.html' %}
-{% load static tz %}
+{% load static tz currency_tags %}
 
 {% block content %}
 
@@ -22,7 +22,7 @@
       {{ flight.date|date:"M. d, Y" }} &middot;
       {{ flight.departure_datetime|timezone:flight.departure_timezone|date:"H:i" }} ({{ flight.departure_timezone }})
       → {{ flight.arrival_datetime|timezone:flight.arrival_timezone|date:"H:i" }} ({{ flight.arrival_timezone }})
-      &middot; €{{ flight.price }}
+      &middot; {{ flight.price|currency:selected_currency }}
     </span>
   </div>
 
@@ -33,12 +33,12 @@
       {{ return_flight.date|date:"M. d, Y" }} &middot;
       {{ return_flight.departure_datetime|timezone:return_flight.departure_timezone|date:"H:i" }} ({{ return_flight.departure_timezone }})
       → {{ return_flight.arrival_datetime|timezone:return_flight.arrival_timezone|date:"H:i" }} ({{ return_flight.arrival_timezone }})
-      &middot; €{{ return_flight.price }}
+      &middot; {{ return_flight.price|currency:selected_currency }}
     </span>
   </div>
   {% endif %}
 
-  <p class="mt-2"><strong>Total Price:</strong> €{{ total_price }}</p>
+  <p class="mt-2"><strong>Total Price:</strong> {{ total_price|currency:selected_currency }}</p>
 </div>
 
 <div class="card">
@@ -47,12 +47,13 @@
   <form method="post">
     {% csrf_token %}
 
-    <table class="table">
+    <div style="overflow-x:auto; -webkit-overflow-scrolling:touch;">
+    <table class="table" style="min-width:360px;">
       <thead>
         <tr>
           <th>Feature</th>
           {% for option in seat_options %}
-          <th>{{ option.name }} (+€{{ option.price }})</th>
+          <th>{{ option.name }} (+{{ option.price|currency:selected_currency }})</th>
           {% endfor %}
         </tr>
       </thead>
@@ -97,6 +98,7 @@
         </tr>
       </tbody>
     </table>
+    </div>
 
     <div class="mt-3">
       <button type="submit" class="btn btn-red">Continue →</button>

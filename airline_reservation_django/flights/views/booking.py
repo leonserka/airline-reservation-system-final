@@ -4,12 +4,35 @@ from django.http import JsonResponse
 from django.conf import settings
 from django.contrib import messages
 import json
+import requests as http_requests
 from ..models import Flight, Ticket
 from ..forms import PassengerForm
 from ..constants import SEAT_PRICES, LUGGAGE, EQUIPMENT
 from ..services.seatmap_service import build_seat_positions
 from ..services.booking_service import process_booking
 from ..services.booking_session import BookingSession
+from ..services.currency_service import get_rates
+
+
+def capture_paypal_order(order_id):
+    auth = http_requests.post(
+        "https://api-m.sandbox.paypal.com/v1/oauth2/token",
+        auth=(settings.PAYPAL_CLIENT_ID, settings.PAYPAL_SECRET),
+        data={"grant_type": "client_credentials"},
+        timeout=15,
+    )
+    auth.raise_for_status()
+    access_token = auth.json()["access_token"]
+
+    capture = http_requests.post(
+        f"https://api-m.sandbox.paypal.com/v2/checkout/orders/{order_id}/capture",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {access_token}",
+        },
+        timeout=15,
+    )
+    return capture.json()
 
 
 def get_return_flight(bs):
@@ -42,11 +65,14 @@ def book_step1(request, flight_id):
             for i in range(num_passengers)
         ]
 
+    base_total = float(flight.price) + (float(return_flight.price) if return_flight else 0)
+
     return render(request, "flights/book_step1.html", {
         "flight": flight,
         "return_flight": return_flight,
         "passenger_forms": forms,
         "num_passengers": num_passengers,
+        "total_price": base_total,
     })
 
 
@@ -71,12 +97,13 @@ def book_step2(request, flight_id):
         return redirect("book_step3", flight_id=flight.id)
 
     seat_options = [{"name": k, "price": v} for k, v in SEAT_PRICES.items()]
+    base_total = float(flight.price) + (float(return_flight.price) if return_flight else 0)
 
     return render(request, "flights/book_step2.html", {
         "flight": flight,
         "return_flight": return_flight,
         "seat_options": seat_options,
-        "total_price": flight.price,
+        "total_price": base_total,
     })
 
 
@@ -179,17 +206,31 @@ def book_step5(request, flight_id):
     total_price = bs.init_price(float(flight.price))
 
     if request.method == "GET":
+        currency = request.session.get('currency', 'EUR')
+        rate = get_rates().get(currency, 1.0)
+        converted_total = round(float(total_price) * rate, 2)
         return render(request, "flights/book_step5.html", {
             "flight": flight,
             "return_flight": return_flight,
             "total_price": total_price,
             "PAYPAL_CLIENT_ID": getattr(settings, "PAYPAL_CLIENT_ID", ""),
+            "paypal_currency": currency,
+            "paypal_amount": f"{converted_total:.2f}",
         })
 
     try:
         payload = json.loads(request.body)
     except (json.JSONDecodeError, ValueError):
         return JsonResponse({"status": "error", "msg": "Invalid JSON"})
+
+    order_id = payload.get("orderID")
+    if order_id:
+        try:
+            capture = capture_paypal_order(order_id)
+            if capture.get("status") != "COMPLETED":
+                return JsonResponse({"status": "error", "msg": "Payment not completed by PayPal."})
+        except Exception as e:
+            return JsonResponse({"status": "error", "msg": f"PayPal capture failed: {e}"})
 
     result = process_booking(
         user=request.user,
@@ -201,6 +242,7 @@ def book_step5(request, flight_id):
         total_price=total_price,
         luggage=luggage,
         equipment=equipment,
+        currency=request.session.get('currency', 'EUR'),
     )
 
     if result["status"] == "ok":

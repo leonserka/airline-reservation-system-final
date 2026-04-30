@@ -100,6 +100,64 @@ a:hover { text-decoration: underline; }
     padding: 32px 20px 48px;
 }
 
+.info-footer {
+    background: #f5f7fa;
+    border-top: 1px solid #dde3ec;
+    padding: 0 20px;
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    margin-left: -50vw;
+    margin-top: 48px;
+}
+
+.info-footer-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    padding: 48px 0 40px;
+}
+
+.info-footer-col h4 {
+    color: #1a1a2e;
+    font-size: 12px;
+    font-weight: 700;
+    margin: 0 0 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #c5cdd8;
+}
+
+.info-footer-col a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #555;
+    font-size: 13px;
+    text-decoration: none;
+    padding: 7px 0;
+    border-bottom: 1px solid #e8ecf0;
+    transition: color 0.2s;
+}
+
+.info-footer-col a::after {
+    content: '›';
+    font-size: 16px;
+    color: #003366;
+    opacity: 0.6;
+}
+
+.info-footer-col a:hover {
+    color: #003366;
+}
+
+.info-footer-col a:hover::after {
+    opacity: 1;
+}
+
 .page-title {
     font-size: 26px;
     font-weight: 700;
@@ -137,6 +195,7 @@ a:hover { text-decoration: underline; }
     .ca-header { padding: 0 12px; }
     .ca-nav { display: none; }
     .ca-right .user-welcome { display: none; }
+    .ca-right .btn-header:not(.btn-logout) { display: none; }
 
     .main-content { padding: 16px 12px 40px; }
 
@@ -144,6 +203,12 @@ a:hover { text-decoration: underline; }
 
     .gap-sm { flex-wrap: wrap; }
     .flex-between { flex-direction: column; gap: 10px; align-items: flex-start; }
+
+    .table { font-size: 12px; }
+    .table th, .table td { padding: 8px 10px; }
+    .card { padding: 16px; }
+
+    .info-footer-grid { grid-template-columns: 1fr; gap: 24px; padding: 32px 0 24px; }
 }
 
 .django-messages {
@@ -177,3 +242,4 @@ a:hover { text-decoration: underline; }
     color: #842029;
     border: 1px solid #dc3545;
 }
+

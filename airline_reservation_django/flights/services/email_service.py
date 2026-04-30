@@ -1,8 +1,9 @@
 from django.core.mail import EmailMultiAlternatives, EmailMessage
 from django.conf import settings
+from .currency_service import format_price
 
 
-def send_receipt_email(to_email, total_sum, pdf_buffer=None, flight=None, user=None):
+def send_receipt_email(to_email, total_sum, pdf_buffer=None, flight=None, user=None, currency='EUR'):
     try:
         subject = (
             f"Booking Confirmed: {flight.departure_city} → {flight.arrival_city} on {flight.date}"
@@ -12,9 +13,11 @@ def send_receipt_email(to_email, total_sum, pdf_buffer=None, flight=None, user=N
         route = f"{flight.departure_city} → {flight.arrival_city}" if flight else "N/A"
         date = str(flight.date) if flight else "N/A"
 
+        price_display = format_price(total_sum, currency)
+
         text_body = (
             f"Dear {username},\n\nYour booking is confirmed!\n\n"
-            f"Route: {route}\nDate: {date}\nTotal paid: €{total_sum:.2f}\n\n"
+            f"Route: {route}\nDate: {date}\nTotal paid: {price_display}\n\n"
             f"Thank you for booking with Airline Reservation.\n"
         )
 
@@ -29,7 +32,7 @@ def send_receipt_email(to_email, total_sum, pdf_buffer=None, flight=None, user=N
             <table style="width:100%;border-collapse:collapse;margin:16px 0;">
               <tr><td style="padding:8px 0;color:#888;font-size:13px;">Route</td><td style="padding:8px 0;font-weight:600;color:#003366;">{route}</td></tr>
               <tr><td style="padding:8px 0;color:#888;font-size:13px;">Date</td><td style="padding:8px 0;font-weight:600;">{date}</td></tr>
-              <tr><td style="padding:8px 0;color:#888;font-size:13px;">Amount paid</td><td style="padding:8px 0;font-weight:600;color:#1a8754;">€{total_sum:.2f}</td></tr>
+              <tr><td style="padding:8px 0;color:#888;font-size:13px;">Amount paid</td><td style="padding:8px 0;font-weight:600;color:#1a8754;">{price_display}</td></tr>
             </table>
             <p style="font-size:13px;color:#888;margin-top:24px;">If a PDF receipt is attached, please save it for your records.</p>
           </div>
@@ -137,6 +140,55 @@ def send_flight_canceled_email(to_email, passenger_name, flight):
         return True
     except Exception as e:
         print(f"[EMAIL ERROR] Failed to send flight canceled email to {to_email}: {e}")
+        return False
+
+
+def send_ticket_canceled_email(to_email, passenger_name, flight, ticket):
+    try:
+        flight_number = flight.flight_number
+        route = f"{flight.departure_city} → {flight.arrival_city}"
+        flight_date = str(flight.date)
+        seat_class = ticket.seat_class
+
+        subject = f"Ticket Canceled – {flight_number} ({route})"
+        text_body = (
+            f"Dear {passenger_name},\n\n"
+            f"Your {seat_class} class ticket for flight {flight_number} ({route}) on {flight_date} has been successfully canceled.\n"
+            f"Your payment has been marked as refunded. Thank you for flying with us.\n\n"
+            f"Airline Reservation System"
+        )
+        html_body = f"""
+        <div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;border:1px solid #e0e3e8;border-radius:8px;overflow:hidden;">
+          <div style="background:#c0392b;padding:24px;text-align:center;">
+            <h2 style="color:#fff;margin:0;font-size:20px;">Ticket Canceled</h2>
+          </div>
+          <div style="padding:28px 32px;">
+            <p style="font-size:16px;color:#222;">Dear <strong>{passenger_name}</strong>,</p>
+            <p style="color:#444;">Your ticket has been successfully <strong>canceled</strong> and your payment has been <strong>refunded</strong>.</p>
+            <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+              <tr><td style="padding:8px 0;color:#888;font-size:13px;">Flight</td><td style="padding:8px 0;font-weight:600;">{flight_number}</td></tr>
+              <tr><td style="padding:8px 0;color:#888;font-size:13px;">Route</td><td style="padding:8px 0;font-weight:600;">{route}</td></tr>
+              <tr><td style="padding:8px 0;color:#888;font-size:13px;">Date</td><td style="padding:8px 0;font-weight:600;">{flight_date}</td></tr>
+              <tr><td style="padding:8px 0;color:#888;font-size:13px;">Class</td><td style="padding:8px 0;font-weight:600;">{seat_class}</td></tr>
+            </table>
+            <p style="color:#444;font-size:14px;">Thank you for flying with us. We hope to see you again.</p>
+          </div>
+          <div style="background:#f0f2f5;padding:14px;text-align:center;font-size:12px;color:#aaa;">
+            Airline Reservation System &copy; 2026
+          </div>
+        </div>
+        """
+        msg = EmailMultiAlternatives(
+            subject=subject,
+            body=text_body,
+            from_email=settings.EMAIL_HOST_USER,
+            to=[to_email],
+        )
+        msg.attach_alternative(html_body, "text/html")
+        msg.send()
+        return True
+    except Exception as e:
+        print(f"[EMAIL ERROR] Failed to send ticket canceled email to {to_email}: {e}")
         return False
 
 

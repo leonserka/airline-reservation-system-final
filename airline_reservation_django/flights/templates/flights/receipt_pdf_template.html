@@ -41,7 +41,7 @@
             <th>Passenger</th>
             <th>Seat</th>
             <th>Class</th>
-            <th>Price (€)</th>
+            <th>Price ({{ currency }})</th>
         </tr>
 
         {% for p in passengers %}
@@ -50,13 +50,13 @@
             <td>{{ p.name }}</td>
             <td>{{ p.seat }}</td>
             <td>{{ p.class }}</td>
-            <td>{{ p.price }} €</td>
+            <td>{{ p.price }}</td>
         </tr>
         {% endfor %}
 
         <tr class="final">
             <td colspan="3"><b>Total:</b></td>
-            <td><b>{{ total_sum }} €</b></td>
+            <td><b>{{ total_sum }}</b></td>
         </tr>
     </table>
 

@@ -1,3 +1,32 @@
+.hidden { display: none; }
+
+.currency-form {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 8px;
+}
+
+.currency-select {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    outline: none;
+}
+
+.currency-select option {
+    background: #003366;
+    color: #fff;
+}
+
+.currency-select:hover {
+    background: rgba(255,255,255,0.2);
+}
+
 .hamburger-btn {
     background: none;
     border: none;
@@ -25,7 +54,7 @@
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.4);
-    z-index: 200;
+    z-index: 1100;
 }
 
 .mega-menu {
@@ -36,7 +65,7 @@
     max-width: 95vw;
     height: 100%;
     background: #fff;
-    z-index: 201;
+    z-index: 1101;
     padding: 40px 32px 32px;
     box-shadow: -4px 0 24px rgba(0,0,0,0.15);
     overflow-y: auto;
@@ -112,6 +141,14 @@
 
 .mega-login-btn:hover { background: #b52020; }
 
+.mega-col--guest { text-align: center; padding-top: 20px; }
+
+.mega-guest-msg { color: #555; font-size: 15px; margin-bottom: 20px; }
+
+.mega-register-link { font-size: 14px; color: #003366; text-decoration: none; }
+.mega-register-link:hover { text-decoration: underline; }
+
 @media (max-width: 768px) {
-    .mega-menu { width: 100%; max-width: 100vw; }
+    .mega-menu { width: 100%; max-width: 100vw; padding: 40px 20px 24px; }
+    .currency-select { font-size: 12px; padding: 3px 6px; }
 }

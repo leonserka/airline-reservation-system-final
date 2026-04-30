@@ -1,5 +1,5 @@
 {% extends 'flights/base.html' %}
-{% load static tz %}
+{% load static tz currency_tags %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'flights/css/book_step5.css' %}">
@@ -26,7 +26,7 @@
       {{ flight.date|date:"M. d, Y" }} &middot;
       {{ flight.departure_datetime|timezone:flight.departure_timezone|date:"H:i" }} ({{ flight.departure_timezone }})
       → {{ flight.arrival_datetime|timezone:flight.arrival_timezone|date:"H:i" }} ({{ flight.arrival_timezone }})
-      &middot; €{{ flight.price }}
+      &middot; {{ flight.price|currency:selected_currency }}
     </span>
   </div>
 
@@ -37,12 +37,12 @@
       {{ return_flight.date|date:"M. d, Y" }} &middot;
       {{ return_flight.departure_datetime|timezone:return_flight.departure_timezone|date:"H:i" }} ({{ return_flight.departure_timezone }})
       → {{ return_flight.arrival_datetime|timezone:return_flight.arrival_timezone|date:"H:i" }} ({{ return_flight.arrival_timezone }})
-      &middot; €{{ return_flight.price }}
+      &middot; {{ return_flight.price|currency:selected_currency }}
     </span>
   </div>
   {% endif %}
 
-  <p class="mt-2"><strong>Total Price:</strong> €{{ total_price }}</p>
+  <p class="mt-2"><strong>Total Price:</strong> {{ total_price|currency:selected_currency }}</p>
 </div>
 
 <div class="card">
@@ -59,9 +59,9 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="https://www.paypal.com/sdk/js?client-id={{ PAYPAL_CLIENT_ID }}&currency=EUR"></script>
+<script src="https://www.paypal.com/sdk/js?client-id={{ PAYPAL_CLIENT_ID }}&currency={{ paypal_currency }}"></script>
 <script>
-  const TOTAL_PRICE = "{{ total_price }}";
+  const TOTAL_PRICE = "{{ paypal_amount }}";
   const CSRF_TOKEN = "{{ csrf_token }}";
   const BOOK_SUCCESS_URL = "{% url 'book_success' %}";
   const FLIGHT_ID = "{{ flight.id }}";

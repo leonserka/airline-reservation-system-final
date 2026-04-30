@@ -20,40 +20,37 @@ paypal.Buttons({
     onApprove: function(data, actions) {
         document.getElementById("loading-overlay").style.display = "flex";
 
-        return actions.order.capture().then(function(details) {
-            fetch("", {  
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": csrftoken
-                },
-                body: JSON.stringify({
-                    orderID: data.orderID,
-                    payment_status: "COMPLETED",
-                    details: details
-                })
+        fetch("", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrftoken
+            },
+            body: JSON.stringify({
+                orderID: data.orderID,
+                payment_status: "COMPLETED",
             })
-            .then(response => response.json())
-            .then(result => {
-                document.getElementById("loading-overlay").style.display = "none";
+        })
+        .then(response => response.json())
+        .then(result => {
+            document.getElementById("loading-overlay").style.display = "none";
 
-                if (result.status === "ok") {
-                    window.location.href = BOOK_SUCCESS_URL;
+            if (result.status === "ok") {
+                window.location.href = BOOK_SUCCESS_URL;
 
-                } else if (result.status === "seat_taken") {
-                    alert(`⚠️ Seat ${result.seat} was just taken by someone else! Please choose another seat.`);
-                    window.location.href = `/book/${FLIGHT_ID}/step3/`;
+            } else if (result.status === "seat_taken") {
+                alert(`⚠️ Seat ${result.seat} was just taken by someone else! Please choose another seat.`);
+                window.location.href = `/book/${FLIGHT_ID}/step3/`;
 
-                } else {
-                    alert("❌ Error: " + (result.msg || "An unexpected error occurred."));
-                    window.location.href = `/book/${FLIGHT_ID}/step3/`;
-                }
-            })
-            .catch(err => {
-                document.getElementById("loading-overlay").style.display = "none";
-                console.error("Fetch Error:", err);
-                alert("Network error occurred. Please try again or contact support.");
-            });
+            } else {
+                alert("❌ Error: " + (result.msg || "An unexpected error occurred."));
+                window.location.href = `/book/${FLIGHT_ID}/step3/`;
+            }
+        })
+        .catch(err => {
+            document.getElementById("loading-overlay").style.display = "none";
+            console.error("Fetch Error:", err);
+            alert("Network error occurred. Please try again or contact support.");
         });
     },
 

@@ -1,0 +1,96 @@
+{% extends 'flights/base.html' %}
+{% load static %}
+
+{% block title %}Help & FAQ — Airline Reservation{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'flights/css/info_pages.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="ip-hero">
+    <h1>Help &amp; FAQ</h1>
+    <p>Answers to the most common questions</p>
+</div>
+
+<div class="ip-body">
+
+    <div class="ip-section">
+        <h2>Booking</h2>
+        <div class="ip-faq-item">
+            <div class="ip-faq-q">How do I book a flight?</div>
+            <div class="ip-faq-a">Use the search tool on the home page or go to Flights. Select your departure and destination, choose a date, then follow the 5-step booking process: passengers → class → seats → extras → payment.</div>
+        </div>
+        <div class="ip-faq-item">
+            <div class="ip-faq-q">Can I book a round-trip flight?</div>
+            <div class="ip-faq-a">Yes. On the home page or flight search, select "Return" and choose both a departure and return date. Both flights will be booked in one session.</div>
+        </div>
+        <div class="ip-faq-item">
+            <div class="ip-faq-q">Can I book for multiple passengers?</div>
+            <div class="ip-faq-a">Yes. When searching, select the number of passengers (up to the available seats). Each passenger's details must be entered separately in Step 1.</div>
+        </div>
+    </div>
+
+    <div class="ip-section">
+        <h2>Check-in</h2>
+        <div class="ip-faq-item">
+            <div class="ip-faq-q">When can I check in online?</div>
+            <div class="ip-faq-a">Online check-in is available from 24 hours up to 2 hours before departure. You can check in from My Bookings → About Ticket → Check-in.</div>
+        </div>
+        <div class="ip-faq-item">
+            <div class="ip-faq-q">What do I need to check in?</div>
+            <div class="ip-faq-a">You need your first name, last name and ID number exactly as entered during booking. These must match your travel document.</div>
+        </div>
+        <div class="ip-faq-item">
+            <div class="ip-faq-q">How do I get my boarding pass?</div>
+            <div class="ip-faq-a">After completing online check-in, go to About Ticket and click "Download Boarding Pass" to get a PDF with a QR code.</div>
+        </div>
+    </div>
+
+    <div class="ip-section">
+        <h2>Payment</h2>
+        <div class="ip-faq-item">
+            <div class="ip-faq-q">What payment methods are accepted?</div>
+            <div class="ip-faq-a">We accept payment via PayPal. You can use your PayPal balance, or pay with a debit or credit card through PayPal without creating an account.</div>
+        </div>
+        <div class="ip-faq-item">
+            <div class="ip-faq-q">Will I receive a receipt?</div>
+            <div class="ip-faq-a">Yes. A booking confirmation email with a PDF receipt is sent to your email address after successful payment. You can also resend it from My Bookings → About Ticket.</div>
+        </div>
+        <div class="ip-faq-item">
+            <div class="ip-faq-q">In which currencies can I pay?</div>
+            <div class="ip-faq-a">We support EUR, USD, GBP, CHF, HUF and CZK. Select your preferred currency from the dropdown in the top navigation bar.</div>
+        </div>
+    </div>
+
+    <div class="ip-section">
+        <h2>Cancellation &amp; Refunds</h2>
+        <div class="ip-faq-item">
+            <div class="ip-faq-q">Can I cancel my ticket?</div>
+            <div class="ip-faq-a">Ticket cancellation is available exclusively for Plus class tickets. Go to My Bookings → About Ticket → Cancel Ticket.</div>
+        </div>
+        <div class="ip-faq-item">
+            <div class="ip-faq-q">How long does a refund take?</div>
+            <div class="ip-faq-a">After cancellation, your payment status changes to Refunded. The actual refund to your account may take 3–5 business days depending on your payment provider.</div>
+        </div>
+        <div class="ip-faq-item">
+            <div class="ip-faq-q">What if my flight is cancelled by the airline?</div>
+            <div class="ip-faq-a">If your flight is cancelled by the airline, all booked passengers are automatically refunded and a cancellation email is sent. Refunds are processed within 24 hours.</div>
+        </div>
+    </div>
+
+    <div class="ip-section">
+        <h2>Still need help?</h2>
+        <p>Contact our support team at <strong>info@airlinereservation.com</strong> or call us at <strong>+385 1 234 5678</strong> (Mon–Fri, 08:00–20:00 CET).</p>
+    </div>
+
+</div>
+
+{% include 'flights/includes/info_footer.html' %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'flights/js/faq.js' %}"></script>
+{% endblock %}

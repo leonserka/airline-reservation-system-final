@@ -1,5 +1,5 @@
 {% extends 'flights/base.html' %}
-{% load static tz %}
+{% load static tz currency_tags %}
 
 {% block content %}
 
@@ -22,11 +22,11 @@
       {{ flight.date|date:"M. d, Y" }} &middot;
       {{ flight.departure_datetime|timezone:flight.departure_timezone|date:"H:i" }} ({{ flight.departure_timezone }})
       → {{ flight.arrival_datetime|timezone:flight.arrival_timezone|date:"H:i" }} ({{ flight.arrival_timezone }})
-      &middot; €{{ flight.price }}
+      &middot; {{ flight.price|currency:selected_currency }}
     </span>
   </div>
 
-  <p class="mt-2"><strong>Current Total:</strong> €{{ total_price }}</p>
+  <p class="mt-2"><strong>Current Total:</strong> {{ total_price|currency:selected_currency }}</p>
 </div>
 
 <form method="post">
@@ -37,7 +37,7 @@
 
     {% for key, cost in luggage_options.items %}
     <label class="option-card">
-      <input type="radio" name="luggage_option" value="{{ key }}"> {{ key }} checked-in bag (+€{{ cost }})
+      <input type="radio" name="luggage_option" value="{{ key }}"> {{ key }} checked-in bag (+{{ cost|currency:selected_currency }})
     </label>
     {% endfor %}
     <label class="option-card">
@@ -50,7 +50,7 @@
 
     {% for key, cost in equipment_options.items %}
     <label class="option-card">
-      <input type="radio" name="equipment_option" value="{{ key }}"> {{ key|capfirst }} equipment (+€{{ cost }})
+      <input type="radio" name="equipment_option" value="{{ key }}"> {{ key|capfirst }} equipment (+{{ cost|currency:selected_currency }})
     </label>
     {% endfor %}
     <label class="option-card">

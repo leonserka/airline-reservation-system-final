@@ -6,7 +6,7 @@ from .email_service import send_receipt_email
 
 
 def process_booking(user, flight, return_flight, passengers, seat_class,
-                    all_selected_seats, total_price, luggage=None, equipment=None):
+                    all_selected_seats, total_price, luggage=None, equipment=None, currency='EUR'):
     try:
         with transaction.atomic():
             requested_flights = [flight]
@@ -82,6 +82,7 @@ def process_booking(user, flight, return_flight, passengers, seat_class,
         pdf_buffer, total_sum = generate_receipt_pdf(
             flight, passengers, seat_class, user, luggage, equipment, return_flight,
             all_selected_seats=all_selected_seats,
+            currency=currency,
         )
     except Exception as e:
         print(f"PDF generation failed: {e}")
@@ -95,6 +96,7 @@ def process_booking(user, flight, return_flight, passengers, seat_class,
             pdf_buffer=pdf_buffer,
             flight=flight,
             user=user,
+            currency=currency,
         )
         print(f"Receipt email to {to_email}: {'sent' if sent else 'failed'}")
 

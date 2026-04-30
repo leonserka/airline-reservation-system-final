@@ -1,4 +1,6 @@
 from .flights import home, create_flight, flight_list
+from .currency import set_currency
+from .pages import destinations, timetable, seat_classes, travel_documents, baggage, special_categories, help_page, special_offers, about_company, media
 from .auth import register, custom_logout, profile, PasswordResetConfirmWithEmail
 from .admin_views import admin_panel, admin_flight_detail, cancel_flight
 from .ajax import (
